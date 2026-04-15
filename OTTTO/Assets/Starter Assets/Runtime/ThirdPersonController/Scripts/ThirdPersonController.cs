@@ -388,5 +388,16 @@ namespace StarterAssets
                 AudioSource.PlayClipAtPoint(LandingAudioClip, transform.TransformPoint(_controller.center), FootstepAudioVolume);
             }
         }
+
+        public Transform warpTarget; // ワープ先のターゲット位置
+
+        void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.CompareTag("WarpTrigger"))
+            {
+                // ワープポイントに移動する
+                transform.position = warpTarget.position;
+            }
+        }
     }
 }
