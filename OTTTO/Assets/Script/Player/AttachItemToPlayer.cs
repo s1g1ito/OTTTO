@@ -6,7 +6,7 @@ public class AttachItemToPlayer : MonoBehaviour
     public Transform player;
     public Vector3 offset = new Vector3(0, -0.5f, 1f);
 
-    private bool isHeld = false;
+    private bool isHeld = false;    // © ‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©
     private bool canPick = true;   // © E‚¦‚é‚©‚Ç‚¤‚©
     private float pickCooldown = 0.2f; // © Äæ“¾–h~ŠÔ
 
@@ -39,9 +39,6 @@ public class AttachItemToPlayer : MonoBehaviour
     {
         player = playerTransform;
         isHeld = true;
-
-        // Player ‚Ìq‚É‚·‚é
-        transform.SetParent(player);
 
         // Player ‚Ì‘O‚É”z’u
         transform.localPosition = offset;
