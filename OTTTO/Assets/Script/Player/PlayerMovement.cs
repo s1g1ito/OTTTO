@@ -7,6 +7,9 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody rb;
     private InputAction moveAction;
+    public Transform cameraTransform;
+
+
 
     void Awake()
     {
