@@ -389,14 +389,15 @@ namespace StarterAssets
             }
         }
 
-        public Transform warpTarget; // ワープ先のターゲット位置
 
-        void OnTriggerEnter(Collider other)
+
+        void OnCollisionEnter(Collision other)
         {
-            if (other.gameObject.CompareTag("WarpTrigger"))
+
+
+            if (other.gameObject.name == "Sphere")
             {
-                // ワープポイントに移動する
-                transform.position = warpTarget.position;
+                this.transform.position = new Vector3(4.0f, 0.5f, 4.0f);
             }
         }
     }
