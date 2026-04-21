@@ -1,33 +1,65 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyFollow : MonoBehaviour
 {
-    public Transform player;        // Player の Transform
-    public float chaseRange = 10f;  // 追いかけ始める距離
-    public float moveSpeed = 3f;    // 移動速度
+    // 追いかける対象のゲームオブジェクト
+    [SerializeField]
+    private GameObject player;
 
-    private Rigidbody rb;
+    // プレイヤーを追いかける距離のしきい値
+    [SerializeField] private float chaseDistance = 10f;
 
+    // 周回用のルートを設定する
+    [SerializeField] private Transform[] m_markers = null;
+    private int currentMarkerIndex = 0;
+    // 巡回ポイントに到達したかの判定用
+    [SerializeField] private float patrolArriveThreshold = 0.5f;
+
+    // NavMeshAgentコンポーネントを入れる
+    private NavMeshAgent navMesAgent;
+
+    // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true; // 倒れないように固定
+        // 自分自身のNavMeshAgentを入れる
+        navMesAgent = this.gameObject.GetComponent<NavMeshAgent>();
+
+        // 最初のマーカーをセット
+        if (m_markers != null && m_markers.Length > 0)
+        {
+            navMesAgent.destination = m_markers[0].position;
+        }
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        float distance = Vector3.Distance(transform.position, player.position);
+        float distance = Vector3.Distance(transform.position, player.transform.position);
 
-        // 一定距離以内なら追いかける
-        if (distance < chaseRange)
+        if (distance < chaseDistance)
         {
-            Vector3 direction = (player.position - transform.position).normalized;
-            direction.y = 0; // 上下方向は無視（地面を走るため）
+            // プレイヤーが近くにいる場合だけ追いかける
+            navMesAgent.destination = player.transform.position;
+        }
+        else
+        {
+            // プレイヤーがいないときは巡回ルートを移動
+            Patrol();
+        }
 
-            rb.MovePosition(transform.position + direction * moveSpeed * Time.fixedDeltaTime);
+        void Patrol()
+        {
+            if (m_markers == null || m_markers.Length == 0) return;
 
-            // Player の方向を向く
-            transform.LookAt(new Vector3(player.position.x, transform.position.y, player.position.z));
+            // NavMeshAgentの移動が終わったか確認（pathPendingは移動中の判定）
+            if (!navMesAgent.pathPending && navMesAgent.remainingDistance <= patrolArriveThreshold)
+            {
+                // 次のマーカーへ
+                currentMarkerIndex = (currentMarkerIndex + 1) % m_markers.Length;
+                navMesAgent.destination = m_markers[currentMarkerIndex].position;
+            }
         }
     }
 }
