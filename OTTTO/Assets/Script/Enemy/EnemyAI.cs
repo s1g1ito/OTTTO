@@ -1,67 +1,66 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 public class EnemyAI : MonoBehaviour
 {
     public float moveSpeed = 3f;
-    public float checkDistance = 1.5f;
     public float rayHeight = 1.0f;
+    public float viewDistance = 10f;   // 視界距離
+    public float viewAngle = 90f;      // 視界角度
 
     private Rigidbody rb;
-
-    private Vector3[] dirs = {
-        Vector3.forward,
-        Vector3.back,
-        Vector3.right,
-        Vector3.left
-    };
-
-    private Vector3 moveDir;
+    private Transform player;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
-        moveDir = dirs[Random.Range(0, 4)];
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     void FixedUpdate()
     {
-        Vector3 rayOrigin = transform.position + Vector3.up * rayHeight;
+        Vector3 origin = transform.position + Vector3.up * rayHeight;
 
-        // デバッグ可視化（4方向）
-        Debug.DrawRay(rayOrigin, moveDir * checkDistance, Color.red);
-        Debug.DrawRay(rayOrigin, Vector3.right * checkDistance, Color.blue);
-        Debug.DrawRay(rayOrigin, Vector3.left * checkDistance, Color.green);
-
-        // 前が壁なら方向転換
-        if (Physics.Raycast(rayOrigin, moveDir, checkDistance))
+        if (CanSeePlayer(origin))
         {
-            Turn(rayOrigin);
+            ChasePlayer();
         }
-
-        rb.MovePosition(rb.position + moveDir * moveSpeed * Time.fixedDeltaTime);
     }
 
-    void Turn(Vector3 origin)
+    // ★ プレイヤー追跡
+    void ChasePlayer()
     {
-        List<Vector3> valid = new List<Vector3>();
+        Vector3 dir = (player.position - transform.position).normalized;
+        dir.y = 0; // 上下のズレを無視
 
-        foreach (var d in dirs)
+        rb.MovePosition(rb.position + dir * moveSpeed * Time.fixedDeltaTime);
+    }
+
+    // ★ 視界判定（Raycast）
+    bool CanSeePlayer(Vector3 origin)
+    {
+        Vector3 toPlayer = player.position - origin;
+        toPlayer.y = 0;
+
+        // 距離チェック
+        if (toPlayer.magnitude > viewDistance)
+            return false;
+
+        // 視界角度チェック
+        float angle = Vector3.Angle(transform.forward, toPlayer);
+        if (angle > viewAngle)
+            return false;
+
+        // Raycast で遮蔽物チェック
+        if (Physics.Raycast(origin, toPlayer.normalized, out RaycastHit hit, viewDistance))
         {
-            if (!Physics.Raycast(origin, d, checkDistance))
+            if (hit.collider.CompareTag("Player"))
             {
-                valid.Add(d);
+                return true;
             }
         }
 
-        if (valid.Count == 0)
-        {
-            moveDir = -moveDir;
-            return;
-        }
-
-        moveDir = valid[Random.Range(0, valid.Count)];
+        return false;
     }
 }
