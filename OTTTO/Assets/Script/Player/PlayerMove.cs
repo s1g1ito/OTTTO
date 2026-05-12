@@ -19,15 +19,5 @@ public class PlayerMove : MonoBehaviour
         {
             transform.position -= transform.forward * moveSpeed;
         }
-
-        if (keyboard.rightArrowKey.isPressed)
-        {
-            transform.Rotate(0, rotateSpeed, 0);
-        }
-
-        if (keyboard.leftArrowKey.isPressed)
-        {
-            transform.Rotate(0, -rotateSpeed, 0);
-        }
     }
 }

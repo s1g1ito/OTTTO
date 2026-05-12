@@ -1,44 +1,32 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class MouseLook : MonoBehaviour
 {
+    public float sensitivity = 200f;
     public Transform playerBody;
-    public float sensitivity = 0.2f;
 
-    private InputAction lookAction;
+    private Vector2 lookValue;
     private float xRotation = 0f;
 
-    void Awake()
+    void Start()
     {
-        lookAction = new InputAction(type: InputActionType.Value);
-        lookAction.AddBinding("<Mouse>/delta");
-    }
-
-    void OnEnable()
-    {
-        lookAction.Enable();
-    }
-
-    void OnDisable()
-    {
-        lookAction.Disable();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
     {
-        Vector2 look = lookAction.ReadValue<Vector2>();
+        Vector2 mouseDelta = lookValue * sensitivity * Time.deltaTime;
 
-        float mouseX = look.x * sensitivity;
-        float mouseY = look.y * sensitivity;
-
-        // 上下（カメラ）
-        xRotation -= mouseY;
+        xRotation -= mouseDelta.y;
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        playerBody.Rotate(Vector3.up * mouseDelta.x);
+    }
 
-        // 左右（プレイヤー）
-        playerBody.Rotate(Vector3.up * mouseX);
+    // Unity Events で使える形
+    public void OnLook(Vector2 value)
+    {
+        lookValue = value;
     }
 }
