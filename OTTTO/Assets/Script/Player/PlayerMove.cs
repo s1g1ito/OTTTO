@@ -19,5 +19,18 @@ public class PlayerMove : MonoBehaviour
         {
             transform.position -= transform.forward * moveSpeed;
         }
+
+
+        if (keyboard.rightArrowKey.isPressed)
+        {
+            transform.position += transform.right * moveSpeed;
+        }
+
+
+        if (keyboard.leftArrowKey.isPressed)
+        {
+            transform.position -= transform.right * moveSpeed;
+
+        }
     }
 }
