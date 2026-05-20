@@ -1153,7 +1153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44a218cfaac8add4fba8746dd0906f48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  playerBody: {fileID: 639633676}
   sensitivity: 0.2
 --- !u!1 &616529554
 GameObject:
@@ -1334,8 +1333,8 @@ GameObject:
   - component: {fileID: 639633673}
   - component: {fileID: 639633672}
   - component: {fileID: 639633677}
-  - component: {fileID: 639633678}
   - component: {fileID: 639633680}
+  - component: {fileID: 639633681}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1465,6 +1464,7 @@ Transform:
   m_Children:
   - {fileID: 5177639}
   - {fileID: 597336609}
+  - {fileID: 2076824599}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &639633677
@@ -1486,19 +1486,6 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 256
---- !u!114 &639633678
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 639633670}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6541dcbd63e4ad40bab530d230a4fb9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  handRb: {fileID: 2056606320}
 --- !u!95 &639633680
 Animator:
   serializedVersion: 7
@@ -1516,18 +1503,38 @@ Animator:
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'mixamorig:Hips'\n\tTransform 'mixamorig:LeftFoot'\n\tTransform
+    'mixamorig:LeftHandIndex1'\n\tTransform 'mixamorig:LeftHandPinky2'\n\tTransform
+    'mixamorig:RightHandRing2'\n\tTransform 'mixamorig:Spine1'\n\tTransform 'mixamorig:LeftToeBase'\n\tTransform
+    'mixamorig:RightArm'\n\tTransform 'mixamorig:LeftLeg'\n\tTransform 'mixamorig:LeftShoulder'\n\tand
+    more ...\n\tFrom animation clip 'Idle'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &639633681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 639633670}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 294e2b5de9c17744fa1dd42e416342aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  sensitivity: 0.2
+  cameraTransform: {fileID: 597336609}
 --- !u!1001 &743187577
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 639633676}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 2a4555bc528e0414b945b0b048b678e8, type: 3}
       propertyPath: m_LocalScale.x
@@ -1547,11 +1554,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2a4555bc528e0414b945b0b048b678e8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.08
+      value: -1.4100001
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2a4555bc528e0414b945b0b048b678e8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.05581
+      value: 3.15
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2a4555bc528e0414b945b0b048b678e8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1559,15 +1566,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2a4555bc528e0414b945b0b048b678e8, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2a4555bc528e0414b945b0b048b678e8, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2a4555bc528e0414b945b0b048b678e8, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2a4555bc528e0414b945b0b048b678e8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3708,6 +3715,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f0271df749728104eac22c3d897fd8ce, type: 3}
+--- !u!4 &2076824599 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 2a4555bc528e0414b945b0b048b678e8, type: 3}
+  m_PrefabInstance: {fileID: 743187577}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -3724,4 +3736,3 @@ SceneRoots:
   - {fileID: 512821323}
   - {fileID: 32544565}
   - {fileID: 373874304}
-  - {fileID: 743187577}
