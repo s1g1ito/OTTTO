@@ -20,14 +20,17 @@ public class PlayerMove : MonoBehaviour
             transform.position -= transform.forward * moveSpeed;
         }
 
+
         if (keyboard.rightArrowKey.isPressed)
         {
-            transform.Rotate(0, rotateSpeed, 0);
+            transform.position += transform.right * moveSpeed;
         }
+
 
         if (keyboard.leftArrowKey.isPressed)
         {
-            transform.Rotate(0, -rotateSpeed, 0);
+            transform.position -= transform.right * moveSpeed;
+
         }
     }
 }
