@@ -2,21 +2,22 @@ using UnityEngine;
 
 public class PressurePlate : MonoBehaviour
 {
-    public Door door;
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Item"))
+        if (other.CompareTag("Player"))
         {
-            door.OpenDoor();
+            other.GetComponent<PlayerController>().isReversed = true;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Item"))
+        if (other.CompareTag("Player"))
         {
-            door.CloseDoor();
+            other.GetComponent<PlayerController>().isReversed = false;
         }
     }
 }
+
+
+
