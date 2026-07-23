@@ -15,6 +15,14 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isGrounded;
 
+
+    Animator animator;
+
+    void Start()
+    {
+        animator = GetComponentInChildren<Animator>();
+    }
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -53,6 +61,15 @@ public class PlayerMovement : MonoBehaviour
         {
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
+
+        // “ü—ÍŽæ“¾
+        Vector2 input = moveAction.ReadValue<Vector2>();
+
+        // “ü—Í‚Ì‹­‚³
+        float speed = input.magnitude;
+
+        // Animator‚Ö‘—‚é
+        //animator.SetFloat("Speed", speed);
     }
 
     void FixedUpdate()
