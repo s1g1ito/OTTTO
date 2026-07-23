@@ -1153,7 +1153,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44a218cfaac8add4fba8746dd0906f48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  sensitivity: 0.2
+  sensitivity: 100
+  playerBody: {fileID: 639633676}
 --- !u!1 &616529554
 GameObject:
   m_ObjectHideFlags: 0
@@ -1334,7 +1335,6 @@ GameObject:
   - component: {fileID: 639633672}
   - component: {fileID: 639633677}
   - component: {fileID: 639633680}
-  - component: {fileID: 639633681}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1448,7 +1448,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 639633670}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 0}
 --- !u!4 &639633676
 Transform:
   m_ObjectHideFlags: 0
@@ -1507,27 +1507,13 @@ Animator:
     are already bound by a Humanoid avatar. These transforms can only be changed
     by Humanoid clips.\n\tTransform 'mixamorig:Hips'\n\tTransform 'mixamorig:LeftFoot'\n\tTransform
     'mixamorig:LeftHandIndex1'\n\tTransform 'mixamorig:LeftHandPinky2'\n\tTransform
-    'mixamorig:RightHandRing2'\n\tTransform 'mixamorig:Spine1'\n\tTransform 'mixamorig:LeftToeBase'\n\tTransform
-    'mixamorig:RightArm'\n\tTransform 'mixamorig:LeftLeg'\n\tTransform 'mixamorig:LeftShoulder'\n\tand
-    more ...\n\tFrom animation clip 'Idle'"
+    'mixamorig:RightHandRing2'\n\tTransform 'mixamorig:Spine1'\n\tTransform 'mixamorig:RightArm'\n\tTransform
+    'mixamorig:LeftLeg'\n\tTransform 'mixamorig:LeftShoulder'\n\tTransform 'mixamorig:RightHandRing1'\n\tand
+    more ...\n\tFrom animation clip 'Idle 1'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &639633681
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 639633670}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 294e2b5de9c17744fa1dd42e416342aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  sensitivity: 0.2
-  cameraTransform: {fileID: 597336609}
 --- !u!1001 &743187577
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1550,7 +1536,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2a4555bc528e0414b945b0b048b678e8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.82
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2a4555bc528e0414b945b0b048b678e8, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1558,7 +1544,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2a4555bc528e0414b945b0b048b678e8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.15
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2a4555bc528e0414b945b0b048b678e8, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1596,6 +1582,16 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: b7cb39a36da604e4191a82fd92c1e4ff, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 2a4555bc528e0414b945b0b048b678e8, type: 3}
+      propertyPath: m_WarningMessage
+      value: "\nBinding warning: Some generic clip(s) animate transforms that are
+        already bound by a Humanoid avatar. These transforms can only be changed
+        by Humanoid clips.\n\tTransform 'mixamorig:Hips'\n\tTransform 'mixamorig:LeftFoot'\n\tTransform
+        'mixamorig:LeftHandIndex1'\n\tTransform 'mixamorig:LeftHandPinky2'\n\tTransform
+        'mixamorig:RightHandRing2'\n\tTransform 'mixamorig:Spine1'\n\tTransform 'mixamorig:RightArm'\n\tTransform
+        'mixamorig:LeftLeg'\n\tTransform 'mixamorig:LeftShoulder'\n\tTransform 'mixamorig:RightHandRing1'\n\tand
+        more ...\n\tFrom animation clip 'Idle 1'"
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
