@@ -15,11 +15,11 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isGrounded;
 
-
     Animator animator;
 
     void Start()
     {
+        // 子オブジェクトに付いているAnimatorを取得
         animator = GetComponentInChildren<Animator>();
     }
 
@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
         rb.freezeRotation = true;
 
         moveAction = new InputAction(type: InputActionType.Value);
+
         moveAction.AddCompositeBinding("2DVector")
             .With("Up", "<Keyboard>/w")
             .With("Down", "<Keyboard>/s")
@@ -36,7 +37,10 @@ public class PlayerMovement : MonoBehaviour
             .With("Right", "<Keyboard>/d");
 
         // ジャンプ入力
-        jumpAction = new InputAction(type: InputActionType.Button, binding: "<Keyboard>/space");
+        jumpAction = new InputAction(
+            type: InputActionType.Button,
+            binding: "<Keyboard>/space"
+        );
     }
 
     void OnEnable()
@@ -54,12 +58,19 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // 接地判定
-        isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        isGrounded = Physics.CheckSphere(
+            groundCheck.position,
+            groundDistance,
+            groundMask
+        );
 
         // ジャンプ
         if (jumpAction.triggered && isGrounded)
         {
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            rb.AddForce(
+                Vector3.up * jumpForce,
+                ForceMode.Impulse
+            );
         }
 
         // 入力取得
@@ -68,15 +79,21 @@ public class PlayerMovement : MonoBehaviour
         // 入力の強さ
         float speed = input.magnitude;
 
-        // Animatorへ送る
-        //animator.SetFloat("Speed", speed);
+        // AnimatorへSpeedを送る
+        animator.SetFloat("Speed", speed);
     }
 
     void FixedUpdate()
     {
         Vector2 input = moveAction.ReadValue<Vector2>();
-        Vector3 move = transform.forward * input.y + transform.right * input.x;
 
-        rb.MovePosition(rb.position + move * moveSpeed * Time.fixedDeltaTime);
+        Vector3 move =
+            transform.forward * input.y +
+            transform.right * input.x;
+
+        rb.MovePosition(
+            rb.position +
+            move * moveSpeed * Time.fixedDeltaTime
+        );
     }
 }
