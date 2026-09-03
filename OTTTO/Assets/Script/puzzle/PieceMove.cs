@@ -22,7 +22,7 @@ public class PieceMove : MonoBehaviour
 
         {
 
-            transform.position += new Vector3(0, 1.3f, 0);
+            transform.position += new Vector3(0, 1f, 0);
 
         }
 
@@ -34,7 +34,7 @@ public class PieceMove : MonoBehaviour
 
         {
 
-            transform.position -= new Vector3(0, 1.3f, 0);
+            transform.position -= new Vector3(0, 1f, 0);
 
         }
 
@@ -59,7 +59,6 @@ public class PieceMove : MonoBehaviour
         {
 
             transform.position -= new Vector3(1, 0, 0);
-
         }
 
     }
