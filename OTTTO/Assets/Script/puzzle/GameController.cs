@@ -57,7 +57,7 @@ public class GameContollore : MonoBehaviour
 
     {
 
-        float offsetY = -1.3f;
+        float offsetY = -1f;
 
 
 
