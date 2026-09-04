@@ -8,6 +8,7 @@ TagManager:
   - WarpTrigger
   - Item
   - Ground
+  - KeyBox
   layers:
   - Default
   - TransparentFX
