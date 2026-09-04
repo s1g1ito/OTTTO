@@ -31,7 +31,7 @@ public class RotatingWall : MonoBehaviour
             return;
 
         transform.rotation = Quaternion.RotateTowards(
-            transform.rotation,
+            transform.rotation, 
             targetRotation,
             rotateSpeed * Time.deltaTime
         );
