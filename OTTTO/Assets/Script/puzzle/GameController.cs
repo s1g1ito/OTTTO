@@ -9,9 +9,11 @@ public class GameContollore : MonoBehaviour
 
     private List<GameObject> PieceList = new List<GameObject>();
 
-   
+
 
     //
+
+    
 
     private int[,] puzzle1 = new int[3, 3]
 
@@ -33,6 +35,8 @@ public class GameContollore : MonoBehaviour
         CreatePieces();
 
     }
+
+   
     void CreatePieces()
 
     {
