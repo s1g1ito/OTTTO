@@ -15,6 +15,15 @@ public class GrabSystem : MonoBehaviour
     // 現在持っている物
     private GameObject heldObject;
 
+    // プレイヤーのAnimator
+    private Animator animator;
+
+    void Start()
+    {
+        // Playerの子にあるAnimatorを取得
+        animator = GetComponentInChildren<Animator>();
+    }
+
     void Update()
     {
         // Eキーを押した
@@ -76,6 +85,9 @@ public class GrabSystem : MonoBehaviour
             rb.isKinematic = true;
         }
 
+        // ★箱を持っている状態にする
+        animator.SetBool("IsHolding", true);
+
         Debug.Log("KeyBoxを掴みました！");
     }
 
@@ -92,6 +104,9 @@ public class GrabSystem : MonoBehaviour
             // 物理演算を再開
             rb.isKinematic = false;
         }
+
+        // ★箱を持っていない状態にする
+        animator.SetBool("IsHolding", false);
 
         Debug.Log("KeyBoxを離しました！");
 
