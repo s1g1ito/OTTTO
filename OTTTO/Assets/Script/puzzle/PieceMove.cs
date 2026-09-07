@@ -3,6 +3,8 @@ using UnityEngine;
 public class PieceMove : MonoBehaviour
 {
 
+  
+
     private void OnMouseDown()
 
     {
@@ -13,6 +15,7 @@ public class PieceMove : MonoBehaviour
     void PieceMoving()
 
     {
+        Debug.Log("Debug");
 
         //è„Ç…RayÇîÚÇŒÇ∑ÅB
 
