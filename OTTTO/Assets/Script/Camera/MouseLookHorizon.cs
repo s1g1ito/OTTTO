@@ -7,6 +7,8 @@ public class MouseLookHorizon : MonoBehaviour
 
     float xRotation = 0f;
 
+    public bool canLook = true;
+
     private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -15,6 +17,8 @@ public class MouseLookHorizon : MonoBehaviour
 
     private void Update()
     {
+        if (!canLook) return;
+
         float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
 
