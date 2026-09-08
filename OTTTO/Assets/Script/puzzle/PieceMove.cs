@@ -5,6 +5,8 @@ public class PieceMove : MonoBehaviour
 
     private GameContollore gameContolloreCS;
 
+    public bool isClear;
+
 
 
     private void Start()
@@ -19,6 +21,13 @@ public class PieceMove : MonoBehaviour
     private void OnMouseDown()
 
     {
+        if (isClear)
+
+        {
+
+            return;
+
+        }
 
         PieceMoving();
 
