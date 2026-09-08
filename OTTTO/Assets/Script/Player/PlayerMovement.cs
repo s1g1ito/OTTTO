@@ -3,7 +3,12 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed = 5f;
+    // 箱を持っていない時の速度
+    public float moveSpeed = 7f;
+
+    // 箱を持っている時の速度
+    public float holdingMoveSpeed = 3f;
+
     public float jumpForce = 5f;
     public Transform groundCheck;
     public float groundDistance = 0.2f;
@@ -91,9 +96,23 @@ public class PlayerMovement : MonoBehaviour
             transform.forward * input.y +
             transform.right * input.x;
 
+        // 箱を持っているかで速度を変更
+        float currentSpeed;
+
+        if (animator.GetBool("IsHolding"))
+        {
+            // 箱を持っている
+            currentSpeed = holdingMoveSpeed;
+        }
+        else
+        {
+            // 箱を持っていない
+            currentSpeed = moveSpeed;
+        }
+
         rb.MovePosition(
             rb.position +
-            move * moveSpeed * Time.fixedDeltaTime
+            move * currentSpeed * Time.fixedDeltaTime
         );
     }
 }
