@@ -11,6 +11,8 @@ public class GameContollore : MonoBehaviour
 
     public Vector3[] Pos;
 
+    public GameObject ClearMessage;
+
 
 
 
@@ -31,7 +33,7 @@ public class GameContollore : MonoBehaviour
     void Start()
 
     {
-
+        ClearMessage.SetActive(false);
         SetCorrectPos();
         CreatePieces();
 
@@ -43,7 +45,7 @@ public class GameContollore : MonoBehaviour
 
         int n = 0;
 
-        float offsetY = -1.3f;
+        float offsetY = -1f;
 
 
 
@@ -83,9 +85,7 @@ public class GameContollore : MonoBehaviour
         }
         PieceList[8].SetActive(false);
 
-        PieceList[8].SetActive(true);
-
-        PieceList[8].transform.position = new Vector2(2, -2.6f);
+       
 
         Dealing();
 
@@ -146,10 +146,35 @@ public class GameContollore : MonoBehaviour
         {
 
             //ÉNÉäÉAÇµÇΩÇ∆Ç´ÇÃââèo
+            PieceList[8].SetActive(true);
+
+            PieceList[8].transform.position = new Vector2(2, -2f);
+
+            foreach (var item in PieceList)
+
+            {
+
+                item.GetComponent<PieceMove>().isClear = true;
+
+            }
+
+            ClearMessage.SetActive(true);
+
+            Invoke("LastPiece", 1f);
 
 
 
         }
+
+    }
+
+    void LastPiece()
+
+    {
+
+        PieceList[8].SetActive(true);
+
+        PieceList[8].transform.position = new Vector2(2, -2f);
 
     }
 
