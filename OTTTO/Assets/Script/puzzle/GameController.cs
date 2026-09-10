@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameContollore : MonoBehaviour
 {
@@ -21,11 +22,11 @@ public class GameContollore : MonoBehaviour
 
     {
 
-        {2,6,0 },
+        {0,1,2 },
 
-        {7,4,5 },
+        {3,4,5 },
 
-        {1,3,8 },
+        {6,8,7 },
 
     };
 
@@ -171,10 +172,14 @@ public class GameContollore : MonoBehaviour
     void LastPiece()
 
     {
+        Debug.Log("last");
+
 
         PieceList[8].SetActive(true);
 
         PieceList[8].transform.position = new Vector2(2, -2f);
+
+        SceneManager.LoadScene("stage5");
 
     }
 
