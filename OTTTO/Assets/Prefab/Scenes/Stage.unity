@@ -17926,27 +17926,13 @@ GameObject:
   - component: {fileID: 194324323}
   - component: {fileID: 194324322}
   - component: {fileID: 194324321}
-  - component: {fileID: 194324320}
   m_Layer: 0
-  m_Name: MouseLookTrigger
+  m_Name: CodeSceneTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &194324320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 194324319}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0307d8a2516e7854da76110f574257cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DisableMouseLookTrigger
-  MouseLookHorizon: {fileID: 0}
 --- !u!65 &194324321
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -18034,7 +18020,7 @@ Transform:
   m_GameObject: {fileID: 194324319}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 94.1529, y: 1.9309, z: 96.34}
+  m_LocalPosition: {x: 94.1529, y: 1.9309, z: 95.48}
   m_LocalScale: {x: 4.5704665, y: 3.66532, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -151573,9 +151559,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 75b2970d0f959ca4e8f53ee3c78e297e, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1591970486}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 75b2970d0f959ca4e8f53ee3c78e297e, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1591970491}
   m_SourcePrefab: {fileID: 100100000, guid: 75b2970d0f959ca4e8f53ee3c78e297e, type: 3}
 --- !u!1 &1591970482 stripped
 GameObject:
@@ -151695,22 +151678,7 @@ MonoBehaviour:
   groundDistance: 0.2
   groundMask:
     serializedVersion: 2
-    m_Bits: 256
---- !u!114 &1591970491
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1591970482}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6151791ff0ac09546b196cbbec9b37c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MouseLookHorizon
-  sensitivity: 200
-  cameraTransform: {fileID: 1600944829}
-  canLook: 1
+    m_Bits: 0
 --- !u!1 &1592231146
 GameObject:
   m_ObjectHideFlags: 0
