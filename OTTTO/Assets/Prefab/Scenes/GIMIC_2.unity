@@ -51982,6 +51982,7 @@ GameObject:
   - component: {fileID: 1731017012}
   - component: {fileID: 1731017011}
   - component: {fileID: 1731017010}
+  - component: {fileID: 1731017013}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -52183,6 +52184,22 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1731017008}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1731017013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1731017008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 445712dac94c56f4c8f1e080e073d980, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FloorMove
+  floors:
+  - {fileID: 1014002211}
+  - {fileID: 312823998}
+  - {fileID: 698299620}
 --- !u!1 &1739058451
 GameObject:
   m_ObjectHideFlags: 0
