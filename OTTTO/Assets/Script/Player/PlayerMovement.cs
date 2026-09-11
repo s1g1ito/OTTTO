@@ -85,7 +85,7 @@ public class PlayerMovement : MonoBehaviour
         float speed = input.magnitude;
 
         // Animator‚ÖSpeed‚ð‘—‚é
-        animator.SetFloat("Speed", speed);
+        //animator.SetFloat("Speed", speed);
     }
 
     void FixedUpdate()
