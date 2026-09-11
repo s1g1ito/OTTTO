@@ -3,11 +3,31 @@ using UnityEngine;
 public class PieceMove : MonoBehaviour
 {
 
-  
+    private GameContollore gameContolloreCS;
+
+    public bool isClear;
+
+
+
+    private void Start()
+
+    {
+
+        gameContolloreCS = FindObjectOfType<GameContollore>();
+
+    }
+
 
     private void OnMouseDown()
 
     {
+        if (isClear)
+
+        {
+
+            return;
+
+        }
 
         PieceMoving();
 
@@ -15,7 +35,9 @@ public class PieceMove : MonoBehaviour
     void PieceMoving()
 
     {
+
         Debug.Log("Debug");
+      
 
         //è„Ç…RayÇîÚÇŒÇ∑ÅB
 
@@ -29,6 +51,7 @@ public class PieceMove : MonoBehaviour
 
         }
 
+        
         //â∫Ç…RayÇîÚÇŒÇ∑ÅB
 
         RaycastHit2D hitDown = Physics2D.Raycast(transform.position + Vector3.down, Vector2.down, 0.1f);
@@ -63,6 +86,7 @@ public class PieceMove : MonoBehaviour
 
             transform.position -= new Vector3(1, 0, 0);
         }
+        gameContolloreCS.ClearCheck();
 
     }
    
