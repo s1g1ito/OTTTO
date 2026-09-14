@@ -10,6 +10,8 @@ public class NumberPanel : MonoBehaviour
 
     public void OnClick()
     {
+        Debug.Log("Clicked!");
+
         number++;
 
         if (number >= 10)
