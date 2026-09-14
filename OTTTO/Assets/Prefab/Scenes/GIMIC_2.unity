@@ -27217,6 +27217,7 @@ GameObject:
   - component: {fileID: 892282201}
   - component: {fileID: 892282200}
   - component: {fileID: 892282199}
+  - component: {fileID: 892282202}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -27298,6 +27299,50 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &892282202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 892282198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!1 &893118612
 GameObject:
   m_ObjectHideFlags: 0
@@ -33219,6 +33264,7 @@ GameObject:
   - component: {fileID: 1085109987}
   - component: {fileID: 1085109986}
   - component: {fileID: 1085109985}
+  - component: {fileID: 1085109992}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -33261,6 +33307,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 5
+  holdingMoveSpeed: 3
   jumpForce: 7
   groundCheck: {fileID: 719767427}
   groundDistance: 0.2
@@ -33383,7 +33430,7 @@ Transform:
   m_GameObject: {fileID: 1085109984}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.5, y: 1.33, z: 0}
+  m_LocalPosition: {x: -0.19, y: 1.33, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -33392,6 +33439,20 @@ Transform:
   - {fileID: 334779379}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1085109992
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1085109984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ad5869dbfadcc444dbb8e30020d8ec34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerRespawn
+  startPoint: {fileID: 1731017009}
+  fallHeight: -5
 --- !u!1 &1091851024
 GameObject:
   m_ObjectHideFlags: 0
@@ -51981,8 +52042,8 @@ GameObject:
   - component: {fileID: 1731017009}
   - component: {fileID: 1731017012}
   - component: {fileID: 1731017011}
-  - component: {fileID: 1731017010}
   - component: {fileID: 1731017013}
+  - component: {fileID: 1731017010}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -52197,9 +52258,109 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FloorMove
   floors:
+  - {fileID: 872817360}
+  - {fileID: 1958891864}
   - {fileID: 1014002211}
+  - {fileID: 563323606}
+  - {fileID: 428548601}
+  - {fileID: 810485419}
+  - {fileID: 1474904813}
   - {fileID: 312823998}
+  - {fileID: 1112368135}
+  - {fileID: 37531572}
+  - {fileID: 1245833502}
   - {fileID: 698299620}
+  - {fileID: 1759840910}
+  - {fileID: 1266068319}
+  - {fileID: 1670383020}
+  - {fileID: 654108910}
+  - {fileID: 1720893103}
+  - {fileID: 331755944}
+  - {fileID: 876231485}
+  - {fileID: 978040997}
+  - {fileID: 1283929299}
+  - {fileID: 673312597}
+  - {fileID: 1067858746}
+  - {fileID: 1971353433}
+  - {fileID: 1940061198}
+  - {fileID: 1191838552}
+  - {fileID: 878696045}
+  - {fileID: 1193812370}
+  - {fileID: 608312268}
+  - {fileID: 851979723}
+  - {fileID: 748418017}
+  - {fileID: 1391869921}
+  - {fileID: 1870605410}
+  - {fileID: 2109505087}
+  - {fileID: 117382555}
+  - {fileID: 233183814}
+  - {fileID: 657894646}
+  - {fileID: 1969343280}
+  - {fileID: 40971365}
+  - {fileID: 1539192990}
+  - {fileID: 2028297222}
+  - {fileID: 1302808587}
+  - {fileID: 135930245}
+  - {fileID: 103066519}
+  - {fileID: 451273283}
+  - {fileID: 1091851024}
+  - {fileID: 1859989770}
+  - {fileID: 1157506565}
+  - {fileID: 599390113}
+  - {fileID: 1236060488}
+  - {fileID: 1664693782}
+  - {fileID: 227362214}
+  - {fileID: 893118612}
+  - {fileID: 1302127733}
+  - {fileID: 836497465}
+  - {fileID: 555955616}
+  - {fileID: 545983128}
+  - {fileID: 1450531294}
+  - {fileID: 883198356}
+  - {fileID: 1677478587}
+  - {fileID: 1715607897}
+  - {fileID: 392084923}
+  - {fileID: 755978240}
+  - {fileID: 1301877838}
+  - {fileID: 1337445202}
+  - {fileID: 79158153}
+  - {fileID: 539495366}
+  - {fileID: 1643936272}
+  - {fileID: 1947728774}
+  - {fileID: 839046965}
+  - {fileID: 1779789841}
+  - {fileID: 464640485}
+  - {fileID: 1059006858}
+  - {fileID: 1739058451}
+  - {fileID: 32380797}
+  - {fileID: 723641697}
+  - {fileID: 1281527893}
+  - {fileID: 2105767318}
+  - {fileID: 477549178}
+  - {fileID: 1499977824}
+  - {fileID: 574779977}
+  - {fileID: 1955770562}
+  - {fileID: 1002429811}
+  - {fileID: 203356177}
+  - {fileID: 1880412755}
+  - {fileID: 1285580894}
+  - {fileID: 843098835}
+  - {fileID: 1784861314}
+  - {fileID: 290831282}
+  - {fileID: 789197455}
+  - {fileID: 1208094466}
+  - {fileID: 1370840877}
+  - {fileID: 1506600369}
+  - {fileID: 1748102102}
+  - {fileID: 1968016509}
+  - {fileID: 464681077}
+  - {fileID: 951136190}
+  - {fileID: 320981018}
+  - {fileID: 1730229768}
+  - {fileID: 258312381}
+  holeCount: 5
+  hideTime: 3
+  showTime: 3
 --- !u!1 &1739058451
 GameObject:
   m_ObjectHideFlags: 0
