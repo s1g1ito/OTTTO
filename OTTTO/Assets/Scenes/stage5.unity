@@ -3760,6 +3760,7 @@ GameObject:
   - component: {fileID: 133282450}
   - component: {fileID: 133282454}
   - component: {fileID: 133282455}
+  - component: {fileID: 133282456}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -3854,7 +3855,7 @@ Transform:
   m_GameObject: {fileID: 133282443}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 38.67, y: 0.85, z: 46.32}
+  m_LocalPosition: {x: 44.82, y: 0.85, z: 46.32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3869,12 +3870,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 133282443}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 342ee30d816cf40468a13c5f1c5a60d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 5
+  holdingMoveSpeed: 3
   jumpForce: 5
   groundCheck: {fileID: 1405147198}
   groundDistance: 0.2
@@ -3920,6 +3922,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &133282456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133282443}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f8d7484161f3c24ba118c69a4e630f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMove
+  moveSpeed: 0.03
+  rotateSpeed: 2
 --- !u!1 &134928049
 GameObject:
   m_ObjectHideFlags: 0
@@ -41875,6 +41891,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1760657773}
   - component: {fileID: 1760657772}
+  - component: {fileID: 1760657774}
   m_Layer: 0
   m_Name: puzzle
   m_TagString: Untagged
@@ -41950,7 +41967,7 @@ Transform:
   m_GameObject: {fileID: 1760657771}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 45.966, y: 1.529, z: 46.955}
+  m_LocalPosition: {x: 45.966, y: 1.28, z: 46.986}
   m_LocalScale: {x: 0.29289, y: 0.29289, z: 0.29289}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -41963,6 +41980,27 @@ Transform:
   - {fileID: 1408131274}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1760657774
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760657771}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1764015932
 GameObject:
   m_ObjectHideFlags: 0
