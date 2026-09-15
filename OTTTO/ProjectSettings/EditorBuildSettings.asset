@@ -5,16 +5,19 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Stage.unity
     guid: 0940f50941ced0641b8069b318ad2112
+  - enabled: 1
+    path: Assets/Prefab/Scenes/CodeScene.unity
+    guid: 83e3c675726970040abe5ac7901caa7e
   - enabled: 0
     path: Assets/Scenes/GameOver.unity
     guid: 60b3ae228f179b645b319ef495ea3c22
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/stage5.unity
     guid: c6631d3c2141ec84aa1b18b8bf675745
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/puzzle.unity
     guid: ac62c2a54a01b504c820a53b5b1552f2
   m_configObjects:
