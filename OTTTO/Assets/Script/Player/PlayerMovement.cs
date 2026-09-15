@@ -9,16 +9,8 @@ public class PlayerMovement : MonoBehaviour
     // 箱を持っている時の速度
     public float holdingMoveSpeed = 3f;
 
-    public float jumpForce = 5f;
-    public Transform groundCheck;
-    public float groundDistance = 0.2f;
-    public LayerMask groundMask;
-
     private Rigidbody rb;
     private InputAction moveAction;
-    private InputAction jumpAction;
-
-    private bool isGrounded;
 
     Animator animator;
 
@@ -33,6 +25,7 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
+        // 移動入力
         moveAction = new InputAction(type: InputActionType.Value);
 
         moveAction.AddCompositeBinding("2DVector")
@@ -40,51 +33,26 @@ public class PlayerMovement : MonoBehaviour
             .With("Down", "<Keyboard>/s")
             .With("Left", "<Keyboard>/a")
             .With("Right", "<Keyboard>/d");
-
-        // ジャンプ入力
-        jumpAction = new InputAction(
-            type: InputActionType.Button,
-            binding: "<Keyboard>/space"
-        );
     }
 
     void OnEnable()
     {
         moveAction.Enable();
-        jumpAction.Enable();
     }
 
     void OnDisable()
     {
         moveAction.Disable();
-        jumpAction.Disable();
     }
 
     void Update()
     {
-        // 接地判定
-        isGrounded = Physics.CheckSphere(
-            groundCheck.position,
-            groundDistance,
-            groundMask
-        );
-
-        // ジャンプ
-        if (jumpAction.triggered && isGrounded)
-        {
-            rb.AddForce(
-                Vector3.up * jumpForce,
-                ForceMode.Impulse
-            );
-        }
-
         // 入力取得
         Vector2 input = moveAction.ReadValue<Vector2>();
 
-        // 入力の強さ
+        // 入力の強さをAnimatorへ送る
         float speed = input.magnitude;
 
-        // AnimatorへSpeedを送る
         animator.SetFloat("Speed", speed);
     }
 
@@ -101,12 +69,10 @@ public class PlayerMovement : MonoBehaviour
 
         if (animator.GetBool("IsHolding"))
         {
-            // 箱を持っている
             currentSpeed = holdingMoveSpeed;
         }
         else
         {
-            // 箱を持っていない
             currentSpeed = moveSpeed;
         }
 
