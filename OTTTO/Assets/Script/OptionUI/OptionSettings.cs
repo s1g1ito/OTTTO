@@ -63,15 +63,23 @@ public class OptionSettings : MonoBehaviour
     {
         if (isWindow)
         {
-            // ウィンドウ
-            Screen.fullScreenMode = FullScreenMode.Windowed;
+            // ウィンドウモード
+            Screen.SetResolution(
+                Screen.width,
+                Screen.height,
+                FullScreenMode.Windowed
+            );
 
             Debug.Log("ウィンドウモード");
         }
         else
         {
             // フルスクリーン
-            Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+            Screen.SetResolution(
+                Screen.width,
+                Screen.height,
+                FullScreenMode.FullScreenWindow
+            );
 
             Debug.Log("フルスクリーン");
         }
