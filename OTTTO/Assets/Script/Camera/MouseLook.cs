@@ -19,6 +19,15 @@ public class MouseLook : MonoBehaviour
         // マウスカーソルを画面中央に固定する
         // ゲーム中にカーソルが画面外へ出ないようにする
         Cursor.lockState = CursorLockMode.Locked;
+
+        // 保存されているマウス感度を取得
+        // 保存されていなければ1.0
+        float sensitivityValue = PlayerPrefs.GetFloat("MouseSensitivity", 1.0f);
+
+        // 基準値100にSliderの値を掛ける
+        sensitivity = 100f * sensitivityValue;
+
+        Debug.Log("読み込んだマウス感度: " + sensitivity);
     }
 
     void Update()
