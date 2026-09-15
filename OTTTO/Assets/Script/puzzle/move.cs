@@ -29,7 +29,9 @@ public class move : MonoBehaviour
 
             Debug.Log("puzzle‚ÉˆÚ“®‚µ‚Ü‚µ‚½");
 
-            this.transform.position = new Vector3(48f, 1f, 44f);
+            this.transform.position = new Vector3(46f, 1f, 45f);
+
+            Debug.Log("ˆÚ“®‚µ‚Ü‚µ‚½");
 
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined;

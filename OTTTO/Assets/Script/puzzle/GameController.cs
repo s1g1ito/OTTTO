@@ -179,11 +179,11 @@ public class GameContollore : MonoBehaviour
 
         PieceList[8].transform.position = new Vector2(2, -2f);
 
-        SceneManager.LoadScene("stage5");
+        SceneManager.LoadScene("stage6");
 
         
         this.transform.position = new Vector3(46f, 1f, 45f);
-        Debug.Log("stage5");
+        Debug.Log("stage6");
     }
 
 
