@@ -1,9 +1,18 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class OptionSettings : MonoBehaviour
 {
+    // ==============================
+    // オプション画面
+    // ==============================
+
+    // オプション画面のCanvas
+    public GameObject optionCanvas;
+
+
     // ==============================
     // 画面サイズ
     // ==============================
@@ -42,6 +51,13 @@ public class OptionSettings : MonoBehaviour
     void Start()
     {
         // ------------------------------
+        // オプション画面を最初は非表示
+        // ------------------------------
+
+        optionCanvas.SetActive(false);
+
+
+        // ------------------------------
         // 現在の画面サイズをDropdownに反映
         // ------------------------------
 
@@ -77,14 +93,72 @@ public class OptionSettings : MonoBehaviour
         // マウス感度
         // ------------------------------
 
-        // 初期値
-        mouseSensitivitySlider.value = 1.0f;
+        // 保存されているマウス感度を読み込む
+        float savedSensitivity =
+            PlayerPrefs.GetFloat("MouseSensitivity", 1.0f);
+
+        mouseSensitivitySlider.value = savedSensitivity;
+
+        // 初期値を表示
+        ChangeMouseSensitivity(savedSensitivity);
 
         // Sliderが変更されたら呼ぶ
         mouseSensitivitySlider.onValueChanged.AddListener(ChangeMouseSensitivity);
+    }
 
-        // 初期値を表示
-        ChangeMouseSensitivity(mouseSensitivitySlider.value);
+
+    // ==============================
+    // Update
+    // ==============================
+
+    void Update()
+    {
+        // Escキーを押したら
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
+        {
+            // オプション画面が表示中なら閉じる
+            if (optionCanvas.activeSelf)
+            {
+                CloseOption();
+            }
+            // 非表示なら開く
+            else
+            {
+                OpenOption();
+            }
+        }
+    }
+
+
+    // ==============================
+    // オプション画面を開く
+    // ==============================
+
+    public void OpenOption()
+    {
+        optionCanvas.SetActive(true);
+
+        // マウスカーソルを表示
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
+        Debug.Log("オプション画面を開きました");
+    }
+
+
+    // ==============================
+    // オプション画面を閉じる
+    // ==============================
+
+    public void CloseOption()
+    {
+        optionCanvas.SetActive(false);
+
+        // マウスカーソルをゲーム用に戻す
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        Debug.Log("オプション画面を閉じました");
     }
 
 
