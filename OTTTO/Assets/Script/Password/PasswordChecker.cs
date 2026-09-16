@@ -8,7 +8,7 @@ public class PasswordChecker : MonoBehaviour
 
     public void CheckPassword()
     {
-        if(inputField.text == "1234")
+        if(inputField.text == CodeGenerator.GeneratedCode)
         {
             PlayerPrefs.SetInt("DoorUnlocked", 1);
             SceneManager.LoadScene("Stage");
