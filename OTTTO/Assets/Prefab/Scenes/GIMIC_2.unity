@@ -31315,8 +31315,8 @@ GameObject:
   - component: {fileID: 1027455856}
   - component: {fileID: 1027455859}
   - component: {fileID: 1027455858}
-  - component: {fileID: 1027455857}
   - component: {fileID: 1027455860}
+  - component: {fileID: 1027455857}
   m_Layer: 0
   m_Name: Top
   m_TagString: Untagged
@@ -31429,6 +31429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c05ea26d1398b4f9d0bb7d7c7f534a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WallRotate
+  rotateSpeed: 180
 --- !u!1 &1027521644
 GameObject:
   m_ObjectHideFlags: 0
