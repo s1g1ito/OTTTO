@@ -2,16 +2,37 @@ using UnityEngine;
 
 public class WallRotate : MonoBehaviour
 {
-    private bool rotated = false;
+    [SerializeField] private float rotateSpeed = 180f;
+
+    private bool isRotating = false;
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (rotated) return;
-
         if (collision.gameObject.CompareTag("Player"))
         {
-            transform.Rotate(0f, 180f, 0f);
-            rotated = true;
+            isRotating = true;
+        }
+    }
+
+    private void Update()
+    {
+        if (isRotating)
+        {
+            transform.Rotate(0f, rotateSpeed * Time.deltaTime, 0f);
+
+            if (transform.eulerAngles.y >= 180f)
+            {
+                transform.rotation = Quaternion.Euler(
+                    transform.eulerAngles.x,
+                    180f,
+                    transform.eulerAngles.z
+                );
+
+                isRotating = false;
+            }
         }
     }
 }
+
+
+
