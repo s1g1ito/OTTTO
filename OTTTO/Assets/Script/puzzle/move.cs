@@ -32,7 +32,7 @@ public class move : MonoBehaviour
         {
             text = "B 拾う";
 
-            if (Input.GetKeyDown(KeyCode.B)) //Bキーを押すとアイテムを拾う
+            if (Input.GetKeyDown(KeyCode.E)) //Bキーを押すとアイテムを拾う
             {
                 Debug.Log("取得しました");
                 text = collision.gameObject.name + "を取得した";
