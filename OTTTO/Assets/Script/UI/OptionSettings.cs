@@ -138,6 +138,9 @@ public class OptionSettings : MonoBehaviour
     {
         optionCanvas.SetActive(true);
 
+        // ゲームを一時停止
+        Time.timeScale = 0f;
+
         // マウスカーソルを表示
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -153,6 +156,9 @@ public class OptionSettings : MonoBehaviour
     public void CloseOption()
     {
         optionCanvas.SetActive(false);
+
+        // ゲームを再開
+        Time.timeScale = 1f;
 
         // マウスカーソルをゲーム用に戻す
         Cursor.lockState = CursorLockMode.Locked;
