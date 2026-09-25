@@ -12,15 +12,17 @@ public class OptionSettings : MonoBehaviour
     // オプション画面のCanvas
     public GameObject optionCanvas;
 
+    // OptionシーンではON
+    // StageシーンではOFF
+    public bool showOnStart = false;
+
 
     // ==============================
     // 画面サイズ
     // ==============================
 
-    // 画面サイズDropdown
     public TMP_Dropdown screenSizeDropdown;
 
-    // 画面サイズ
     private int[] widths = { 1280, 1600, 1920 };
     private int[] heights = { 720, 900, 1080 };
 
@@ -29,7 +31,6 @@ public class OptionSettings : MonoBehaviour
     // ウィンドウモード
     // ==============================
 
-    // ウィンドウ化Toggle
     public Toggle windowModeToggle;
 
 
@@ -37,10 +38,8 @@ public class OptionSettings : MonoBehaviour
     // マウス感度
     // ==============================
 
-    // マウス感度Slider
     public Slider mouseSensitivitySlider;
 
-    // マウス感度を表示するValueText
     public TMP_Text mouseSensitivityText;
 
 
@@ -51,10 +50,33 @@ public class OptionSettings : MonoBehaviour
     void Start()
     {
         // ------------------------------
-        // オプション画面を最初は非表示
+        // オプション画面の初期状態
         // ------------------------------
 
-        optionCanvas.SetActive(false);
+        if (showOnStart)
+        {
+            // Optionシーン
+            optionCanvas.SetActive(true);
+
+            // ゲームを停止
+            Time.timeScale = 0f;
+
+            // マウスカーソルを表示
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            // Stageシーン
+            optionCanvas.SetActive(false);
+
+            // ゲームを通常状態にする
+            Time.timeScale = 1f;
+
+            // マウスカーソルをゲーム用にする
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
 
 
         // ------------------------------
@@ -74,7 +96,6 @@ public class OptionSettings : MonoBehaviour
             }
         }
 
-        // 画面サイズ変更
         screenSizeDropdown.onValueChanged.AddListener(ChangeScreenSize);
 
 
@@ -85,7 +106,6 @@ public class OptionSettings : MonoBehaviour
         // 現在がウィンドウならON
         windowModeToggle.isOn = !Screen.fullScreen;
 
-        // ウィンドウモード変更
         windowModeToggle.onValueChanged.AddListener(ChangeWindowMode);
 
 
@@ -103,7 +123,9 @@ public class OptionSettings : MonoBehaviour
         ChangeMouseSensitivity(savedSensitivity);
 
         // Sliderが変更されたら呼ぶ
-        mouseSensitivitySlider.onValueChanged.AddListener(ChangeMouseSensitivity);
+        mouseSensitivitySlider.onValueChanged.AddListener(
+            ChangeMouseSensitivity
+        );
     }
 
 
@@ -113,6 +135,12 @@ public class OptionSettings : MonoBehaviour
 
     void Update()
     {
+        // OptionシーンではEscで閉じない
+        if (showOnStart)
+        {
+            return;
+        }
+
         // Escキーを押したら
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
@@ -224,7 +252,7 @@ public class OptionSettings : MonoBehaviour
 
     void ChangeMouseSensitivity(float value)
     {
-        // 画面に「1.00」のように表示
+        // 「1.00」のように表示
         mouseSensitivityText.text = value.ToString("F2");
 
         // マウス感度を保存

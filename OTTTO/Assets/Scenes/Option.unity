@@ -3393,6 +3393,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9341306811c1a234d8a0777a2d5f3a3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OptionSettings
+  optionCanvas: {fileID: 1209912353}
+  showOnStart: 1
   screenSizeDropdown: {fileID: 404235561}
   windowModeToggle: {fileID: 1258996742}
   mouseSensitivitySlider: {fileID: 1924241352}
@@ -4881,8 +4883,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 450206b1f0396eb4aa52166ce54f20b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  targetScene: {fileID: 102900000, guid: 42a43cfc20af8264d957b9ec52e5c48a, type: 3}
-  targetSceneName: Player
+  targetScene: {fileID: 102900000, guid: 6362a96194b303f4899c088b8010e2f9, type: 3}
+  targetSceneName: Title
 --- !u!1 &1914319062
 GameObject:
   m_ObjectHideFlags: 0
