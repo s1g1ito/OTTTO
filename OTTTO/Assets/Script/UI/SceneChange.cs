@@ -3,10 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class SceneChange : MonoBehaviour
 {
-    // 移動先のシーン
+    [InspectorName("飛ぶ先のシーン")]
     public Object targetScene;
 
-    // シーンを読み込む
     public void ChangeScene()
     {
         if (targetScene != null)
@@ -15,7 +14,7 @@ public class SceneChange : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("移動先のシーンが設定されていません");
+            Debug.LogWarning("飛ぶ先のシーンが設定されていません");
         }
     }
 }
