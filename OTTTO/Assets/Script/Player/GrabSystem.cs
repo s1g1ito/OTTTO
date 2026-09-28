@@ -3,6 +3,10 @@ using UnityEngine.InputSystem;
 
 public class GrabSystem : MonoBehaviour
 {
+    // ==============================
+    // 掴む設定
+    // ==============================
+
     // 掴める距離
     public float grabDistance = 3f;
 
@@ -12,17 +16,41 @@ public class GrabSystem : MonoBehaviour
     // 掴んだ物を持つ位置
     public Transform holdPoint;
 
+
+    // ==============================
+    // 現在の状態
+    // ==============================
+
     // 現在持っている物
     private GameObject heldObject;
 
     // プレイヤーのAnimator
     private Animator animator;
 
+    // PlayerのCollider
+    private Collider playerCollider;
+
+    // 持っている箱のCollider
+    private Collider[] heldObjectColliders;
+
+
+    // ==============================
+    // Start
+    // ==============================
+
     void Start()
     {
         // Playerの子にあるAnimatorを取得
         animator = GetComponentInChildren<Animator>();
+
+        // Player自身のColliderを取得
+        playerCollider = GetComponent<Collider>();
     }
+
+
+    // ==============================
+    // Update
+    // ==============================
 
     void Update()
     {
@@ -42,8 +70,14 @@ public class GrabSystem : MonoBehaviour
         }
     }
 
+
+    // ==============================
+    // 箱を探す
+    // ==============================
+
     void TryGrab()
     {
+        // カメラから前方にRayを飛ばす
         Ray ray = new Ray(
             playerCamera.transform.position,
             playerCamera.transform.forward
@@ -66,17 +100,34 @@ public class GrabSystem : MonoBehaviour
         }
     }
 
+
+    // ==============================
+    // 箱を掴む
+    // ==============================
+
     void GrabObject(GameObject obj)
     {
         heldObject = obj;
 
+
+        // ------------------------------
         // 箱を持つ位置に移動
+        // ------------------------------
+
         heldObject.transform.position = holdPoint.position;
 
-        // 箱を持つ位置の子にする
+
+        // ------------------------------
+        // HoldPointの子にする
+        // ------------------------------
+
         heldObject.transform.SetParent(holdPoint);
 
-        // Rigidbodyを取得
+
+        // ------------------------------
+        // Rigidbody
+        // ------------------------------
+
         Rigidbody rb = heldObject.GetComponent<Rigidbody>();
 
         if (rb != null)
@@ -85,18 +136,75 @@ public class GrabSystem : MonoBehaviour
             rb.isKinematic = true;
         }
 
-        // ★箱を持っている状態にする
+
+        // ------------------------------
+        // Playerと箱の衝突を無効にする
+        // ------------------------------
+
+        heldObjectColliders =
+            heldObject.GetComponentsInChildren<Collider>();
+
+        foreach (Collider boxCollider in heldObjectColliders)
+        {
+            if (playerCollider != null)
+            {
+                Physics.IgnoreCollision(
+                    playerCollider,
+                    boxCollider,
+                    true
+                );
+            }
+        }
+
+
+        // ------------------------------
+        // Animator
+        // ------------------------------
+
         animator.SetBool("IsHolding", true);
+
 
         Debug.Log("KeyBoxを掴みました！");
     }
 
+
+    // ==============================
+    // 箱を離す
+    // ==============================
+
     void DropObject()
     {
+        // ------------------------------
         // 親子関係を解除
+        // ------------------------------
+
         heldObject.transform.SetParent(null);
 
-        // Rigidbodyを取得
+
+        // ------------------------------
+        // Playerと箱の衝突を元に戻す
+        // ------------------------------
+
+        if (heldObjectColliders != null)
+        {
+            foreach (Collider boxCollider in heldObjectColliders)
+            {
+                if (playerCollider != null)
+                {
+                    Physics.IgnoreCollision(
+                        playerCollider,
+                        boxCollider,
+                        false
+                    );
+                }
+            }
+        }
+
+
+        // ------------------------------
+        // Rigidbody
+        // ------------------------------
+
         Rigidbody rb = heldObject.GetComponent<Rigidbody>();
 
         if (rb != null)
@@ -105,11 +213,22 @@ public class GrabSystem : MonoBehaviour
             rb.isKinematic = false;
         }
 
-        // ★箱を持っていない状態にする
+
+        // ------------------------------
+        // Animator
+        // ------------------------------
+
         animator.SetBool("IsHolding", false);
+
 
         Debug.Log("KeyBoxを離しました！");
 
+
+        // ------------------------------
+        // 持っている物をリセット
+        // ------------------------------
+
         heldObject = null;
+        heldObjectColliders = null;
     }
 }
