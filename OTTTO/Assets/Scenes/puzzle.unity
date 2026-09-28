@@ -2517,7 +2517,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1976627911}
   - component: {fileID: 1976627910}
-  - component: {fileID: 1976627912}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2574,29 +2573,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1976627912
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1976627909}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbea01a5d032d554fb779f3cf046da9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GameController
-  PieceBase: {fileID: 630783519673487315, guid: 33412e719c6133d4195aec3f5048ac67, type: 3}
-  PieceFaces:
-  - {fileID: 1581294535, guid: af02e0a21a15b164d9f302ec980fe26e, type: 3}
-  - {fileID: 1847984396, guid: af02e0a21a15b164d9f302ec980fe26e, type: 3}
-  - {fileID: -1283299520, guid: af02e0a21a15b164d9f302ec980fe26e, type: 3}
-  - {fileID: 113049540, guid: af02e0a21a15b164d9f302ec980fe26e, type: 3}
-  - {fileID: -1243610481, guid: af02e0a21a15b164d9f302ec980fe26e, type: 3}
-  - {fileID: 476718742, guid: af02e0a21a15b164d9f302ec980fe26e, type: 3}
-  - {fileID: -1556783113, guid: af02e0a21a15b164d9f302ec980fe26e, type: 3}
-  - {fileID: -2117441994, guid: af02e0a21a15b164d9f302ec980fe26e, type: 3}
-  PieceList: []
 --- !u!1 &2014871456
 GameObject:
   m_ObjectHideFlags: 0
