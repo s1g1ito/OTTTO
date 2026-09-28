@@ -135,23 +135,23 @@ public class OptionSettings : MonoBehaviour
 
     void Update()
     {
-        // OptionシーンではEscで閉じない
         if (showOnStart)
         {
             return;
         }
 
-        // Escキーを押したら
         if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
-            // オプション画面が表示中なら閉じる
+            Debug.Log("ESCを検出した");
+
             if (optionCanvas.activeSelf)
             {
+                Debug.Log("オプションを閉じます");
                 CloseOption();
             }
-            // 非表示なら開く
             else
             {
+                Debug.Log("オプションを開きます");
                 OpenOption();
             }
         }
