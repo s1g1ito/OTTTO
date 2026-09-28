@@ -7937,7 +7937,6 @@ Transform:
   m_Children:
   - {fileID: 737372991}
   - {fileID: 2134339747}
-  - {fileID: 935575311}
   - {fileID: 998250365}
   m_Father: {fileID: 1530204710}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -27862,11 +27861,11 @@ Transform:
   m_GameObject: {fileID: 935575310}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.45, y: 1, z: 0}
-  m_LocalScale: {x: 0.1, y: 2, z: 1}
+  m_LocalPosition: {x: 9, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 284402380}
+  m_Father: {fileID: 998250365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &935575312
 BoxCollider:
@@ -28346,6 +28345,7 @@ GameObject:
   - component: {fileID: 941324718}
   - component: {fileID: 941324721}
   - component: {fileID: 941324720}
+  - component: {fileID: 941324722}
   - component: {fileID: 941324719}
   m_Layer: 0
   m_Name: bottom
@@ -28447,6 +28447,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 941324717}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &941324722
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 941324717}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71c05ea26d1398b4f9d0bb7d7c7f534a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WallRotate
+  rotateDuration: 3
 --- !u!1 &944330876
 GameObject:
   m_ObjectHideFlags: 0
@@ -29539,7 +29552,8 @@ Transform:
   m_LocalPosition: {x: -0.45, y: 1, z: 0}
   m_LocalScale: {x: 0.1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 935575311}
   m_Father: {fileID: 284402380}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &998250366
