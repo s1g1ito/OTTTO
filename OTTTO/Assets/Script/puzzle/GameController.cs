@@ -181,7 +181,7 @@ public class GameContollore : MonoBehaviour
 
         SceneManager.LoadScene("stage6");
 
-        
+
         this.transform.position = new Vector3(46f, 1f, 45f);
         Debug.Log("stage6");
     }
