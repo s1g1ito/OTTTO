@@ -43232,6 +43232,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouseLook
   sensitivity: 0.5
+  playerBody: {fileID: 0}
 --- !u!114 &1801692152
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43272,12 +43273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 5
-  jumpForce: 5
-  groundCheck: {fileID: 1820619055}
-  groundDistance: 0.2
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 256
+  holdingMoveSpeed: 3
 --- !u!54 &1801692155
 Rigidbody:
   m_ObjectHideFlags: 0
