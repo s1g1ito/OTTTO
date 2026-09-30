@@ -21,13 +21,6 @@ public class EnemyFollow : MonoBehaviour
     // NavMeshAgentコンポーネントを入れる
     private NavMeshAgent navMesAgent;
 
-    private bool isChasing = false;
-
-    public void StartChase()
-    {
-        isChasing = true;
-    }
-
     // Start is called before the first frame update
     void Start()
     {
