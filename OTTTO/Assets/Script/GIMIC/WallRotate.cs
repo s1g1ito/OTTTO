@@ -25,7 +25,7 @@ public class WallRotate : MonoBehaviour
             isRotating = true;
         }
     }
-
+     
     private void Update()
     {
         if (isRotating)
