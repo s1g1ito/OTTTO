@@ -10,6 +10,8 @@ public class EnemyAI : MonoBehaviour
     private Rigidbody rb;
     private Transform player;
 
+    public EnemyFollow chaseEnemy;
+
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -24,7 +26,10 @@ public class EnemyAI : MonoBehaviour
 
         if (CanSeePlayer(origin))
         {
-            ChasePlayer();
+            if(chaseEnemy != null)
+            {
+                chaseEnemy.StartChase();
+            }
         }
     }
 
