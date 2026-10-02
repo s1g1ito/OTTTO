@@ -28,7 +28,7 @@ public class move : MonoBehaviour
     }
     void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.tag == "Item")
+        if (collision.gameObject.tag == "Player")
         {
             text = "B èEÇ§";
 
