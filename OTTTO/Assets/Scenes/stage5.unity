@@ -9530,8 +9530,9 @@ GameObject:
   - component: {fileID: 342974202}
   - component: {fileID: 342974201}
   - component: {fileID: 342974203}
+  - component: {fileID: 342974204}
   m_Layer: 0
-  m_Name: 9669202_2 (1)
+  m_Name: gameobject
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9646,6 +9647,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TouchObject
   gameObject: {fileID: 0}
   target: {fileID: 0}
+--- !u!114 &342974204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 342974199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6fbe42584dc34f418191fa89819ee6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Itemtag
 --- !u!1 &344179092
 GameObject:
   m_ObjectHideFlags: 0
@@ -20087,6 +20100,7 @@ GameObject:
   - component: {fileID: 755618354}
   - component: {fileID: 755618353}
   - component: {fileID: 755618355}
+  - component: {fileID: 755618356}
   m_Layer: 0
   m_Name: gameobject
   m_TagString: Item
@@ -20217,6 +20231,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ItemLogger
   target: {fileID: 133282443}
   scoreLabel: {fileID: 907715120}
+--- !u!114 &755618356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 755618350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6fbe42584dc34f418191fa89819ee6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Itemtag
 --- !u!1 &762915151
 GameObject:
   m_ObjectHideFlags: 0
@@ -37040,7 +37066,7 @@ GameObject:
   - component: {fileID: 1456935616}
   - component: {fileID: 1456935615}
   m_Layer: 0
-  m_Name: 9669202_2 (1)
+  m_Name: gameobject
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
