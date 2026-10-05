@@ -183,7 +183,7 @@ public class GameContollore : MonoBehaviour
 
 
         this.transform.position = new Vector3(46f, 1f, 45f);
-        Debug.Log("stage6");
+        Debug.Log("stage5");
     }
 
 
