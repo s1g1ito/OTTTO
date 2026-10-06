@@ -22,11 +22,11 @@ public class GameContollore : MonoBehaviour
 
     {
 
-        {0,1,2 },
+        {6,2,5},
 
-        {3,4,5 },
+        {7,1,4 },
 
-        {6,8,7 },
+        {3,0,8 },
 
     };
 
