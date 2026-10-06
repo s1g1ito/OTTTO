@@ -16,22 +16,9 @@ public class ItemManager : MonoBehaviour
         UpdateUI();
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Item"))
-        {
-            itemCount++;
-            UpdateUI();
-            Destroy(other.gameObject);
+  
 
-            if (itemCount == 8 && puzzle != null)
-            {
-                puzzle.SetActive(true);
-            }
-        }
-    }
-
-    private void UpdateUI()
+    public void UpdateUI()
     {
         itemText.text = "Item: " + itemCount;
     }
