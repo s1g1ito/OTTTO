@@ -1,35 +1,39 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 
 public class ItemManager : MonoBehaviour
 {
-    private int count = 0;
-    private GameObject scoreText;
+    public int itemCount = 0;
+    public TMP_Text itemText;
 
-    void Start()
+    public GameObject puzzle;
+
+    private void Start()
     {
-        scoreText = GameObject.Find("ScoreText");
-
+        UpdateUI();
     }
 
-   
-    void OnCollisionStay(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collision.gameObject.tag == "Player")
+        if (other.CompareTag("Item"))
         {
-            Debug.Log("éÊìæÇµÇ‹ÇµÇΩ");
-           
-            scoreText.GetComponent<ScoreManager>().score = scoreText.GetComponent<ScoreManager>().score + 1;
+            itemCount++;
+            UpdateUI();
+            Destroy(other.gameObject);
 
-            Debug.Log("ÉJÉEÉìÉgÇ™ÇPëùÇ¶ÇΩ");
-
-            Destroy(this.gameObject);
-
-
-
+            if (itemCount == 8 && puzzle != null)
+            {
+                puzzle.SetActive(true);
+            }
         }
+    }
+
+    private void UpdateUI()
+    {
+        itemText.text = "Item: " + itemCount;
     }
 }
 

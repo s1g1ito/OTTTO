@@ -1,22 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ScoreManager : MonoBehaviour
 {
-    private TextMeshPro scoreText;
+    // スコアを表示するText
+    public TextMeshProUGUI scoreText;
+
+    // 現在のスコア
     public int score = 0;
 
     void Start()
     {
-        scoreText = GetComponentInChildren<TextMeshPro>();
+        // 最初のスコアを0にする
         scoreText.text = "0";
     }
 
     void Update()
     {
+        // スコアを画面に表示する
         scoreText.text = score.ToString();
     }
 }
