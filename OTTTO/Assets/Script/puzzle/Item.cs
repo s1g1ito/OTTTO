@@ -13,11 +13,13 @@ public class Item : MonoBehaviour
             {
                 manager.itemCount++;
                 manager.UpdateUI();
+                Debug.Log("ピースを取得！");
 
                 // 8個なら puzzle を出す
                 if (manager.itemCount == 8 && manager.puzzle != null)
                 {
                     manager.puzzle.SetActive(true);
+                    Debug.Log("ピースがそろったよ！");
                 }
             }
 

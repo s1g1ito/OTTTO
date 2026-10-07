@@ -23704,7 +23704,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 924839281b2c7c04eb9347cdb67d2c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BallMover
-  speed: 5
+  speed: 3
 --- !u!135 &872286163
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -23792,7 +23792,7 @@ Transform:
   m_GameObject: {fileID: 872286161}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 44.27, y: 3.43, z: 45.54256}
+  m_LocalPosition: {x: 44.27, y: 2.12, z: 45.54256}
   m_LocalScale: {x: 4.235, y: 4.235, z: 4.235}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -23838,7 +23838,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BallFollow
   player: {fileID: 1988031067}
-  speed: 5
+  speed: 100
 --- !u!1 &872766051
 GameObject:
   m_ObjectHideFlags: 0
@@ -27145,7 +27145,7 @@ Transform:
   m_GameObject: {fileID: 998937286}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 44.8432, y: 0.5, z: 39.32852}
+  m_LocalPosition: {x: 44.8432, y: 0.5, z: 41.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44485,7 +44485,7 @@ Transform:
   m_GameObject: {fileID: 1680558015}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 44.8432, y: 0.5, z: 36.15}
+  m_LocalPosition: {x: 44.8432, y: 0.5, z: 29.67}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -50614,7 +50614,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 19.54622, y: 0, z: 31.863}
-  m_LocalScale: {x: 82.57151, y: 1, z: 162.89587}
+  m_LocalScale: {x: 10000, y: 0, z: 10000}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -52090,8 +52090,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 342ee30d816cf40468a13c5f1c5a60d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  moveSpeed: 6
-  holdingMoveSpeed: 3
+  moveSpeed: 3.5
+  holdingMoveSpeed: 5
 --- !u!114 &1988031062
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52223,7 +52223,7 @@ Transform:
   m_GameObject: {fileID: 1988031059}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 45.9, y: 1.33, z: 35.3}
+  m_LocalPosition: {x: 45.9, y: 0.94, z: 35.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
