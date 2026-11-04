@@ -154644,7 +154644,7 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Height: 2
@@ -154743,7 +154743,7 @@ Transform:
   m_GameObject: {fileID: 1638273366}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 23.1, y: 1.56, z: 15.03}
+  m_LocalPosition: {x: 10.8, y: 1.56, z: 9.3}
   m_LocalScale: {x: 2.4536, y: 3.9755, z: 2.324723}
   m_ConstrainProportionsScale: 0
   m_Children: []
