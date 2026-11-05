@@ -21,6 +21,8 @@ public class EnemyFollow : MonoBehaviour
     // NavMeshAgentコンポーネントを入れる
     private NavMeshAgent navMesAgent;
 
+    private bool isChasing = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +38,12 @@ public class EnemyFollow : MonoBehaviour
 
     void Update()
     {
+        if(isChasing)
+        {
+            navMesAgent.destination = player.transform.position;
+            return;
+        }
+
         float distance = Vector3.Distance(transform.position, player.transform.position);
 
         if (distance < chaseDistance)
@@ -61,5 +69,10 @@ public class EnemyFollow : MonoBehaviour
                 navMesAgent.destination = m_markers[currentMarkerIndex].position;
             }
         }
+    }
+
+    public void StartChase()
+    {
+        isChasing = true;
     }
 }
