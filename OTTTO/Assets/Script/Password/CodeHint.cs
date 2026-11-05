@@ -5,7 +5,7 @@ public class CodeHint : MonoBehaviour
 {
     public TMP_Text hintText;
 
-    public void Start()
+    private void Start()
     {
         hintText.text = CodeGenerator.GeneratedCode;
     }

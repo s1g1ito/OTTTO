@@ -49969,7 +49969,7 @@ Transform:
   m_GameObject: {fileID: 482260752}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 74.64, y: 1, z: 62.94}
+  m_LocalPosition: {x: 94.7, y: 1, z: 79.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -120306,6 +120306,7 @@ MonoBehaviour:
   rayHeight: 1
   viewDistance: 10
   viewAngle: 90
+  chaseEnemy: {fileID: 0}
 --- !u!195 &1199447199
 NavMeshAgent:
   m_ObjectHideFlags: 0
