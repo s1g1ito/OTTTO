@@ -6391,6 +6391,8 @@ GameObject:
   m_Component:
   - component: {fileID: 218226145}
   - component: {fileID: 218226144}
+  - component: {fileID: 218226146}
+  - component: {fileID: 218226147}
   m_Layer: 0
   m_Name: MazeManager
   m_TagString: Untagged
@@ -6429,6 +6431,55 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &218226146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218226143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 0}
+  m_BuildHeightMesh: 0
+--- !u!114 &218226147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218226143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa61ab9e583681488893488b45c1f19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapRoute
+  player: {fileID: 1371706156}
+  goal: {fileID: 2072166691}
+  routeLine: {fileID: 1454104345}
+  displayTime: 5
+  lineHeight: 0.5
 --- !u!1 &221366622
 GameObject:
   m_ObjectHideFlags: 0
@@ -15443,8 +15494,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 640, y: -255}
-  m_SizeDelta: {x: 600, y: 600}
+  m_AnchoredPosition: {x: 764.99, y: -343.18}
+  m_SizeDelta: {x: 390.0272, y: 393.6464}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &530633708
 MonoBehaviour:
@@ -62907,8 +62958,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -10.3198, y: 0}
+  m_SizeDelta: {x: 306.6396, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2126866289
 MonoBehaviour:
@@ -63626,8 +63677,8 @@ SceneRoots:
   m_Roots:
   - {fileID: 42128302}
   - {fileID: 1409869820}
-  - {fileID: 376518500}
   - {fileID: 218226145}
+  - {fileID: 376518500}
   - {fileID: 491348645}
   - {fileID: 1371706156}
   - {fileID: 105068269}
