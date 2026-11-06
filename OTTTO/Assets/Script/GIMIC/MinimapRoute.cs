@@ -1,25 +1,47 @@
+
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class MinimapRoute : MonoBehaviour
 {
-    [Header("Target")]
     public Transform player;
     public Transform goal;
-
-    [Header("Route")]
     public LineRenderer routeLine;
-    public float displayTime = 5f;
-    public float lineHeight = 0.5f;
 
-    private Coroutine hideCoroutine;
+    [Header("Route Settings")]
+    public float displayTime = 5f;
+    public float heightOffset = 0.15f;
+    public float lineWidth = 0.06f;
+
+    [Header("Wall Settings")]
+    public LayerMask wallLayer;
+    public float rayDistance = 5f;
+    public float wallCheckHeight = 0.5f;
+
+    [Header("Smooth Settings")]
+    [Range(2, 20)]
+    public int smoothResolution = 10;
+
+    [Range(0.05f, 0.4f)]
+    public float cornerSmoothness = 0.2f;
+
     private NavMeshPath path;
+    private Coroutine hideCoroutine;
 
     void Start()
     {
-        routeLine.enabled = false;
         path = new NavMeshPath();
+
+        routeLine.enabled = false;
+        routeLine.useWorldSpace = true;
+
+        routeLine.startWidth = lineWidth;
+        routeLine.endWidth = lineWidth;
+
+        routeLine.numCornerVertices = 8;
+        routeLine.numCapVertices = 8;
     }
 
     void Update()
@@ -32,62 +54,190 @@ public class MinimapRoute : MonoBehaviour
 
     void ShowRoute()
     {
-        // プレイヤーとゴールがNavMesh上にあるか確認
-        NavMeshHit playerHit;
-        NavMeshHit goalHit;
-
-        if (!NavMesh.SamplePosition(
-            player.position, out playerHit, 2f,
-            NavMesh.AllAreas))
-        {
-            Debug.LogWarning("PlayerがNavMesh上にありません");
-            return;
-        }
-
-        if (!NavMesh.SamplePosition(
-            goal.position, out goalHit, 2f,
-            NavMesh.AllAreas))
-        {
-            Debug.LogWarning("GoalがNavMesh上にありません");
-            return;
-        }
-
-        // 壁を避ける経路を計算
         bool found = NavMesh.CalculatePath(
-            playerHit.position,
-            goalHit.position,
+            player.position,
+            goal.position,
             NavMesh.AllAreas,
             path
         );
 
-        if (!found || path.status != NavMeshPathStatus.PathComplete)
+        if (!found ||
+            path.status != NavMeshPathStatus.PathComplete ||
+            path.corners.Length < 2)
         {
-            Debug.LogWarning("ゴールまでの経路が見つかりません");
+            Debug.Log("ルートが見つかりません");
             return;
         }
 
-        // 曲がり角を含む経路を表示
-        Vector3[] corners = path.corners;
+        List<Vector3> centerPoints =
+            new List<Vector3>();
 
-        routeLine.positionCount = corners.Length;
-
-        for (int i = 0; i < corners.Length; i++)
+        // 経路を細かく分割して中央位置を計算
+        for (int i = 0; i < path.corners.Length - 1; i++)
         {
-            routeLine.SetPosition(
-                i,
-                corners[i] + Vector3.up * lineHeight
+            Vector3 start = path.corners[i];
+            Vector3 end = path.corners[i + 1];
+
+            float distance = Vector3.Distance(start, end);
+
+            int divisions = Mathf.Max(
+                2,
+                Mathf.CeilToInt(distance / 0.25f)
             );
+
+            for (int j = 0; j < divisions; j++)
+            {
+                float t = (float)j / divisions;
+
+                Vector3 point = Vector3.Lerp(
+                    start,
+                    end,
+                    t
+                );
+
+                centerPoints.Add(GetCenterPosition(
+                    point,
+                    start,
+                    end
+                ));
+            }
+        }
+
+        Vector3 last = path.corners[
+            path.corners.Length - 1
+        ];
+
+        centerPoints.Add(last);
+
+        // 滑らかに補間
+        List<Vector3> smoothPoints =
+            SmoothPath(centerPoints);
+
+        routeLine.positionCount = smoothPoints.Count;
+
+        for (int i = 0; i < smoothPoints.Count; i++)
+        {
+            Vector3 pos = smoothPoints[i];
+
+            pos.y += heightOffset;
+
+            routeLine.SetPosition(i, pos);
         }
 
         routeLine.enabled = true;
 
-        // 前回の非表示処理を停止
         if (hideCoroutine != null)
         {
             StopCoroutine(hideCoroutine);
         }
 
         hideCoroutine = StartCoroutine(HideRoute());
+    }
+
+    // 左右の壁の中間位置を取得
+    Vector3 GetCenterPosition(
+        Vector3 position,
+        Vector3 start,
+        Vector3 end)
+    {
+        Vector3 direction = end - start;
+
+        direction.y = 0f;
+        direction.Normalize();
+
+        Vector3 right = Vector3.Cross(
+            Vector3.up,
+            direction
+        ).normalized;
+
+        Vector3 origin =
+            position + Vector3.up * wallCheckHeight;
+
+        RaycastHit leftHit;
+        RaycastHit rightHit;
+
+        bool leftFound = Physics.Raycast(
+            origin,
+            -right,
+            out leftHit,
+            rayDistance,
+            wallLayer,
+            QueryTriggerInteraction.Ignore
+        );
+
+        bool rightFound = Physics.Raycast(
+            origin,
+            right,
+            out rightHit,
+            rayDistance,
+            wallLayer,
+            QueryTriggerInteraction.Ignore
+        );
+
+        if (leftFound && rightFound)
+        {
+            Vector3 center = (
+                leftHit.point + rightHit.point
+            ) * 0.5f;
+
+            center.y = position.y;
+
+            return center;
+        }
+
+        return position;
+    }
+
+    // 曲がり角を滑らかにする
+    List<Vector3> SmoothPath(List<Vector3> points)
+    {
+        if (points.Count < 3)
+            return points;
+
+        List<Vector3> result =
+            new List<Vector3>();
+
+        result.Add(points[0]);
+
+        for (int i = 1; i < points.Count - 1; i++)
+        {
+            Vector3 previous = points[i - 1];
+            Vector3 current = points[i];
+            Vector3 next = points[i + 1];
+
+            Vector3 pointA = Vector3.Lerp(
+                current,
+                previous,
+                cornerSmoothness
+            );
+
+            Vector3 pointB = Vector3.Lerp(
+                current,
+                next,
+                cornerSmoothness
+            );
+
+            result.Add(pointA);
+
+            for (int j = 1; j < smoothResolution; j++)
+            {
+                float t = (float)j / smoothResolution;
+
+                Vector3 p = Vector3.Lerp(
+                    Vector3.Lerp(pointA, current, t),
+                    Vector3.Lerp(current, pointB, t),
+                    t
+                );
+
+                result.Add(p);
+            }
+
+            result.Add(pointB);
+        }
+
+        result.Add(points[points.Count - 1]);
+
+        return result;
     }
 
     IEnumerator HideRoute()

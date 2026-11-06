@@ -6390,9 +6390,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 218226145}
-  - component: {fileID: 218226144}
-  - component: {fileID: 218226146}
   - component: {fileID: 218226147}
+  - component: {fileID: 218226146}
   m_Layer: 0
   m_Name: MazeManager
   m_TagString: Untagged
@@ -6400,22 +6399,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &218226144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 218226143}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c4b811bac487e374eaa4fe0aa79d64a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MazeGenerator
-  width: 10
-  height: 10
-  mazeCellPrefab: {fileID: 5640764479148408230, guid: 1914a734b0395ed4983338cb1e930279, type: 3}
-  root: {fileID: 0}
 --- !u!4 &218226145
 Transform:
   m_ObjectHideFlags: 0
@@ -6425,13 +6408,38 @@ Transform:
   m_GameObject: {fileID: 218226143}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -127.7, y: 0, z: 0}
+  m_LocalPosition: {x: 0.04, y: 0.42, z: 0.96}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &218226146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218226143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1aa61ab9e583681488893488b45c1f19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MinimapRoute
+  player: {fileID: 1371706156}
+  goal: {fileID: 2072166691}
+  routeLine: {fileID: 1454104345}
+  displayTime: 5
+  heightOffset: 0.15
+  lineWidth: 0.15
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  rayDistance: 5
+  wallCheckHeight: 0.5
+  smoothResolution: 10
+  cornerSmoothness: 0.4
+--- !u!114 &218226147
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6461,25 +6469,8 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 6defcfc4300b7ac4bba93b3892c5610e, type: 2}
   m_BuildHeightMesh: 0
---- !u!114 &218226147
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 218226143}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aa61ab9e583681488893488b45c1f19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MinimapRoute
-  player: {fileID: 1371706156}
-  goal: {fileID: 2072166691}
-  routeLine: {fileID: 1454104345}
-  displayTime: 5
-  lineHeight: 0.5
 --- !u!1 &221366622
 GameObject:
   m_ObjectHideFlags: 0
@@ -62958,7 +62949,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -10.3198, y: 0}
+  m_AnchoredPosition: {x: -10.319824, y: 0}
   m_SizeDelta: {x: 306.6396, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2126866289
