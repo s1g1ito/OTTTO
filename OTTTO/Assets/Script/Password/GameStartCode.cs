@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GameStartCode : MonoBehaviour
 {
-    private void Start()
+    private void Awake()
     {
         CodeGenerator.Generate();
     }
