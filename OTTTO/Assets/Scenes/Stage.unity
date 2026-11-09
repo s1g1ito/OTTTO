@@ -51210,6 +51210,7 @@ GameObject:
   - component: {fileID: 482260755}
   - component: {fileID: 482260754}
   - component: {fileID: 482260753}
+  - component: {fileID: 482260761}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -51384,7 +51385,7 @@ Transform:
   m_GameObject: {fileID: 482260752}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 85.35, y: 1, z: 94.38}
+  m_LocalPosition: {x: -0.1, y: 1, z: -4.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -51395,6 +51396,18 @@ Transform:
   - {fileID: 25518934}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &482260761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 482260752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95cb96be70011704cbf424d355276c4f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerReturn
 --- !u!1 &483433217
 GameObject:
   m_ObjectHideFlags: 0
@@ -51731,6 +51744,37 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 486980618}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &486999721
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 486999723}
+  m_Layer: 0
+  m_Name: ReturnPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &486999723
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486999721}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 89.9, y: 0, z: 93.2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &487061802
 GameObject:
   m_ObjectHideFlags: 0
@@ -151130,6 +151174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5311227b21975c944b9cfd71036374d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CodeSceneTrigger
+  returnPosition: {fileID: 1697161783}
 --- !u!65 &1479475030
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -171599,6 +171644,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1697161782}
   - component: {fileID: 1697161781}
+  - component: {fileID: 1697161783}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -171633,6 +171679,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1697161783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1697161780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80e29bb858b332c4fac426dd23c7ada5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ReturnPosition
+  returnPoint: {fileID: 486999723}
 --- !u!1 &1697232000
 GameObject:
   m_ObjectHideFlags: 0
@@ -221009,3 +221068,4 @@ SceneRoots:
   - {fileID: 989648503}
   - {fileID: 1697161782}
   - {fileID: 482260760}
+  - {fileID: 486999723}
