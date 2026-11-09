@@ -17,15 +17,18 @@ public class MinimapRoute : MonoBehaviour
 
     [Header("Wall Settings")]
     public LayerMask wallLayer;
-    public float rayDistance = 5f;
+    public float rayDistance = 3f;
     public float wallCheckHeight = 0.5f;
+
+    [Header("NavMesh Settings")]
+    public float navMeshSampleDistance = 0.3f;
 
     [Header("Smooth Settings")]
     [Range(2, 20)]
     public int smoothResolution = 10;
 
     [Range(0.05f, 0.4f)]
-    public float cornerSmoothness = 0.2f;
+    public float cornerSmoothness = 0.15f;
 
     private NavMeshPath path;
     private Coroutine hideCoroutine;
@@ -69,10 +72,10 @@ public class MinimapRoute : MonoBehaviour
             return;
         }
 
-        List<Vector3> centerPoints =
+        List<Vector3> routePoints =
             new List<Vector3>();
 
-        // 経路を細かく分割して中央位置を計算
+        // NavMeshの経路を細かく分割
         for (int i = 0; i < path.corners.Length - 1; i++)
         {
             Vector3 start = path.corners[i];
@@ -82,8 +85,15 @@ public class MinimapRoute : MonoBehaviour
 
             int divisions = Mathf.Max(
                 2,
-                Mathf.CeilToInt(distance / 0.25f)
+                Mathf.CeilToInt(distance / 0.2f)
             );
+
+            Vector3 direction = (end - start).normalized;
+
+            Vector3 right = Vector3.Cross(
+                Vector3.up,
+                direction
+            ).normalized;
 
             for (int j = 0; j < divisions; j++)
             {
@@ -95,23 +105,45 @@ public class MinimapRoute : MonoBehaviour
                     t
                 );
 
-                centerPoints.Add(GetCenterPosition(
+                // 左右の壁から中央位置を計算
+                Vector3 center = GetCenterPosition(
                     point,
-                    start,
-                    end
-                ));
+                    right
+                );
+
+                routePoints.Add(center);
             }
         }
 
-        Vector3 last = path.corners[
+        routePoints.Add(path.corners[
             path.corners.Length - 1
-        ];
+        ]);
 
-        centerPoints.Add(last);
+        // NavMesh上にある地点だけを採用
+        List<Vector3> validPoints =
+            new List<Vector3>();
 
-        // 滑らかに補間
+        foreach (Vector3 point in routePoints)
+        {
+            NavMeshHit hit;
+
+            if (NavMesh.SamplePosition(
+                point,
+                out hit,
+                navMeshSampleDistance,
+                NavMesh.AllAreas))
+            {
+                validPoints.Add(hit.position);
+            }
+            else
+            {
+                validPoints.Add(point);
+            }
+        }
+
+        // 滑らかにする
         List<Vector3> smoothPoints =
-            SmoothPath(centerPoints);
+            SmoothPath(validPoints);
 
         routeLine.positionCount = smoothPoints.Count;
 
@@ -134,22 +166,10 @@ public class MinimapRoute : MonoBehaviour
         hideCoroutine = StartCoroutine(HideRoute());
     }
 
-    // 左右の壁の中間位置を取得
     Vector3 GetCenterPosition(
         Vector3 position,
-        Vector3 start,
-        Vector3 end)
+        Vector3 right)
     {
-        Vector3 direction = end - start;
-
-        direction.y = 0f;
-        direction.Normalize();
-
-        Vector3 right = Vector3.Cross(
-            Vector3.up,
-            direction
-        ).normalized;
-
         Vector3 origin =
             position + Vector3.up * wallCheckHeight;
 
@@ -188,7 +208,6 @@ public class MinimapRoute : MonoBehaviour
         return position;
     }
 
-    // 曲がり角を滑らかにする
     List<Vector3> SmoothPath(List<Vector3> points)
     {
         if (points.Count < 3)
@@ -248,3 +267,4 @@ public class MinimapRoute : MonoBehaviour
         hideCoroutine = null;
     }
 }
+
