@@ -13,7 +13,7 @@ public class PieceMove : MonoBehaviour
 
     {
 
-        gameContolloreCS = FindObjectOfType<GameContollore>();
+        gameContolloreCS = FindFirstObjectByType<GameContollore>();
 
     }
 
