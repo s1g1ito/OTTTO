@@ -6431,15 +6431,14 @@ MonoBehaviour:
   routeLine: {fileID: 1454104345}
   displayTime: 5
   heightOffset: 0.15
-  lineWidth: 0.15
+  lineWidth: 0.06
   wallLayer:
     serializedVersion: 2
     m_Bits: 0
   rayDistance: 5
   wallCheckHeight: 0.5
-  navMeshSampleDistance: 0.3
-  smoothResolution: 10
-  cornerSmoothness: 0.4
+  smoothResolution: 8
+  cornerSmoothness: 0.05
 --- !u!114 &218226147
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6649,7 +6648,7 @@ GameObject:
   - component: {fileID: 224136232}
   - component: {fileID: 224136231}
   - component: {fileID: 224136230}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40385,9 +40384,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef354e79184c5b2468898c2dd116a7d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemManager
-  itemCount: 0
-  itemText: {fileID: 0}
-  puzzle: {fileID: 0}
 --- !u!4 &1409869820
 Transform:
   m_ObjectHideFlags: 0
@@ -42442,7 +42438,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 55
+    m_Bits: 567
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
