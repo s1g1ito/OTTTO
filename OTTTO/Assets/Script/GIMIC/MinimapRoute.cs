@@ -1,4 +1,5 @@
 
+
 using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
@@ -13,19 +14,18 @@ public class MinimapRoute : MonoBehaviour
     [Header("Route Settings")]
     public float displayTime = 5f;
     public float heightOffset = 0.15f;
-    public float lineWidth = 0.06f;
+    public float lineWidth = 0.04f;
 
     [Header("Wall Settings")]
     public LayerMask wallLayer;
     public float rayDistance = 5f;
     public float wallCheckHeight = 0.5f;
 
-    [Header("Smooth Settings")]
-    [Range(2, 20)]
-    public int smoothResolution = 8;
+    [Header("Path Settings")]
+    public int pointsPerSegment = 10;
 
-    [Range(0.05f, 0.4f)]
-    public float cornerSmoothness = 0.05f;
+    [Header("Corner Settings")]
+    public float maxCornerOffset = 1.0f;
 
     private NavMeshPath path;
     private Coroutine hideCoroutine;
@@ -40,13 +40,12 @@ public class MinimapRoute : MonoBehaviour
         routeLine.startWidth = lineWidth;
         routeLine.endWidth = lineWidth;
 
-        routeLine.numCornerVertices = 8;
-        routeLine.numCapVertices = 8;
+        routeLine.numCornerVertices = 4;
+        routeLine.numCapVertices = 4;
     }
 
     void Update()
     {
-        // Mキーでルート表示
         if (Input.GetKeyDown(KeyCode.M))
         {
             ShowRoute();
@@ -55,6 +54,12 @@ public class MinimapRoute : MonoBehaviour
 
     void ShowRoute()
     {
+        if (player == null || goal == null || routeLine == null)
+        {
+            Debug.LogError("Player、Goal、Route Lineを設定してください");
+            return;
+        }
+
         bool found = NavMesh.CalculatePath(
             player.position,
             goal.position,
@@ -70,83 +75,107 @@ public class MinimapRoute : MonoBehaviour
             return;
         }
 
-        List<Vector3> routePoints = new List<Vector3>();
+        Vector3[] corners = path.corners;
+        int segmentCount = corners.Length - 1;
 
-        // NavMeshの経路を細かく分割
-        for (int i = 0; i < path.corners.Length - 1; i++)
+        Vector3[] centerStart = new Vector3[segmentCount];
+        Vector3[] centerEnd = new Vector3[segmentCount];
+
+        // 各通路の中央を計算
+        for (int i = 0; i < segmentCount; i++)
         {
-            Vector3 start = path.corners[i];
-            Vector3 end = path.corners[i + 1];
+            Vector3 start = corners[i];
+            Vector3 end = corners[i + 1];
 
-            float distance = Vector3.Distance(start, end);
+            Vector3 right = GetRightDirection(start, end);
 
-            int divisions = Mathf.Max(
-                2,
-                Mathf.CeilToInt(distance / 0.2f)
+            centerStart[i] = GetCenterPosition(
+                Vector3.Lerp(start, end, 0.25f),
+                right
             );
 
-            Vector3 direction = (end - start).normalized;
+            centerEnd[i] = GetCenterPosition(
+                Vector3.Lerp(start, end, 0.75f),
+                right
+            );
+        }
 
-            direction.y = 0;
-            direction.Normalize();
+        // 曲がり角の中央位置を計算
+        Vector3[] turnPoints = new Vector3[corners.Length];
 
-            Vector3 right = Vector3.Cross(
-                Vector3.up,
-                direction
-            ).normalized;
+        turnPoints[0] = GetCenterPosition(
+            corners[0],
+            GetRightDirection(corners[0], corners[1])
+        );
 
-            for (int j = 0; j < divisions; j++)
+        turnPoints[corners.Length - 1] = GetCenterPosition(
+            corners[corners.Length - 1],
+            GetRightDirection(
+                corners[corners.Length - 2],
+                corners[corners.Length - 1]
+            )
+        );
+
+        for (int i = 1; i < corners.Length - 1; i++)
+        {
+            Vector3 intersection;
+
+            bool success = TryGetIntersection(
+                centerStart[i - 1],
+                centerEnd[i - 1],
+                centerStart[i],
+                centerEnd[i],
+                out intersection
+            );
+
+            // 交点が遠くに飛び出す場合は使用しない
+            if (success &&
+                Vector3.Distance(intersection, corners[i])
+                <= maxCornerOffset)
             {
-                float t = (float)j / divisions;
+                intersection.y = corners[i].y;
+                turnPoints[i] = intersection;
+            }
+            else
+            {
+                // 前後の中央位置から安全な位置を求める
+                Vector3 safePoint = (
+                    centerEnd[i - 1] +
+                    centerStart[i]
+                ) * 0.5f;
 
-                Vector3 point = Vector3.Lerp(
-                    start,
-                    end,
-                    t
-                );
+                safePoint.y = corners[i].y;
 
-                // 通路の中央位置を取得
-                Vector3 center = GetCenterPosition(
-                    point,
-                    right
-                );
-
-                routePoints.Add(center);
+                turnPoints[i] = safePoint;
             }
         }
 
-        // ゴール地点も中央に補正
-        Vector3 lastStart =
-            path.corners[path.corners.Length - 2];
+        // ルートの点を作成
+        List<Vector3> routePoints = new List<Vector3>();
 
-        Vector3 lastEnd =
-            path.corners[path.corners.Length - 1];
-
-        Vector3 lastDirection =
-            (lastEnd - lastStart).normalized;
-
-        lastDirection.y = 0;
-        lastDirection.Normalize();
-
-        Vector3 lastRight = Vector3.Cross(
-            Vector3.up,
-            lastDirection
-        ).normalized;
-
-        routePoints.Add(
-            GetCenterPosition(lastEnd, lastRight)
-        );
-
-        // ルートを滑らかにする
-        List<Vector3> smoothPoints =
-            SmoothPath(routePoints);
-
-        routeLine.positionCount = smoothPoints.Count;
-
-        for (int i = 0; i < smoothPoints.Count; i++)
+        for (int i = 0; i < segmentCount; i++)
         {
-            Vector3 pos = smoothPoints[i];
+            Vector3 start = turnPoints[i];
+            Vector3 end = turnPoints[i + 1];
 
+            for (int j = 0; j < pointsPerSegment; j++)
+            {
+                float t = (float)j / pointsPerSegment;
+
+                Vector3 point = Vector3.Lerp(start, end, t);
+
+                routePoints.Add(point);
+            }
+        }
+
+        routePoints.Add(turnPoints[turnPoints.Length - 1]);
+
+        // LineRendererに設定
+        routeLine.positionCount = routePoints.Count;
+
+        for (int i = 0; i < routePoints.Count; i++)
+        {
+            Vector3 pos = routePoints[i];
             pos.y += heightOffset;
 
             routeLine.SetPosition(i, pos);
@@ -154,7 +183,6 @@ public class MinimapRoute : MonoBehaviour
 
         routeLine.enabled = true;
 
-        // 前の非表示処理を停止
         if (hideCoroutine != null)
         {
             StopCoroutine(hideCoroutine);
@@ -163,10 +191,28 @@ public class MinimapRoute : MonoBehaviour
         hideCoroutine = StartCoroutine(HideRoute());
     }
 
-    // 左右の壁から通路の中央を取得
+    // 通路の左右方向を取得
+    Vector3 GetRightDirection(Vector3 start, Vector3 end)
+    {
+        Vector3 direction = end - start;
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.001f)
+            return Vector3.right;
+
+        direction.Normalize();
+
+        return Vector3.Cross(
+            Vector3.up,
+            direction
+        ).normalized;
+    }
+
+    // 左右の壁の中央を取得
     Vector3 GetCenterPosition(
         Vector3 position,
-        Vector3 right)
+        Vector3 right
+    )
     {
         Vector3 origin =
             position + Vector3.up * wallCheckHeight;
@@ -192,7 +238,6 @@ public class MinimapRoute : MonoBehaviour
             QueryTriggerInteraction.Ignore
         );
 
-        // 左右の壁が両方見つかった場合
         if (leftFound && rightFound)
         {
             Vector3 center = (
@@ -207,59 +252,44 @@ public class MinimapRoute : MonoBehaviour
         return position;
     }
 
-    // ルートの角を滑らかにする
-    List<Vector3> SmoothPath(List<Vector3> points)
+    // XZ平面上で交点を計算
+    bool TryGetIntersection(
+        Vector3 a1,
+        Vector3 a2,
+        Vector3 b1,
+        Vector3 b2,
+        out Vector3 intersection
+    )
     {
-        if (points.Count < 3)
-            return points;
+        intersection = Vector3.zero;
 
-        List<Vector3> result =
-            new List<Vector3>();
+        float dx1 = a2.x - a1.x;
+        float dz1 = a2.z - a1.z;
 
-        result.Add(points[0]);
+        float dx2 = b2.x - b1.x;
+        float dz2 = b2.z - b1.z;
 
-        for (int i = 1; i < points.Count - 1; i++)
-        {
-            Vector3 previous = points[i - 1];
-            Vector3 current = points[i];
-            Vector3 next = points[i + 1];
+        float denominator =
+            dx1 * dz2 - dz1 * dx2;
 
-            Vector3 pointA = Vector3.Lerp(
-                current,
-                previous,
-                cornerSmoothness
-            );
+        if (Mathf.Abs(denominator) < 0.001f)
+            return false;
 
-            Vector3 pointB = Vector3.Lerp(
-                current,
-                next,
-                cornerSmoothness
-            );
+        float dx = b1.x - a1.x;
+        float dz = b1.z - a1.z;
 
-            result.Add(pointA);
+        float t = (dx * dz2 - dz * dx2) / denominator;
 
-            for (int j = 1; j < smoothResolution; j++)
-            {
-                float t = (float)j / smoothResolution;
+        intersection = new Vector3(
+            a1.x + t * dx1,
+            a1.y,
+            a1.z + t * dz1
+        );
 
-                Vector3 p = Vector3.Lerp(
-                    Vector3.Lerp(pointA, current, t),
-                    Vector3.Lerp(current, pointB, t),
-                    t
-                );
-
-                result.Add(p);
-            }
-
-            result.Add(pointB);
-        }
-
-        result.Add(points[points.Count - 1]);
-
-        return result;
+        return true;
     }
 
-    // 一定時間後にルートを非表示
+    // 一定時間後に非表示
     IEnumerator HideRoute()
     {
         yield return new WaitForSeconds(displayTime);
@@ -268,4 +298,13 @@ public class MinimapRoute : MonoBehaviour
         hideCoroutine = null;
     }
 }
+
+
+
+
+
+
+
+
+
 
