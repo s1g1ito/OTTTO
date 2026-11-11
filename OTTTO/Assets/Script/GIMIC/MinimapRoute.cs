@@ -22,10 +22,10 @@ public class MinimapRoute : MonoBehaviour
 
     [Header("Smooth Settings")]
     [Range(2, 20)]
-    public int smoothResolution = 10;
+    public int smoothResolution = 8;
 
     [Range(0.05f, 0.4f)]
-    public float cornerSmoothness = 0.2f;
+    public float cornerSmoothness = 0.05f;
 
     private NavMeshPath path;
     private Coroutine hideCoroutine;
@@ -46,6 +46,7 @@ public class MinimapRoute : MonoBehaviour
 
     void Update()
     {
+        // Mキーでルート表示
         if (Input.GetKeyDown(KeyCode.M))
         {
             ShowRoute();
@@ -69,10 +70,9 @@ public class MinimapRoute : MonoBehaviour
             return;
         }
 
-        List<Vector3> centerPoints =
-            new List<Vector3>();
+        List<Vector3> routePoints = new List<Vector3>();
 
-        // 経路を細かく分割して中央位置を計算
+        // NavMeshの経路を細かく分割
         for (int i = 0; i < path.corners.Length - 1; i++)
         {
             Vector3 start = path.corners[i];
@@ -82,8 +82,18 @@ public class MinimapRoute : MonoBehaviour
 
             int divisions = Mathf.Max(
                 2,
-                Mathf.CeilToInt(distance / 0.25f)
+                Mathf.CeilToInt(distance / 0.2f)
             );
+
+            Vector3 direction = (end - start).normalized;
+
+            direction.y = 0;
+            direction.Normalize();
+
+            Vector3 right = Vector3.Cross(
+                Vector3.up,
+                direction
+            ).normalized;
 
             for (int j = 0; j < divisions; j++)
             {
@@ -95,23 +105,41 @@ public class MinimapRoute : MonoBehaviour
                     t
                 );
 
-                centerPoints.Add(GetCenterPosition(
+                // 通路の中央位置を取得
+                Vector3 center = GetCenterPosition(
                     point,
-                    start,
-                    end
-                ));
+                    right
+                );
+
+                routePoints.Add(center);
             }
         }
 
-        Vector3 last = path.corners[
-            path.corners.Length - 1
-        ];
+        // ゴール地点も中央に補正
+        Vector3 lastStart =
+            path.corners[path.corners.Length - 2];
 
-        centerPoints.Add(last);
+        Vector3 lastEnd =
+            path.corners[path.corners.Length - 1];
 
-        // 滑らかに補間
+        Vector3 lastDirection =
+            (lastEnd - lastStart).normalized;
+
+        lastDirection.y = 0;
+        lastDirection.Normalize();
+
+        Vector3 lastRight = Vector3.Cross(
+            Vector3.up,
+            lastDirection
+        ).normalized;
+
+        routePoints.Add(
+            GetCenterPosition(lastEnd, lastRight)
+        );
+
+        // ルートを滑らかにする
         List<Vector3> smoothPoints =
-            SmoothPath(centerPoints);
+            SmoothPath(routePoints);
 
         routeLine.positionCount = smoothPoints.Count;
 
@@ -126,6 +154,7 @@ public class MinimapRoute : MonoBehaviour
 
         routeLine.enabled = true;
 
+        // 前の非表示処理を停止
         if (hideCoroutine != null)
         {
             StopCoroutine(hideCoroutine);
@@ -134,22 +163,11 @@ public class MinimapRoute : MonoBehaviour
         hideCoroutine = StartCoroutine(HideRoute());
     }
 
-    // 左右の壁の中間位置を取得
+    // 左右の壁から通路の中央を取得
     Vector3 GetCenterPosition(
         Vector3 position,
-        Vector3 start,
-        Vector3 end)
+        Vector3 right)
     {
-        Vector3 direction = end - start;
-
-        direction.y = 0f;
-        direction.Normalize();
-
-        Vector3 right = Vector3.Cross(
-            Vector3.up,
-            direction
-        ).normalized;
-
         Vector3 origin =
             position + Vector3.up * wallCheckHeight;
 
@@ -174,6 +192,7 @@ public class MinimapRoute : MonoBehaviour
             QueryTriggerInteraction.Ignore
         );
 
+        // 左右の壁が両方見つかった場合
         if (leftFound && rightFound)
         {
             Vector3 center = (
@@ -188,7 +207,7 @@ public class MinimapRoute : MonoBehaviour
         return position;
     }
 
-    // 曲がり角を滑らかにする
+    // ルートの角を滑らかにする
     List<Vector3> SmoothPath(List<Vector3> points)
     {
         if (points.Count < 3)
@@ -240,6 +259,7 @@ public class MinimapRoute : MonoBehaviour
         return result;
     }
 
+    // 一定時間後にルートを非表示
     IEnumerator HideRoute()
     {
         yield return new WaitForSeconds(displayTime);
@@ -248,3 +268,4 @@ public class MinimapRoute : MonoBehaviour
         hideCoroutine = null;
     }
 }
+
