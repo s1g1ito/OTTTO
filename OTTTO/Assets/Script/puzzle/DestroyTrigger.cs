@@ -1,12 +1,15 @@
+
 using UnityEngine;
 
-public class BallEnd : MonoBehaviour
+public class DestroyTrigger : MonoBehaviour
 {
+    public GameObject ball;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Ball"))
         {
-            other.gameObject.SetActive(false);
+            Destroy(ball);
         }
     }
 }
