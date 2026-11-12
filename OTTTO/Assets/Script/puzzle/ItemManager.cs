@@ -31,7 +31,7 @@ public class ItemManager : MonoBehaviour
         }
     }
 
-    private void UpdateUI()
+    public void UpdateUI()
     {
         itemText.text = "Item: " + itemCount;
     }
