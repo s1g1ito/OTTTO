@@ -6,7 +6,11 @@ public class CodeGenerator
 
     public static void Generate()
     {
-        GeneratedCode = Random.Range(1000, 9999).ToString();
-        Debug.Log("¡‰ñ‚ÌˆÃØ”Ô†: " + GeneratedCode);
+        if (string.IsNullOrEmpty(GeneratedCode))
+        {
+            GeneratedCode = Random.Range(1000, 10000).ToString();
+
+            Debug.Log("¡‰ñ‚ÌˆÃØ”Ô†: " + GeneratedCode);
+        }
     }
 }
