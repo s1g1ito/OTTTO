@@ -60557,13 +60557,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 613422493}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!114 &613422496
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -96105,7 +96105,7 @@ GameObject:
   - component: {fileID: 971654222}
   - component: {fileID: 971654221}
   m_Layer: 5
-  m_Name: Canvas (1)
+  m_Name: MAP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -142460,7 +142460,7 @@ Transform:
   m_GameObject: {fileID: 1468615882}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 44.8, y: 1, z: 38.4}
+  m_LocalPosition: {x: 19.77, y: 1, z: 55.41}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -157061,7 +157061,6 @@ GameObject:
   - component: {fileID: 1622854331}
   - component: {fileID: 1622854333}
   - component: {fileID: 1622854332}
-  - component: {fileID: 1622854334}
   m_Layer: 5
   m_Name: FogOverlay
   m_TagString: Untagged
@@ -157123,23 +157122,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1622854330}
   m_CullTransparentMesh: 1
---- !u!114 &1622854334
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1622854330}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 435293934f25b5d4f8bb4cda518e728d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  player: {fileID: 1468615890}
-  minimapCamera: {fileID: 1242686085}
-  fogOverlay: {fileID: 1622854332}
-  textureSize: 500
-  revealRadius: 2
 --- !u!1 &1624843644
 GameObject:
   m_ObjectHideFlags: 0
@@ -158729,7 +158711,6 @@ MonoBehaviour:
   rayHeight: 1
   viewDistance: 10
   viewAngle: 90
-  chaseEnemy: {fileID: 1422528009}
 --- !u!114 &1638273368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170262,6 +170243,64 @@ MonoBehaviour:
   - {fileID: 479477338}
   - {fileID: 826838383}
   - {fileID: 1988010180}
+--- !u!1 &1759788292
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1759788293}
+  - component: {fileID: 1759788294}
+  m_Layer: 0
+  m_Name: FogManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1759788293
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1759788292}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2017884241}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1759788294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1759788292}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 435293934f25b5d4f8bb4cda518e728d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  player: {fileID: 1468615890}
+  minimapCamera: {fileID: 1242686085}
+  fogOverlay: {fileID: 1622854332}
+  textureSize: 500
+  startRevealRadius: 0.6
+  revealStep: 0.2
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  maxHalfWidth: 5
+  rayHeight: 1
+  wallPadding: 0.1
+  worldMin: {x: -100, y: -100}
+  worldMax: {x: 100, y: 100}
 --- !u!1 &1759907032
 GameObject:
   m_ObjectHideFlags: 0
@@ -196072,6 +196111,7 @@ Transform:
   m_Children:
   - {fileID: 1242686083}
   - {fileID: 1781978513}
+  - {fileID: 1759788293}
   m_Father: {fileID: 971654224}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2018699710
