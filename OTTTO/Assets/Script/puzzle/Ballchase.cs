@@ -14,6 +14,11 @@ public class BallChase : MonoBehaviour
 
     private Rigidbody rb;
 
+    private float rotationSpeed = 360f;
+    private float currentRotation = 0f;
+
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -42,6 +47,14 @@ public class BallChase : MonoBehaviour
                 chasing = true;
                 rb.useGravity = true;
             }
+
+            currentRotation = Mathf.MoveTowards(
+    currentRotation,
+    180f,
+    rotationSpeed * Time.deltaTime
+);
+
+            transform.rotation = Quaternion.Euler(0f, 0f, currentRotation);
         }
     }
 
@@ -63,5 +76,9 @@ public class BallChase : MonoBehaviour
     public void Activate()
     {
         activated = true;
+
+        
     }
+
+
 }
