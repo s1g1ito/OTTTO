@@ -157100,7 +157100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RawImage
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -170300,6 +170300,8 @@ MonoBehaviour:
   rayHeight: 1
   wallPadding: 0.1
   worldMin: {x: -100, y: -100}
+  stageId: Stage2
+  autoSaveInterval: 3
   worldMax: {x: 100, y: 100}
 --- !u!1 &1759907032
 GameObject:

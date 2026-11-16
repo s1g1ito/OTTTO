@@ -1,6 +1,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 
 [DefaultExecutionOrder(100)]
 public class FogOfWar : MonoBehaviour
@@ -25,6 +26,25 @@ public class FogOfWar : MonoBehaviour
     [SerializeField]
     private Vector2 worldMin =
         new Vector2(-100f, -100f);
+
+    [Header("セーブ設定")]
+    [SerializeField] private string stageId = "Stage2";
+    [SerializeField] private float autoSaveInterval = 3f;
+
+    private bool saveDirty = false;
+    private float lastSaveTime;
+
+    private string SavePath
+    {
+        get
+        {
+            return Path.Combine(
+                Application.persistentDataPath,
+                "fog_" + stageId + ".dat"
+            );
+        }
+    }
+
 
     [SerializeField]
     private Vector2 worldMax =
@@ -67,13 +87,21 @@ public class FogOfWar : MonoBehaviour
         fogOverlay.texture = fogTexture;
         fogOverlay.color = Color.white;
 
+
         lastPosition = player.position;
 
-        // 開始地点の周囲だけ表示
+        // 前回の探索記録を読み込む
+        LoadExploration();
+
+        // 現在地周辺を探索済みにする
         RevealCircle(lastPosition, startRevealRadius);
 
+        // マップを更新
         ApplyFog();
         UpdateMapView();
+
+        lastSaveTime = Time.unscaledTime;
+
     }
 
     private void LateUpdate()
@@ -127,6 +155,15 @@ public class FogOfWar : MonoBehaviour
         }
 
         UpdateMapView();
+
+        // 探索記録が変化していれば定期的に保存
+        if (saveDirty &&
+            Time.unscaledTime - lastSaveTime >=
+            Mathf.Max(1f, autoSaveInterval))
+        {
+            SaveExploration();
+        }
+
     }
 
     private void RevealCorridor(
@@ -241,7 +278,11 @@ public class FogOfWar : MonoBehaviour
 
         fogPixels[index] = new Color32(0, 0, 0, 0);
 
+        // 地図の画像を更新する
         isDirty = true;
+
+        // 探索記録を保存する
+        saveDirty = true;
     }
 
     private void ApplyFog()
@@ -285,10 +326,13 @@ public class FogOfWar : MonoBehaviour
         );
     }
 
+
     [ContextMenu("探索記録をリセット")]
     public void ResetExploration()
     {
-        if (fogTexture == null || fogPixels == null)
+        if (fogTexture == null ||
+            fogPixels == null ||
+            player == null)
         {
             return;
         }
@@ -299,18 +343,149 @@ public class FogOfWar : MonoBehaviour
             fogPixels[i] = new Color32(0, 0, 0, 255);
         }
 
-        // 現在地から探索を再開する
+        // 現在地から探索を再開
         lastPosition = player.position;
 
-        // 開始地点の周囲だけ表示
+        // 地図と保存データを更新対象にする
         isDirty = true;
+        saveDirty = true;
+
+        // 現在地周辺を表示
         RevealCircle(lastPosition, startRevealRadius);
 
-        // マップの表示を更新
+        // 地図を更新
         ApplyFog();
         UpdateMapView();
 
+        // リセット後の状態を保存
+        SaveExploration();
+
         Debug.Log("探索記録をリセットしました！");
+    }
+
+
+    [ContextMenu("探索記録を保存")]
+    public void SaveExploration()
+    {
+        if (fogPixels == null || !saveDirty)
+            return;
+
+        try
+        {
+            byte[] alphaData = new byte[fogPixels.Length];
+
+            for (int i = 0; i < fogPixels.Length; i++)
+            {
+                alphaData[i] = fogPixels[i].a;
+            }
+
+            Directory.CreateDirectory(
+                Application.persistentDataPath
+            );
+
+            using (BinaryWriter writer =
+                new BinaryWriter(File.Create(SavePath)))
+            {
+                // 保存形式のバージョン
+                writer.Write(1);
+
+                // マップ設定
+                writer.Write(textureSize);
+                writer.Write(worldMin.x);
+                writer.Write(worldMin.y);
+                writer.Write(worldMax.x);
+                writer.Write(worldMax.y);
+
+                // 探索済み・未探索の情報
+                writer.Write(alphaData);
+            }
+
+            saveDirty = false;
+            lastSaveTime = Time.unscaledTime;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError(
+                "探索記録の保存に失敗: " + e.Message
+            );
+        }
+    }
+
+    public void LoadExploration()
+    {
+        if (fogPixels == null || !File.Exists(SavePath))
+            return;
+
+        try
+        {
+            using (BinaryReader reader =
+                new BinaryReader(File.OpenRead(SavePath)))
+            {
+                int version = reader.ReadInt32();
+                int savedSize = reader.ReadInt32();
+
+                float minX = reader.ReadSingle();
+                float minY = reader.ReadSingle();
+                float maxX = reader.ReadSingle();
+                float maxY = reader.ReadSingle();
+
+                // 現在のマップ設定と一致するか確認
+                if (version != 1 ||
+                    savedSize != textureSize ||
+                    minX != worldMin.x ||
+                    minY != worldMin.y ||
+                    maxX != worldMax.x ||
+                    maxY != worldMax.y)
+                {
+                    Debug.LogWarning(
+                        "保存データとマップ設定が一致しません"
+                    );
+                    return;
+                }
+
+                byte[] alphaData =
+                    reader.ReadBytes(fogPixels.Length);
+
+                if (alphaData.Length != fogPixels.Length)
+                {
+                    Debug.LogWarning(
+                        "探索記録のデータが不完全です"
+                    );
+                    return;
+                }
+
+                for (int i = 0; i < fogPixels.Length; i++)
+                {
+                    fogPixels[i] = new Color32(
+                        0, 0, 0, alphaData[i]
+                    );
+                }
+            }
+
+            isDirty = true;
+
+            Debug.Log(
+                "探索記録を読み込みました: " + stageId
+            );
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError(
+                "探索記録の読み込みに失敗: " + e.Message
+            );
+        }
+    }
+
+    // シーン切り替え・オブジェクト無効化時に保存
+    private void OnDisable()
+    {
+        SaveExploration();
+    }
+
+    // アプリ終了時にも保存
+    private void OnApplicationQuit()
+    {
+        SaveExploration();
     }
 
     private void OnDestroy()
