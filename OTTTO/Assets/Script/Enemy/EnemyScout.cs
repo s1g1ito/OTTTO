@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
 public class EnemyScout : MonoBehaviour
 {
     [Header("éãîFê›íË")]
-    public float viewDistance = 10f;
-    public float viewAngle = 90f;
+    public float viewDistance = 5f;
+    public float viewAngle = 45f;
     public float rayHeight = 1f;
 
     [Header("úpújê›íË")]
@@ -15,10 +16,19 @@ public class EnemyScout : MonoBehaviour
     [Header("í ímÇ∑ÇÈìGB")]
     public EnemyHunter hunter;
 
+    [Header("éãäEï\é¶ê›íË")]
+    public Color viewColor = new Color(1f, 0f, 0f, 0.8f);
+    public float groundHeight = 0.05f;
+    [Range(10, 100)]
+    public int segments = 40;
+
     private NavMeshAgent agent;
     private Transform player;
     private int currentPoint = 0;
     private bool foundPlayer = false;
+
+    private Mesh visionMesh;
+    private MeshRenderer visionRenderer;
 
     void Start()
     {
@@ -32,25 +42,28 @@ public class EnemyScout : MonoBehaviour
 
         if (patrolPoints.Length > 0)
             agent.SetDestination(patrolPoints[0].position);
+
+        CreateVisionMesh();
     }
 
     void Update()
     {
-        if (player == null) return;
-
-        // PlayerÇî≠å©ÇµÇΩÇ©ämîF
-        if (!foundPlayer && CanSeePlayer())
+        if (player != null)
         {
-            foundPlayer = true;
+            if (!foundPlayer && CanSeePlayer())
+            {
+                foundPlayer = true;
 
-            if (hunter != null)
-                hunter.StartChase();
+                if (hunter != null)
+                    hunter.StartChase();
 
-            Debug.Log("ìGAÇ™PlayerÇî≠å©ÅI");
+                Debug.Log("ìGAÇ™PlayerÇî≠å©ÅI");
+            }
+
+            Patrol();
         }
 
-        // ìGAÇÕî≠å©å„Ç‡úpújÇë±ÇØÇÈ
-        Patrol();
+        UpdateVisionMesh();
     }
 
     void Patrol()
@@ -97,5 +110,96 @@ public class EnemyScout : MonoBehaviour
         }
 
         return false;
+    }
+
+    void CreateVisionMesh()
+    {
+        GameObject vision = new GameObject("VisionRange");
+
+        vision.transform.SetParent(transform);
+        vision.transform.localPosition = new Vector3(0, 0.15f, 0);
+        vision.transform.localRotation = Quaternion.identity;
+
+        MeshFilter filter = vision.AddComponent<MeshFilter>();
+        visionRenderer = vision.AddComponent<MeshRenderer>();
+
+        visionMesh = new Mesh();
+        visionMesh.name = "VisionMesh";
+
+        filter.mesh = visionMesh;
+
+        // URPópÇÃUnlitÉVÉFÅ[É_Å[
+        Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
+
+        if (shader == null)
+        {
+            // URPÇ≈ÇÕÇ»Ç¢èÍçá
+            shader = Shader.Find("Unlit/Color");
+        }
+
+        Material mat = new Material(shader);
+
+        // óŒêF
+        Color green = new Color(0f, 1f, 0f, 1f);
+
+        if (mat.HasProperty("_BaseColor"))
+            mat.SetColor("_BaseColor", green);
+
+        if (mat.HasProperty("_Color"))
+            mat.SetColor("_Color", green);
+
+        // óºñ ï\é¶
+        if (mat.HasProperty("_Cull"))
+            mat.SetFloat("_Cull", 0);
+
+        mat.renderQueue = 3000;
+
+        visionRenderer.material = mat;
+
+        visionRenderer.shadowCastingMode =
+            UnityEngine.Rendering.ShadowCastingMode.Off;
+
+        visionRenderer.receiveShadows = false;
+    }
+
+    void UpdateVisionMesh()
+    {
+        if (visionMesh == null) return;
+
+        int count = segments + 2;
+
+        Vector3[] vertices = new Vector3[count];
+        int[] triangles = new int[segments * 3];
+
+        vertices[0] = Vector3.zero;
+
+        for (int i = 0; i <= segments; i++)
+        {
+            float angle =
+                -viewAngle + (viewAngle * 2f * i / segments);
+
+            float rad = angle * Mathf.Deg2Rad;
+
+            vertices[i + 1] = new Vector3(
+                Mathf.Sin(rad) * viewDistance,
+                0,
+                Mathf.Cos(rad) * viewDistance
+            );
+
+            if (i < segments)
+            {
+                int t = i * 3;
+
+                triangles[t] = 0;
+                triangles[t + 1] = i + 1;
+                triangles[t + 2] = i + 2;
+            }
+        }
+
+        visionMesh.Clear();
+        visionMesh.vertices = vertices;
+        visionMesh.triangles = triangles;
+        visionMesh.RecalculateNormals();
+        visionMesh.RecalculateBounds();
     }
 }
