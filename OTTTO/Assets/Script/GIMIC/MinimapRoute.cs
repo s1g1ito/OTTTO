@@ -33,6 +33,12 @@ public class MinimapRoute : MonoBehaviour
     {
         path = new NavMeshPath();
 
+        if (routeLine == null)
+        {
+            Debug.LogError("Route Lineが設定されていません");
+            return;
+        }
+
         routeLine.enabled = false;
         routeLine.useWorldSpace = true;
 
@@ -43,15 +49,8 @@ public class MinimapRoute : MonoBehaviour
         routeLine.numCapVertices = 4;
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            ShowRoute();
-        }
-    }
-
-    void ShowRoute()
+    // boのクリックから呼び出す
+    public void ShowRoute()
     {
         if (player == null || goal == null || routeLine == null)
         {
@@ -182,6 +181,7 @@ public class MinimapRoute : MonoBehaviour
 
         routeLine.enabled = true;
 
+        // 前の非表示処理を停止
         if (hideCoroutine != null)
         {
             StopCoroutine(hideCoroutine);
@@ -297,6 +297,7 @@ public class MinimapRoute : MonoBehaviour
         hideCoroutine = null;
     }
 }
+
 
 
 
