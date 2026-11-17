@@ -17,8 +17,9 @@ public class EnemyScout : MonoBehaviour
     public EnemyHunter hunter;
 
     [Header("視界表示設定")]
-    public Color viewColor = new Color(1f, 0f, 0f, 0.8f);
-    public float groundHeight = 0.05f;
+    public Color normalViewColor = new Color(0f, 1f, 0f, 0.5f);
+    public Color detectedViewColor = new Color(1f, 0f, 0f, 0.7f);
+    public float groundHeight = 3.0f;
     [Range(10, 100)]
     public int segments = 40;
 
@@ -50,14 +51,27 @@ public class EnemyScout : MonoBehaviour
     {
         if (player != null)
         {
-            if (!foundPlayer && CanSeePlayer())
+            bool canSeePlayer = CanSeePlayer();
+
+            if (canSeePlayer)
             {
-                foundPlayer = true;
+                // Playerを発見 → 赤
+                SetVisionColor(detectedViewColor);
 
-                if (hunter != null)
-                    hunter.StartChase();
+                if (!foundPlayer)
+                {
+                    foundPlayer = true;
 
-                Debug.Log("敵AがPlayerを発見！");
+                    if (hunter != null)
+                        hunter.StartChase();
+
+                    Debug.Log("敵AがPlayerを発見！");
+                }
+            }
+            else
+            {
+                // Playerが視界外 → 緑
+                SetVisionColor(normalViewColor);
             }
 
             Patrol();
@@ -84,32 +98,78 @@ public class EnemyScout : MonoBehaviour
 
     bool CanSeePlayer()
     {
+        // 敵の目の高さ
         Vector3 origin =
             transform.position + Vector3.up * rayHeight;
 
-        Vector3 direction =
-            player.position - origin;
+        // Playerの少し上を狙う
+        Vector3 target =
+            player.position + Vector3.up * 1.0f;
 
+        Vector3 direction =
+            target - origin;
+
+        // 水平方向だけで距離・角度を計算
         Vector3 flatDirection =
             new Vector3(direction.x, 0, direction.z);
 
-        if (flatDirection.magnitude > viewDistance)
-            return false;
+        float distance = flatDirection.magnitude;
 
-        if (Vector3.Angle(
-            transform.forward, flatDirection) > viewAngle)
+        // 距離チェック
+        if (distance > viewDistance)
+        {
             return false;
+        }
 
+        // 角度チェック
+        float angle =
+            Vector3.Angle(transform.forward, flatDirection);
+
+        if (angle > viewAngle)
+        {
+            return false;
+        }
+
+        // Playerへ向かってRayを飛ばす
         if (Physics.Raycast(
             origin,
             direction.normalized,
             out RaycastHit hit,
-            viewDistance))
+            direction.magnitude))
         {
-            return hit.collider.CompareTag("Player");
+            // Player本体
+            if (hit.transform == player)
+            {
+                return true;
+            }
+
+            // Playerの子オブジェクト
+            if (hit.transform.IsChildOf(player))
+            {
+                return true;
+            }
+
+            // Playerに到達する前に壁などに当たった
+            return false;
         }
 
         return false;
+    }
+
+    void SetVisionColor(Color color)
+    {
+        if (visionRenderer == null)
+            return;
+
+        Material mat = visionRenderer.material;
+
+        // URP
+        if (mat.HasProperty("_BaseColor"))
+            mat.SetColor("_BaseColor", color);
+
+        // Built-in
+        if (mat.HasProperty("_Color"))
+            mat.SetColor("_Color", color);
     }
 
     void CreateVisionMesh()
@@ -117,7 +177,7 @@ public class EnemyScout : MonoBehaviour
         GameObject vision = new GameObject("VisionRange");
 
         vision.transform.SetParent(transform);
-        vision.transform.localPosition = new Vector3(0, 0.15f, 0);
+        vision.transform.localPosition = new Vector3(0, 3.0f, 0);
         vision.transform.localRotation = Quaternion.identity;
 
         MeshFilter filter = vision.AddComponent<MeshFilter>();
@@ -140,7 +200,7 @@ public class EnemyScout : MonoBehaviour
         Material mat = new Material(shader);
 
         // 緑色
-        Color green = new Color(0f, 1f, 0f, 1f);
+        Color green = normalViewColor;
 
         if (mat.HasProperty("_BaseColor"))
             mat.SetColor("_BaseColor", green);
