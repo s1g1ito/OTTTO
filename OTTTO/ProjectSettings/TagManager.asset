@@ -10,6 +10,7 @@ TagManager:
   - Ground
   - KeyBox
   - Ball
+  - ENEMY
   layers:
   - Default
   - TransparentFX

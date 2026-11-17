@@ -17,7 +17,7 @@ public class BallChase : MonoBehaviour
     private float rotationSpeed = 360f;
     private float currentRotation = 0f;
 
-
+    private Vector3 moveDirection;
 
     void Start()
     {
@@ -46,13 +46,18 @@ public class BallChase : MonoBehaviour
             {
                 chasing = true;
                 rb.useGravity = true;
+
+                // Å‰‚Éis•ûŒü‚ðŒˆ’è
+                moveDirection = player.position - transform.position;
+                moveDirection.y = 0;
+                moveDirection.Normalize();
             }
 
             currentRotation = Mathf.MoveTowards(
-    currentRotation,
-    180f,
-    rotationSpeed * Time.deltaTime
-);
+                currentRotation,
+                180f,
+                rotationSpeed * Time.deltaTime
+            );
 
             transform.rotation = Quaternion.Euler(0f, 0f, currentRotation);
         }
@@ -62,23 +67,17 @@ public class BallChase : MonoBehaviour
     {
         if (!chasing) return;
 
-        Vector3 direction = player.position - rb.position;
-        direction.y = 0;
+        // ˆê’¼ü‚ÉˆÚ“®
+        Vector3 velocity = rb.linearVelocity;
 
-        if (direction.sqrMagnitude > 0.01f)
-        {
-            Vector3 movement = direction.normalized * chaseSpeed;
+        velocity.x = moveDirection.x * chaseSpeed;
+        velocity.z = moveDirection.z * chaseSpeed;
 
-            rb.AddForce(movement, ForceMode.Force);
-        }
+        rb.linearVelocity = velocity;
     }
 
     public void Activate()
     {
         activated = true;
-
-        
     }
-
-
 }
