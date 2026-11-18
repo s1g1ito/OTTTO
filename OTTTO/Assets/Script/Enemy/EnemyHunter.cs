@@ -19,154 +19,283 @@ public class EnemyHunter : MonoBehaviour
     private Transform player;
 
     private int currentPoint = 0;
+
+    // 追跡中か
     private bool isChasing = false;
 
     void Start()
     {
-        agent = GetComponent<NavMeshAgent>();
+        agent =
+            GetComponent<NavMeshAgent>();
 
+        // Player取得
         GameObject obj =
             GameObject.FindGameObjectWithTag("Player");
 
         if (obj != null)
-            player = obj.transform;
+        {
+            player =
+                obj.transform;
+        }
+        else
+        {
+            Debug.LogError(
+                "EnemyHunter：Playerタグのオブジェクトが見つかりません！"
+            );
+        }
 
         // 最初は徘徊
         if (patrolPoints != null &&
             patrolPoints.Length > 0)
         {
             agent.SetDestination(
-                patrolPoints[0].position);
+                patrolPoints[0].position
+            );
         }
 
-        Invoke("StartChase", 3f);
+        // ここでInvokeしない
+        // 敵Aから通知されるか、
+        // 敵B自身がPlayerを発見したら追跡する
     }
 
     void Update()
     {
-        if (player == null || agent == null)
+        if (player == null ||
+            agent == null)
+        {
             return;
+        }
+
+
+        // 追跡中
+
 
         if (isChasing)
         {
-            float distance = Vector3.Distance(
-                transform.position,
-                player.position
-            );
+            float distance =
+                Vector3.Distance(
+                    transform.position,
+                    player.position
+                );
 
+            // Playerが遠くなりすぎた
             if (distance > loseDistance)
             {
                 StopChase();
                 return;
             }
 
-            agent.isStopped = false;
-            agent.SetDestination(player.position);
-        }
-        else
-        {
-            if (CanSeePlayer())
-            {
-                StartChase();
-                return;
-            }
+            agent.isStopped =
+                false;
 
-            Patrol();
+            // Playerを追跡
+            agent.SetDestination(
+                player.position
+            );
+
+            return;
         }
+
+
+        // 追跡していない
+
+
+        // 敵B自身がPlayerを発見
+        if (CanSeePlayer())
+        {
+            Debug.Log(
+                "★★ 敵Bが自分でPlayerを発見！ ★★"
+            );
+
+            StartChase();
+
+            return;
+        }
+
+        // Playerを見つけていないので徘徊
+        Patrol();
     }
 
-    // 徘徊処理
+
+    // 徘徊
+
+
     void Patrol()
     {
         if (patrolPoints == null ||
             patrolPoints.Length == 0)
+        {
             return;
+        }
 
         if (!agent.pathPending &&
             agent.remainingDistance <= arriveDistance)
         {
             currentPoint =
-                (currentPoint + 1) % patrolPoints.Length;
+                (currentPoint + 1) %
+                patrolPoints.Length;
 
             agent.SetDestination(
-                patrolPoints[currentPoint].position);
+                patrolPoints[currentPoint].position
+            );
         }
     }
 
-    // Playerの視界判定
+
+    // 敵B自身のPlayer視認判定
+
+
     bool CanSeePlayer()
     {
+        // 敵Bの目の位置
         Vector3 origin =
-            transform.position + Vector3.up * rayHeight;
+            transform.position +
+            Vector3.up * rayHeight;
+
+        // Playerの胸あたり
+        Vector3 target =
+            player.position +
+            Vector3.up * 1.0f;
 
         Vector3 direction =
-            player.position - origin;
+            target - origin;
 
+        // 水平方向
         Vector3 flatDirection =
-            new Vector3(direction.x, 0, direction.z);
+            new Vector3(
+                direction.x,
+                0f,
+                direction.z
+            );
 
-        // 距離判定
-        if (flatDirection.magnitude > viewDistance)
+        float distance =
+            flatDirection.magnitude;
+
+ 
+        //距離
+    
+
+        if (distance > viewDistance)
+        {
             return false;
+        }
 
-        // 角度判定
-        if (Vector3.Angle(
-            transform.forward,
-            flatDirection) > viewAngle)
+        
+        //角度
+        
+
+        float angle =
+            Vector3.Angle(
+                transform.forward,
+                flatDirection
+            );
+
+        if (angle > viewAngle)
+        {
             return false;
+        }
 
-        // 遮蔽物判定
+        
+        //遮蔽物
+        
+
         if (Physics.Raycast(
             origin,
             direction.normalized,
             out RaycastHit hit,
-            viewDistance))
+            direction.magnitude))
         {
-            return hit.collider.CompareTag("Player");
+            // Player本体
+            if (hit.transform == player)
+            {
+                return true;
+            }
+
+            // Playerの子オブジェクト
+            if (hit.transform.IsChildOf(player))
+            {
+                return true;
+            }
+
+            // 壁などに当たった
+            return false;
         }
 
         return false;
     }
 
-    // 追跡開始
+   
+    //追跡開始
+    
+
     public void StartChase()
     {
-        Debug.Log("敵B：追跡通知を受信！");
-
-        if (agent == null || !agent.enabled)
+        if (isChasing)
         {
-            Debug.LogError("NavMeshAgentが無効です！");
+            return;
+        }
+
+        Debug.Log(
+            "敵B：追跡通知を受信！"
+        );
+
+        if (agent == null ||
+            !agent.enabled)
+        {
+            Debug.LogError(
+                "敵B：NavMeshAgentが無効です！"
+            );
+
             return;
         }
 
         if (!agent.isOnNavMesh)
         {
-            Debug.LogError("敵BがNavMesh上にいません！");
+            Debug.LogError(
+                "敵B：NavMesh上にいません！"
+            );
+
             return;
         }
 
         if (player == null)
         {
-            Debug.LogError("Playerが取得できていません！");
+            Debug.LogError(
+                "敵B：Playerが取得できていません！"
+            );
+
             return;
         }
 
-        isChasing = true;
+        isChasing =
+            true;
 
-        agent.isStopped = false;
-        agent.SetDestination(player.position);
+        agent.isStopped =
+            false;
 
-        Debug.Log("敵B：追跡開始！目的地：" + player.position);
+        agent.SetDestination(
+            player.position
+        );
+
+        Debug.Log(
+            "敵B：追跡開始！目的地：" +
+            player.position
+        );
     }
 
+   
     // 追跡終了
+    
+
     void StopChase()
     {
-        isChasing = false;
+        isChasing =
+            false;
 
-        // 現在の経路を解除
         agent.ResetPath();
 
-        Debug.Log("EnemyHunter：追跡終了、徘徊再開！");
+        Debug.Log(
+            "敵B：追跡終了、徘徊再開！"
+        );
     }
 }
