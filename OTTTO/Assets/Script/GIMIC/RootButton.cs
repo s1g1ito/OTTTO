@@ -14,6 +14,7 @@ public class RouteButton : MonoBehaviour
 
     void Start()
     {
+        // ボタンについているBox Colliderを取得
         boxCollider = GetComponent<BoxCollider>();
 
         if (boxCollider == null)
@@ -22,28 +23,35 @@ public class RouteButton : MonoBehaviour
             return;
         }
 
+        // PlayerのColliderを取得
         if (player != null)
         {
-            playerColliders = player.GetComponentsInChildren<Collider>();
+            playerColliders =
+                player.GetComponentsInChildren<Collider>();
+        }
+        else
+        {
+            Debug.LogError("Playerが設定されていません");
         }
     }
 
     // ボタンをクリックしたとき
     void OnMouseDown()
     {
-        Debug.Log("ボタンがクリックされました");
+        Debug.Log("① ボタンがクリックされました");
 
-        if (player == null || minimapRoute == null ||
+        if (player == null ||
+            minimapRoute == null ||
             boxCollider == null)
         {
             Debug.LogError("Inspectorの設定を確認してください");
             return;
         }
 
-        // プレイヤーとBox Colliderが重なっているか確認
+        // プレイヤーが範囲内にいるか確認
         if (IsPlayerInside())
         {
-            Debug.Log("範囲内！ルートを表示します");
+            Debug.Log("② 範囲内！ルートを表示します");
 
             minimapRoute.ShowRoute();
         }
@@ -53,7 +61,7 @@ public class RouteButton : MonoBehaviour
         }
     }
 
-    // プレイヤーのColliderとボタンのColliderを比較
+    // プレイヤーとBox Colliderの重なりを確認
     bool IsPlayerInside()
     {
         if (playerColliders == null)
@@ -69,17 +77,21 @@ public class RouteButton : MonoBehaviour
 
             bool overlap = Physics.ComputePenetration(
                 boxCollider,
-                transform.position,
-                transform.rotation,
+                boxCollider.transform.position,
+                boxCollider.transform.rotation,
+
                 playerCol,
                 playerCol.transform.position,
                 playerCol.transform.rotation,
+
                 out direction,
                 out distance
             );
 
             if (overlap)
+            {
                 return true;
+            }
         }
 
         return false;
