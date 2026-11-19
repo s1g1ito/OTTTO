@@ -40,6 +40,8 @@ public class FogOfWar : MonoBehaviour
     private bool isDirty;
     private bool saveDirty;
     private float lastSaveTime;
+    // ロードするステージを記録
+    private static string returnStageId;
 
     private string SavePath => Path.Combine(
         Application.persistentDataPath,
@@ -75,14 +77,24 @@ public class FogOfWar : MonoBehaviour
         fogOverlay.color = Color.white;
 
         // コンティニュー時だけ保存データを読み込む
-        if (loadSavedOnStart)
+
+        if (returnStageId == stageId)
         {
+            // パズルシーンから戻った場合
+            returnStageId = null;
+
             LoadExploration();
+
+            Debug.Log("パズルから帰還：探索記録をロード");
         }
         else
         {
-            Debug.Log("FogOfWar: 新規探索として開始しました。");
+            // 新規開始・ゲームオーバー後
+            saveDirty = true;
+
+            Debug.Log("新規探索：探索記録を初期化");
         }
+
 
         lastPosition = player.position;
         RevealCircle(lastPosition, startRevealRadius);
@@ -279,6 +291,11 @@ public class FogOfWar : MonoBehaviour
         {
             Debug.LogError("探索記録の保存に失敗: " + e.Message);
         }
+    }
+    // パズルシーンから戻るときに呼び出す
+    public static void RequestMapLoad(string stageId)
+    {
+        returnStageId = stageId;
     }
 
     public void LoadExploration()

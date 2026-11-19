@@ -179,7 +179,9 @@ public class GameContollore : MonoBehaviour
 
         PieceList[8].transform.position = new Vector2(2, -2f);
 
-        SceneManager.LoadScene("stage5");
+        FogOfWar.RequestMapLoad("Stage5");
+
+        SceneManager.LoadScene("Stage5");
 
 
         this.transform.position = new Vector3(46f, 1f, 45f);
