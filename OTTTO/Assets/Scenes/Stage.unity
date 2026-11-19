@@ -91175,7 +91175,7 @@ Transform:
   m_GameObject: {fileID: 482260752}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.71111983, z: -0, w: 0.7030709}
-  m_LocalPosition: {x: 74.51, y: 1, z: 93.9}
+  m_LocalPosition: {x: 89.39, y: 1, z: 64.26}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -190669,8 +190669,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 200b7e453025b084ab9f90e09ee83f8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyScout
-  viewDistance: 5
-  viewAngle: 45
+  viewDistance: 10
+  viewAngle: 60
   rayHeight: 1
   patrolPoints:
   - {fileID: 319259718}
@@ -190680,9 +190680,12 @@ MonoBehaviour:
   - {fileID: 1461621006}
   arriveDistance: 0.5
   hunter: {fileID: 1199447203}
+  visionObstacleMask:
+    serializedVersion: 2
+    m_Bits: 768
   normalViewColor: {r: 0, g: 1, b: 0, a: 0.5}
   detectedViewColor: {r: 1, g: 0, b: 0, a: 0.7}
-  groundHeight: 0.05
+  groundHeight: 3
   segments: 40
 --- !u!1 &1015513237
 GameObject:
@@ -225786,7 +225789,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 781ac8c5fb1bf8641b83a53be779c740, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 25.5
+      value: 40.7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 781ac8c5fb1bf8641b83a53be779c740, type: 3}
       propertyPath: m_LocalPosition.y
@@ -225794,7 +225797,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 781ac8c5fb1bf8641b83a53be779c740, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 75.2
+      value: 89.4
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 781ac8c5fb1bf8641b83a53be779c740, type: 3}
       propertyPath: m_LocalRotation.w
@@ -225968,10 +225971,14 @@ MonoBehaviour:
   - {fileID: 994163223}
   - {fileID: 929262075}
   arriveDistance: 0.5
+  moveSpeed: 3
   viewDistance: 10
   viewAngle: 90
   rayHeight: 1
   loseDistance: 75
+  visionObstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &1200551530
 GameObject:
   m_ObjectHideFlags: 0

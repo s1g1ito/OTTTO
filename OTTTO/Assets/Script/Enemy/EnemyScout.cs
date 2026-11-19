@@ -6,7 +6,11 @@ public class EnemyScout : MonoBehaviour
 {
     [Header("視認設定")]
     public float viewDistance = 10f;
+
+    // 扇形全体の角度
+    // 60なら左30°～右30°
     public float viewAngle = 60f;
+
     public float rayHeight = 1f;
 
     [Header("徘徊設定")]
@@ -16,10 +20,18 @@ public class EnemyScout : MonoBehaviour
     [Header("通知する敵B")]
     public EnemyHunter hunter;
 
-    [Header("視界表示設定")]
-    public Color normalViewColor = new Color(0f, 1f, 0f, 0.5f);
-    public Color detectedViewColor = new Color(1f, 0f, 0f, 0.7f);
+    [Header("視界を遮るレイヤー")]
+    [Tooltip("Wallなど、視界を遮るLayerだけを設定してください。Groundは入れません。")]
+    public LayerMask visionObstacleMask;
 
+    [Header("視界表示設定")]
+    public Color normalViewColor =
+        new Color(0f, 1f, 0f, 0.5f);
+
+    public Color detectedViewColor =
+        new Color(1f, 0f, 0f, 0.7f);
+
+    [Header("VisionRange表示")]
     public float groundHeight = 3.0f;
 
     [Range(10, 100)]
@@ -30,7 +42,7 @@ public class EnemyScout : MonoBehaviour
 
     private int currentPoint = 0;
 
-    // 一度発見したら、同じPlayerに何度も通知しない
+    // 現在Playerを視認しているか
     private bool foundPlayer = false;
 
     private Mesh visionMesh;
@@ -38,91 +50,211 @@ public class EnemyScout : MonoBehaviour
 
     void Start()
     {
+        // ========================================
+        // NavMeshAgent
+        // ========================================
+
         agent = GetComponent<NavMeshAgent>();
 
+        // ========================================
         // Player取得
+        // ========================================
+
         GameObject obj =
             GameObject.FindGameObjectWithTag("Player");
 
         if (obj != null)
         {
             player = obj.transform;
+
+            Debug.Log(
+                "EnemyScout：Playerを取得しました"
+            );
         }
         else
         {
-            Debug.LogError("EnemyScout：Playerタグのオブジェクトが見つかりません！");
+            Debug.LogError(
+                "EnemyScout：Playerタグのオブジェクトが見つかりません！"
+            );
         }
 
-        // 最初の徘徊地点へ
+        // ========================================
+        // EnemyHunter取得
+        // ========================================
+
+        if (hunter == null)
+        {
+            hunter =
+                FindObjectOfType<EnemyHunter>();
+
+            if (hunter != null)
+            {
+                Debug.Log(
+                    "EnemyScout：EnemyHunterを自動取得しました"
+                );
+            }
+            else
+            {
+                Debug.LogError(
+                    "EnemyScout：EnemyHunterが見つかりません！"
+                );
+            }
+        }
+
+        // ========================================
+        // NavMesh確認
+        // ========================================
+
+        if (!agent.isOnNavMesh)
+        {
+            Debug.LogError(
+                "EnemyScout：NavMesh上にいません！"
+            );
+        }
+
+        // ========================================
+        // 最初の巡回地点
+        // ========================================
+
         if (patrolPoints != null &&
-            patrolPoints.Length > 0)
+            patrolPoints.Length > 0 &&
+            agent.isOnNavMesh)
         {
             agent.SetDestination(
                 patrolPoints[0].position
             );
         }
 
-        // 視界表示作成
+        // ========================================
+        // VisionRange作成
+        // ========================================
+
         CreateVisionMesh();
+
+        // 最初は緑
+        SetVisionColor(normalViewColor);
     }
 
     void Update()
     {
-        if (player != null)
+        // ========================================
+        // Playerがいない
+        // ========================================
+
+        if (player == null)
         {
-
-            // 敵A自身の視界判定
-            bool canSeePlayer = CanSeePlayer();
-
-            if (canSeePlayer)
-            {
-                // Playerを発見
-                if (!foundPlayer)
-                {
-                    foundPlayer = true;
-
-                    Debug.Log(
-                        "★★ 敵Aの扇形にPlayerが入った！ ★★"
-                    );
-
-                    // 敵Bへ通知
-                    if (hunter != null)
-                    {
-                        Debug.Log(
-                            "★★ 敵A → 敵Bへ追跡通知！ ★★"
-                        );
-
-                        hunter.StartChase();
-                    }
-                    else
-                    {
-                        Debug.LogWarning(
-                            "EnemyScout：EnemyHunterが設定されていません！"
-                        );
-                    }
-                }
-
-                // 色変更は後で調整
-                SetVisionColor(detectedViewColor);
-            }
-            else
-            {
-                SetVisionColor(normalViewColor);
-            }
-
-            // 徘徊
             Patrol();
+            UpdateVisionMesh();
+            return;
         }
 
-        // 扇形表示更新
+        // ========================================
+        // Player視認
+        // ========================================
+
+        bool canSeePlayer =
+            CanSeePlayer();
+
+        // ========================================
+        // 発見中
+        // ========================================
+
+        if (canSeePlayer)
+        {
+            // VisionRangeを赤にする
+            SetVisionColor(
+                detectedViewColor
+            );
+
+            // 初めて発見した瞬間
+            if (!foundPlayer)
+            {
+                foundPlayer = true;
+
+                Debug.Log(
+                    "================================"
+                );
+
+                Debug.Log(
+                    "★★ 敵A：Playerを発見！ ★★"
+                );
+
+                Debug.Log(
+                    "★★ VisionRange → 赤 ★★"
+                );
+
+                // EnemyHunterへ通知
+                if (hunter != null)
+                {
+                    Debug.Log(
+                        "★★ 敵A → 敵Bへ追跡通知！ ★★"
+                    );
+
+                    hunter.StartChase();
+                }
+                else
+                {
+                    Debug.LogError(
+                        "EnemyScout：EnemyHunterが設定されていません！"
+                    );
+                }
+
+                Debug.Log(
+                    "================================"
+                );
+            }
+        }
+        else
+        {
+            // 見失ったら緑
+            SetVisionColor(
+                normalViewColor
+            );
+
+            // 視界から出た
+            if (foundPlayer)
+            {
+                foundPlayer = false;
+
+                Debug.Log(
+                    "EnemyScout：PlayerがVisionRangeから出ました"
+                );
+            }
+        }
+
+        // ========================================
+        // 巡回
+        // ========================================
+
+        Patrol();
+
+        // ========================================
+        // VisionRange更新
+        // ========================================
+
         UpdateVisionMesh();
     }
 
-    // 徘徊
+    // ========================================
+    // 巡回
+    // ========================================
+
     void Patrol()
     {
+        if (agent == null ||
+            !agent.enabled ||
+            !agent.isOnNavMesh)
+        {
+            return;
+        }
+
         if (patrolPoints == null ||
             patrolPoints.Length == 0)
+        {
+            return;
+        }
+
+        if (patrolPoints[currentPoint] == null)
         {
             return;
         }
@@ -131,7 +263,8 @@ public class EnemyScout : MonoBehaviour
             agent.remainingDistance <= arriveDistance)
         {
             currentPoint =
-                (currentPoint + 1) % patrolPoints.Length;
+                (currentPoint + 1) %
+                patrolPoints.Length;
 
             agent.SetDestination(
                 patrolPoints[currentPoint].position
@@ -139,15 +272,26 @@ public class EnemyScout : MonoBehaviour
         }
     }
 
+    // ========================================
     // Player視認判定
+    // ========================================
+
     bool CanSeePlayer()
     {
-        // 敵Aの目の高さ
+        if (player == null)
+        {
+            return false;
+        }
+
+        // ========================================
+        // 敵Aの目
+        // ========================================
+
         Vector3 origin =
             transform.position +
             Vector3.up * rayHeight;
 
-        // Playerの胸あたりを狙う
+        // Playerの胸
         Vector3 target =
             player.position +
             Vector3.up * 1.0f;
@@ -155,7 +299,10 @@ public class EnemyScout : MonoBehaviour
         Vector3 direction =
             target - origin;
 
-        // 水平方向だけ取得
+        // ========================================
+        // 水平方向
+        // ========================================
+
         Vector3 flatDirection =
             new Vector3(
                 direction.x,
@@ -166,14 +313,18 @@ public class EnemyScout : MonoBehaviour
         float distance =
             flatDirection.magnitude;
 
-        //距離判定
+        // ========================================
+        // ① 距離
+        // ========================================
 
         if (distance > viewDistance)
         {
             return false;
         }
 
-        //扇形の角度判定
+        // ========================================
+        // ② 扇形の角度
+        // ========================================
 
         float angle =
             Vector3.Angle(
@@ -181,39 +332,60 @@ public class EnemyScout : MonoBehaviour
                 flatDirection
             );
 
-        if (angle > viewAngle)
+        // viewAngleは扇形全体の角度
+        if (angle > viewAngle / 2f)
         {
             return false;
         }
 
-        //遮蔽物判定
+        // ========================================
+        // ③ 壁などの遮蔽物
+        // ========================================
 
+        Vector3 rayDirection =
+            direction.normalized;
+
+        float rayDistance =
+            direction.magnitude;
+
+        Debug.DrawRay(
+            origin,
+            rayDirection * rayDistance,
+            Color.yellow
+        );
+
+        // visionObstacleMaskに設定されたものだけ
+        // 視界を遮る
         if (Physics.Raycast(
             origin,
-            direction.normalized,
+            rayDirection,
             out RaycastHit hit,
-            direction.magnitude))
+            rayDistance,
+            visionObstacleMask))
         {
-            // Player本体
-            if (hit.transform == player)
-            {
-                return true;
-            }
+            Debug.Log(
+                "EnemyScout：視界が " +
+                hit.transform.name +
+                " に遮られました"
+            );
 
-            // Playerの子オブジェクト
-            if (hit.transform.IsChildOf(player))
-            {
-                return true;
-            }
-
-            // Playerより先に壁などに当たった
             return false;
         }
 
-        return false;
+        // ========================================
+        // ここまで来たらPlayer発見
+        // ========================================
+
+        Debug.Log(
+            "★★ EnemyScout：Playerを視認しました！ ★★"
+        );
+
+        return true;
     }
 
-    // 視界の色変更
+    // ========================================
+    // VisionRange色変更
+    // ========================================
 
     void SetVisionColor(Color color)
     {
@@ -225,7 +397,6 @@ public class EnemyScout : MonoBehaviour
         Material mat =
             visionRenderer.material;
 
-        // URP
         if (mat.HasProperty("_BaseColor"))
         {
             mat.SetColor(
@@ -234,7 +405,6 @@ public class EnemyScout : MonoBehaviour
             );
         }
 
-        // Built-in
         if (mat.HasProperty("_Color"))
         {
             mat.SetColor(
@@ -244,20 +414,24 @@ public class EnemyScout : MonoBehaviour
         }
     }
 
-    // 視界Mesh作成
+    // ========================================
+    // VisionRange作成
+    // ========================================
 
     void CreateVisionMesh()
     {
         GameObject vision =
             new GameObject("VisionRange");
 
-        vision.transform.SetParent(transform);
+        vision.transform.SetParent(
+            transform
+        );
 
         vision.transform.localPosition =
             new Vector3(
-                0,
+                0f,
                 groundHeight,
-                0
+                0f
             );
 
         vision.transform.localRotation =
@@ -278,13 +452,15 @@ public class EnemyScout : MonoBehaviour
         filter.mesh =
             visionMesh;
 
-        // URP
+        // ========================================
+        // Shader
+        // ========================================
+
         Shader shader =
             Shader.Find(
                 "Universal Render Pipeline/Unlit"
             );
 
-        // Built-in
         if (shader == null)
         {
             shader =
@@ -294,15 +470,11 @@ public class EnemyScout : MonoBehaviour
         Material mat =
             new Material(shader);
 
-        // 通常時は緑
-        Color green =
-            normalViewColor;
-
         if (mat.HasProperty("_BaseColor"))
         {
             mat.SetColor(
                 "_BaseColor",
-                green
+                normalViewColor
             );
         }
 
@@ -310,14 +482,17 @@ public class EnemyScout : MonoBehaviour
         {
             mat.SetColor(
                 "_Color",
-                green
+                normalViewColor
             );
         }
 
         // 両面表示
         if (mat.HasProperty("_Cull"))
         {
-            mat.SetFloat("_Cull", 0);
+            mat.SetFloat(
+                "_Cull",
+                0
+            );
         }
 
         mat.renderQueue = 3000;
@@ -332,7 +507,9 @@ public class EnemyScout : MonoBehaviour
             false;
     }
 
-    // 視界Mesh更新
+    // ========================================
+    // VisionRange Mesh更新
+    // ========================================
 
     void UpdateVisionMesh()
     {
@@ -354,24 +531,32 @@ public class EnemyScout : MonoBehaviour
         vertices[0] =
             Vector3.zero;
 
-        for (int i = 0; i <= segments; i++)
+        // ========================================
+        // 扇形
+        // ========================================
+
+        for (int i = 0;
+             i <= segments;
+             i++)
         {
             float angle =
-                -viewAngle +
+                -viewAngle / 2f +
                 (
-                    viewAngle * 2f * i /
+                    viewAngle *
+                    i /
                     segments
                 );
 
             float rad =
-                angle * Mathf.Deg2Rad;
+                angle *
+                Mathf.Deg2Rad;
 
             vertices[i + 1] =
                 new Vector3(
                     Mathf.Sin(rad) *
                     viewDistance,
 
-                    0,
+                    0f,
 
                     Mathf.Cos(rad) *
                     viewDistance
