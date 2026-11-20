@@ -85,7 +85,7 @@ public class EnemyScout : MonoBehaviour
         if (hunter == null)
         {
             hunter =
-                FindObjectOfType<EnemyHunter>();
+                Object.FindAnyObjectByType<EnemyHunter>();
 
             if (hunter != null)
             {
@@ -176,18 +176,18 @@ public class EnemyScout : MonoBehaviour
                 );
 
                 Debug.Log(
-                    "★★ 敵A：Playerを発見！ ★★"
+                    "敵A：Playerを発見！"
                 );
 
                 Debug.Log(
-                    "★★ VisionRange → 赤 ★★"
+                    "VisionRange → 赤"
                 );
 
                 // EnemyHunterへ通知
                 if (hunter != null)
                 {
                     Debug.Log(
-                        "★★ 敵A → 敵Bへ追跡通知！ ★★"
+                        "敵A → 敵Bへ追跡通知！"
                     );
 
                     hunter.StartChase();
@@ -283,25 +283,16 @@ public class EnemyScout : MonoBehaviour
             return false;
         }
 
-        // ========================================
-        // 敵Aの目
-        // ========================================
-
         Vector3 origin =
             transform.position +
             Vector3.up * rayHeight;
 
-        // Playerの胸
         Vector3 target =
             player.position +
             Vector3.up * 1.0f;
 
         Vector3 direction =
             target - origin;
-
-        // ========================================
-        // 水平方向
-        // ========================================
 
         Vector3 flatDirection =
             new Vector3(
@@ -313,34 +304,23 @@ public class EnemyScout : MonoBehaviour
         float distance =
             flatDirection.magnitude;
 
-        // ========================================
-        // ① 距離
-        // ========================================
-
+        // 距離チェック
         if (distance > viewDistance)
         {
             return false;
         }
 
-        // ========================================
-        // ② 扇形の角度
-        // ========================================
-
+        // 角度チェック
         float angle =
             Vector3.Angle(
                 transform.forward,
                 flatDirection
             );
 
-        // viewAngleは扇形全体の角度
         if (angle > viewAngle / 2f)
         {
             return false;
         }
-
-        // ========================================
-        // ③ 壁などの遮蔽物
-        // ========================================
 
         Vector3 rayDirection =
             direction.normalized;
@@ -354,30 +334,75 @@ public class EnemyScout : MonoBehaviour
             Color.yellow
         );
 
-        // visionObstacleMaskに設定されたものだけ
-        // 視界を遮る
-        if (Physics.Raycast(
-            origin,
-            rayDirection,
-            out RaycastHit hit,
-            rayDistance,
-            visionObstacleMask))
-        {
-            Debug.Log(
-                "EnemyScout：視界が " +
-                hit.transform.name +
-                " に遮られました"
+        // --------------------------------------------------
+        // まず「何に当たったか」を確認する
+        // --------------------------------------------------
+
+        RaycastHit[] hits =
+            Physics.RaycastAll(
+                origin,
+                rayDirection,
+                rayDistance
             );
 
-            return false;
+        // RaycastAllは距離順とは限らないので並べ替える
+        System.Array.Sort(
+            hits,
+            (a, b) =>
+                a.distance.CompareTo(b.distance)
+        );
+
+        foreach (RaycastHit hit in hits)
+        {
+            GameObject hitObject =
+                hit.collider.gameObject;
+
+            string layerName =
+                LayerMask.LayerToName(
+                    hitObject.layer
+                );
+
+            Debug.Log(
+                "EnemyScout：Raycast → " +
+                hitObject.name +
+                " / Layer = " +
+                layerName
+            );
+
+            // Playerに当たったら「見えている」
+            if (hitObject.CompareTag("Player"))
+            {
+                Debug.Log(
+                    "EnemyScout：Playerを視認しました！"
+                );
+
+                return true;
+            }
+
+            // Groundは完全に無視
+            if (layerName == "Ground")
+            {
+                continue;
+            }
+
+            // Wallだけ視界を遮る
+            if (layerName == "Wall")
+            {
+                Debug.Log(
+                    "EnemyScout：Wallに視界を遮られました"
+                );
+
+                return false;
+            }
+
+            // その他のオブジェクトは無視
         }
 
-        // ========================================
-        // ここまで来たらPlayer発見
-        // ========================================
-
+        // 何にも遮られずPlayerにも当たらなかった場合
+        // PlayerがColliderを持っていないケースなどを考慮して、
+        // 最後にPlayerが範囲内なら見えている扱いにする
         Debug.Log(
-            "★★ EnemyScout：Playerを視認しました！ ★★"
+            "EnemyScout：Playerを視認しました！"
         );
 
         return true;
