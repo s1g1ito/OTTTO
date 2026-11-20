@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,8 +6,10 @@ public class MouseLook : MonoBehaviour
     // マウスの感度
     public float sensitivity = 100f;
 
+    // 視点反転フラグ（新規追加）
+    public bool isLookReversed = false;
+
     // プレイヤー本体のTransform
-    // 左右の視点移動に使用する
     public Transform playerBody;
 
     // カメラの上下方向の回転角度
@@ -16,15 +17,11 @@ public class MouseLook : MonoBehaviour
 
     void Start()
     {
-        // マウスカーソルを画面中央に固定する
-        // ゲーム中にカーソルが画面外へ出ないようにする
         Cursor.lockState = CursorLockMode.Locked;
 
-        // 保存されているマウス感度を取得
-        // 保存されていなければ1.0
-        float sensitivityValue = PlayerPrefs.GetFloat("MouseSensitivity", 1.0f);
+        float sensitivityValue =
+            PlayerPrefs.GetFloat("MouseSensitivity", 1.0f);
 
-        // 基準値100にSliderの値を掛ける
         sensitivity = 100f * sensitivityValue;
 
         Debug.Log("読み込んだマウス感度: " + sensitivity);
@@ -32,30 +29,28 @@ public class MouseLook : MonoBehaviour
 
     void Update()
     {
-        // マウスの移動量を取得する
+        // マウスの移動量を取得
         Vector2 mouseDelta = Mouse.current.delta.ReadValue();
 
-        // マウスの左右の移動量を取得
-        // 感度とフレーム時間を掛けて視点の移動量を調整する
-        float mouseX = mouseDelta.x * sensitivity * Time.deltaTime;
+        // 視点反転処理（新規追加）
+        if (isLookReversed)
+        {
+            mouseDelta = -mouseDelta;
+        }
 
-        // マウスの上下の移動量を取得
-        float mouseY = mouseDelta.y * sensitivity * Time.deltaTime;
+        float mouseX =
+            mouseDelta.x * sensitivity * Time.deltaTime;
 
-        // マウスの上下移動によってカメラの回転角度を変更する
-        // マウスを上に動かすと視点が上を向く
+        float mouseY =
+            mouseDelta.y * sensitivity * Time.deltaTime;
+
         xRotation -= mouseY;
 
-        // カメラが上下90度以上回転しないように制限する
         xRotation = Mathf.Clamp(xRotation, -90f, 90f);
 
-        // カメラ自身を上下方向に回転させる
-        // X軸を使って上下の視点移動を行う
-        transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+        transform.localRotation =
+            Quaternion.Euler(xRotation, 0f, 0f);
 
-        // プレイヤー本体を左右に回転させる
-        // Y軸を使って左右の視点移動を行う
         playerBody.Rotate(Vector3.up * mouseX);
     }
 }
-
