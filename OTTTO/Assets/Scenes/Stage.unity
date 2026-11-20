@@ -91044,6 +91044,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 6
   holdingMoveSpeed: 3
+  isMoveReversed: 0
 --- !u!114 &482260755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -91175,7 +91176,7 @@ Transform:
   m_GameObject: {fileID: 482260752}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.71111983, z: -0, w: 0.7030709}
-  m_LocalPosition: {x: 5.21, y: 1, z: 0.51}
+  m_LocalPosition: {x: 88.3, y: 1, z: 95}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -279219,6 +279220,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CodeSceneTrigger
   returnPosition: {fileID: 1697161783}
+  codeSceneName: CodeScene
+  advanceToStage2: 1
+  nextSceneName: Player
 --- !u!65 &1479475030
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -286920,6 +286924,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   sensitivity: 60
+  isLookReversed: 0
   playerBody: {fileID: 482260760}
 --- !u!114 &1525515677
 MonoBehaviour:
@@ -309056,6 +309061,16 @@ MonoBehaviour:
   height: 10
   mazeCellPrefab: {fileID: 5640764479148408230, guid: 1914a734b0395ed4983338cb1e930279, type: 3}
   root: {fileID: 1895448426}
+  cellScale: 5
+  player: {fileID: 0}
+  startPoint: {fileID: 0}
+  playerHeight: 1
+  goal: {fileID: 0}
+  goalHeight: 0.5
+  goalWallSide: 0
+  removeGoalWall: 1
+  goalInset: 0.5
+  rotateGoalTowardMaze: 1
 --- !u!4 &1644750582
 Transform:
   m_ObjectHideFlags: 0
