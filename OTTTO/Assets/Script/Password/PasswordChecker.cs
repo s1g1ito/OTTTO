@@ -4,28 +4,64 @@ using TMPro;
 
 public class PasswordChecker : MonoBehaviour
 {
+    [Header("暗証番号入力")]
     public TMP_InputField inputField;
 
-    void Start()
+    private void Start()
     {
-        // マウスカーソルを表示
         Cursor.visible = true;
-
-        // マウスカーソルの固定を解除
         Cursor.lockState = CursorLockMode.None;
     }
 
     public void CheckPassword()
     {
-        if (inputField.text == CodeGenerator.GeneratedCode)
+        if (inputField == null)
         {
-            PlayerPrefs.SetInt("DoorUnlocked", 1);
+            Debug.LogError("InputFieldが未設定です");
+            return;
+        }
 
-            SceneManager.LoadScene("Stage");
+        // 暗証番号が不正解の場合
+        if (inputField.text != CodeGenerator.GeneratedCode)
+        {
+            Debug.Log("パスワードが違います");
+            return;
+        }
+
+        Debug.Log("暗証番号が正解しました！");
+
+        // Stage1から来た場合
+        if (CodeSceneTrigger.AdvanceToStage2)
+        {
+            string nextScene = CodeSceneTrigger.NextSceneName;
+
+            if (!Application.CanStreamedLevelBeLoaded(nextScene))
+            {
+                Debug.LogError(
+                    nextScene + "がBuild Profilesにありません");
+                return;
+            }
+
+            // Stage2へ移動
+            SceneManager.LoadScene(nextScene);
         }
         else
         {
-            Debug.Log("パスワードが違います");
+            // 従来の開錠処理
+            string returnScene =
+                CodeSceneTrigger.ReturnSceneName;
+
+            if (!Application.CanStreamedLevelBeLoaded(returnScene))
+            {
+                Debug.LogError(
+                    returnScene + "がBuild Profilesにありません");
+                return;
+            }
+
+            PlayerPrefs.SetInt("DoorUnlocked", 1);
+            PlayerPrefs.Save();
+
+            SceneManager.LoadScene(returnScene);
         }
     }
 }

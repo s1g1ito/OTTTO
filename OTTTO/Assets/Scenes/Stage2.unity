@@ -62626,7 +62626,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &652720788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62643,6 +62643,16 @@ MonoBehaviour:
   height: 10
   mazeCellPrefab: {fileID: 5640764479148408230, guid: 1914a734b0395ed4983338cb1e930279, type: 3}
   root: {fileID: 110427559}
+  cellScale: 5
+  player: {fileID: 0}
+  startPoint: {fileID: 0}
+  playerHeight: 1
+  goal: {fileID: 0}
+  goalHeight: 0.5
+  goalWallSide: 0
+  removeGoalWall: 1
+  goalInset: 0.5
+  rotateGoalTowardMaze: 1
 --- !u!4 &652720789
 Transform:
   m_ObjectHideFlags: 0
@@ -133674,7 +133684,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1420211139
 Transform:
   m_ObjectHideFlags: 0
@@ -205339,7 +205349,7 @@ Transform:
   m_GameObject: {fileID: 8071426000311559996}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 19.77, y: 1, z: 55.41}
+  m_LocalPosition: {x: 44.52, y: 1, z: 41.46}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

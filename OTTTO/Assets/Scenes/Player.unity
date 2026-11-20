@@ -4248,6 +4248,13 @@ MonoBehaviour:
   height: 10
   mazeCellPrefab: {fileID: 5640764479148408230, guid: 1914a734b0395ed4983338cb1e930279, type: 3}
   root: {fileID: 512821323}
+  cellScale: 5
+  player: {fileID: 1642832583}
+  goal: {fileID: 0}
+  playerHeight: 1
+  goalHeight: 0.5
+  goalWallSide: 0
+  removeGoalWall: 1
 --- !u!4 &1292715687
 Transform:
   m_ObjectHideFlags: 0
