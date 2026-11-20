@@ -10,8 +10,12 @@ TagManager:
   - Ground
   - KeyBox
   - Ball
+<<<<<<< HEAD
   - Enemy
   - Gimick
+=======
+  - ENEMY
+>>>>>>> Gimmick
   layers:
   - Default
   - TransparentFX
