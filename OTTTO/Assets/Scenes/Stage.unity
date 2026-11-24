@@ -23454,51 +23454,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 119279793}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1 &119623393
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 119623395}
-  - component: {fileID: 119623394}
-  m_Layer: 0
-  m_Name: Code
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &119623394
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 119623393}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b942fdec98937a40aa6f109b1133814, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CodeHint
-  hintText: {fileID: 1425228780}
---- !u!4 &119623395
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 119623393}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 84.43, y: 8.23, z: 17.2}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &121509644
 GameObject:
   m_ObjectHideFlags: 0
@@ -91176,7 +91131,7 @@ Transform:
   m_GameObject: {fileID: 482260752}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.71111983, z: -0, w: 0.7030709}
-  m_LocalPosition: {x: 88.3, y: 1, z: 95}
+  m_LocalPosition: {x: 79.3, y: 1, z: 17.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -190683,7 +190638,7 @@ MonoBehaviour:
   hunter: {fileID: 1199447203}
   visionObstacleMask:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 0
   normalViewColor: {r: 0, g: 1, b: 0, a: 0.5}
   detectedViewColor: {r: 1, g: 0, b: 0, a: 0.7}
   groundHeight: 3
@@ -225979,7 +225934,7 @@ MonoBehaviour:
   loseDistance: 75
   visionObstacleMask:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 0
 --- !u!1 &1200551530
 GameObject:
   m_ObjectHideFlags: 0
@@ -268466,7 +268421,7 @@ GameObject:
   - component: {fileID: 1425228781}
   - component: {fileID: 1425228780}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: Code
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -318106,6 +318061,8 @@ GameObject:
   - component: {fileID: 1697161782}
   - component: {fileID: 1697161781}
   - component: {fileID: 1697161783}
+  - component: {fileID: 1697161784}
+  - component: {fileID: 1697161785}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -318153,6 +318110,39 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReturnPosition
   returnPoint: {fileID: 486999723}
+--- !u!114 &1697161784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1697161780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b942fdec98937a40aa6f109b1133814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeHint
+  hintText: {fileID: 1425228780}
+--- !u!114 &1697161785
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1697161780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efa5b3276f51d0a48b38602efdab0082, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeWatchTrigger
+  player: {fileID: 482260760}
+  watchDistance: 5
+  watchAngle: 30
+  requiredWatchTime: 3
+  hunter: {fileID: 1199447203}
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 1
 --- !u!1 &1697245953
 GameObject:
   m_ObjectHideFlags: 0
@@ -399059,4 +399049,3 @@ SceneRoots:
   - {fileID: 2656632}
   - {fileID: 666049733}
   - {fileID: 1425228782}
-  - {fileID: 119623395}
