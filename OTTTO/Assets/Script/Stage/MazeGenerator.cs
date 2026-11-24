@@ -22,18 +22,26 @@ public class MazeGenerator : MonoBehaviour
 
     [Header("ゴール設定")]
     [SerializeField] private Transform goal;
-    [SerializeField] private float goalHeight = 1.5f;
+    [SerializeField] private float goalHeight = 0f;
 
     [Header("ゴールの壁設定")]
     [SerializeField]
     private GoalWallSide goalWallSide =
         GoalWallSide.Top;
 
-    [SerializeField] private bool removeGoalWall = false;
+    [SerializeField] private bool removeGoalWall = true;
 
     [Header("ゴールの位置調整")]
-    [SerializeField] private float goalInset = 0.5f;
+    [SerializeField] private float goalInset = 0f;
     [SerializeField] private bool rotateGoalTowardMaze = true;
+
+    [Header("感圧板ギミック設定")]
+    [SerializeField] private PlateCheak pressurePlate;
+    [SerializeField] private Rigidbody keyBox;
+    [SerializeField] private Transform keyBoxStartPoint;
+
+    private Vector3 initialKeyBoxPosition;
+    private Quaternion initialKeyBoxRotation;
 
     private enum GoalWallSide
     {
@@ -41,9 +49,18 @@ public class MazeGenerator : MonoBehaviour
         Right
     }
 
+    private void Awake()
+    {
+        // 箱の初期位置を保存
+        if (keyBox != null)
+        {
+            initialKeyBoxPosition = keyBox.position;
+            initialKeyBoxRotation = keyBox.rotation;
+        }
+    }
+
     private void Start()
     {
-        // ステージ開始時に迷路生成
         GenerateMaze();
     }
 
@@ -76,11 +93,12 @@ public class MazeGenerator : MonoBehaviour
         }
     }
 
-    // 迷路生成
+    // 迷路をランダム生成
     public void GenerateMaze()
     {
         if (width <= 0 || height <= 0 ||
-            root == null || mazeCellPrefab == null ||
+            root == null ||
+            mazeCellPrefab == null ||
             cellScale <= 0f)
         {
             Debug.LogError(
@@ -88,21 +106,25 @@ public class MazeGenerator : MonoBehaviour
             return;
         }
 
-        // プレイヤーやゴールが削除対象に
+        // 削除対象に重要なオブジェクトが
         // 入っていないか確認する
-        if ((player != null &&
-             (player == root || player.IsChildOf(root))) ||
-            (goal != null &&
-             (goal == root || goal.IsChildOf(root))))
+        if (IsInsideMazeRoot(player) ||
+            IsInsideMazeRoot(startPoint) ||
+            IsInsideMazeRoot(goal) ||
+            (pressurePlate != null &&
+             IsInsideMazeRoot(pressurePlate.transform)) ||
+            (keyBox != null &&
+             IsInsideMazeRoot(keyBox.transform)))
         {
             Debug.LogError(
-                "PlayerとGoalはMazeRootの子にしないでください");
+                "Player、Goal、箱、感圧板などを" +
+                "MazeRootの子にしないでください");
             return;
         }
 
         ClearMaze();
 
-        // 迷路データを作成
+        // 迷路データ作成
         maze = new MazeCellModel[width, height];
 
         for (int x = 0; x < width; x++)
@@ -113,16 +135,16 @@ public class MazeGenerator : MonoBehaviour
             }
         }
 
-        // ランダムな迷路を生成
+        // 深さ優先探索で迷路生成
         GenerateMazePath(0, 0);
 
-        // 必要な場合だけゴールの外壁を削除
+        // ゴールの外壁を削除
         if (removeGoalWall)
         {
             RemoveGoalWall();
         }
 
-        // 迷路のPrefabを配置
+        // 迷路のPrefabを生成
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -142,7 +164,7 @@ public class MazeGenerator : MonoBehaviour
                 if (cell == null)
                 {
                     Debug.LogError(
-                        "MazeCellコンポーネントがありません");
+                        "MazeCellが設定されていません");
                     continue;
                 }
 
@@ -153,19 +175,33 @@ public class MazeGenerator : MonoBehaviour
             }
         }
 
-        // スタートとゴールの位置を自動設定
+        // スタートとゴールを自動配置
         SetStartAndGoal();
 
-        Debug.Log("迷路を生成しました");
+        // 箱と感圧板を初期化
+        ResetGimmick();
+
+        Physics.SyncTransforms();
+
+        Debug.Log("迷路とギミックを生成しました");
+    }
+
+    // MazeRootの子かどうかを確認
+    private bool IsInsideMazeRoot(Transform target)
+    {
+        if (target == null || root == null)
+        {
+            return false;
+        }
+
+        return target == root || target.IsChildOf(root);
     }
 
     // 死亡時に呼び出す
     public void RestartMaze()
     {
-        Debug.Log("死亡したため迷路を再生成します");
+        Debug.Log("迷路を再生成します");
 
-        // 新しい迷路を生成
-        // プレイヤーもスタート位置に戻る
         GenerateMaze();
     }
 
@@ -198,7 +234,7 @@ public class MazeGenerator : MonoBehaviour
         }
     }
 
-    // 探索方向をランダムに並べ替える
+    // 探索方向をランダム化
     private List<(int, int, MazeCellModel.Wall, MazeCellModel.Wall)>
         ShuffleDirections()
     {
@@ -237,7 +273,7 @@ public class MazeGenerator : MonoBehaviour
         return directions;
     }
 
-    // ゴール部分の外壁を削除
+    // ゴールの外壁を削除
     private void RemoveGoalWall()
     {
         MazeCellModel goalCell =
@@ -258,27 +294,23 @@ public class MazeGenerator : MonoBehaviour
     // スタートとゴールを自動配置
     private void SetStartAndGoal()
     {
-        // スタートの中心座標
         Vector3 startPosition = new Vector3(
             0f,
             playerHeight,
             0f
         );
 
-        // StartPointも自動配置する
         if (startPoint != null)
         {
             startPoint.position = startPosition;
         }
 
-        // プレイヤーをスタートに移動
         SetPlayerPosition(startPosition);
 
-        // ゴールを右上の壁に配置
         SetGoalPosition();
     }
 
-    // プレイヤーの位置を設定
+    // プレイヤー配置
     private void SetPlayerPosition(Vector3 position)
     {
         if (player == null)
@@ -311,11 +343,9 @@ public class MazeGenerator : MonoBehaviour
         {
             player.position = position;
         }
-
-        Physics.SyncTransforms();
     }
 
-    // ゴールを右上の外壁に配置
+    // 右上の外壁にゴールを配置
     private void SetGoalPosition()
     {
         if (goal == null)
@@ -325,39 +355,26 @@ public class MazeGenerator : MonoBehaviour
             return;
         }
 
-        // 右上のマスの中心
         Vector3 goalCellCenter = new Vector3(
             (width - 1) * cellScale,
             0f,
             (height - 1) * cellScale
         );
 
-        // 外壁の方向
-        Vector3 wallDirection;
+        Vector3 wallDirection =
+            goalWallSide == GoalWallSide.Top
+            ? Vector3.forward
+            : Vector3.right;
 
-        if (goalWallSide == GoalWallSide.Top)
-        {
-            wallDirection = Vector3.forward;
-        }
-        else
-        {
-            wallDirection = Vector3.right;
-        }
-
-        // 外壁の中心座標
         Vector3 wallPosition =
             goalCellCenter +
             wallDirection * (cellScale / 2f);
 
-        // 壁の内側に少し移動
         wallPosition -= wallDirection * goalInset;
-
-        // 高さを設定
         wallPosition.y = goalHeight;
 
         goal.position = wallPosition;
 
-        // ギミックを迷路の内側に向ける
         if (rotateGoalTowardMaze)
         {
             goal.rotation = Quaternion.LookRotation(
@@ -366,7 +383,50 @@ public class MazeGenerator : MonoBehaviour
             );
         }
 
+        // 扉の配置位置を初期位置として再設定
+        DoorMove[] doors =
+            goal.GetComponentsInChildren<DoorMove>(true);
+
+        foreach (DoorMove door in doors)
+        {
+            // Goal自身が扉なら位置を維持
+            // 子オブジェクトなら初期ローカル位置に戻す
+            bool isChild = door.transform != goal;
+
+            door.InitializeDoor(isChild);
+        }
+
         Debug.Log(
             "ゴールを配置しました：" + wallPosition);
+    }
+
+    // 箱と感圧板の初期化
+    private void ResetGimmick()
+    {
+        // 箱を元の位置に戻す
+        if (keyBox != null)
+        {
+            Vector3 boxPosition =
+                keyBoxStartPoint != null
+                ? keyBoxStartPoint.position
+                : initialKeyBoxPosition;
+
+            Quaternion boxRotation =
+                keyBoxStartPoint != null
+                ? keyBoxStartPoint.rotation
+                : initialKeyBoxRotation;
+
+            keyBox.linearVelocity = Vector3.zero;
+            keyBox.angularVelocity = Vector3.zero;
+
+            keyBox.position = boxPosition;
+            keyBox.rotation = boxRotation;
+        }
+
+        // 感圧板の判定をリセット
+        if (pressurePlate != null)
+        {
+            pressurePlate.ResetPlate();
+        }
     }
 }
