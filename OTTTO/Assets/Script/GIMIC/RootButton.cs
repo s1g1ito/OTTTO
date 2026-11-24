@@ -1,4 +1,3 @@
-
 using UnityEngine;
 
 public class RouteButton : MonoBehaviour
@@ -35,29 +34,32 @@ public class RouteButton : MonoBehaviour
         }
     }
 
-    // ボタンをクリックしたとき
-    void OnMouseDown()
+    void Update()
     {
-        Debug.Log("① ボタンがクリックされました");
-
-        if (player == null ||
-            minimapRoute == null ||
-            boxCollider == null)
+        // Eキーを押したとき
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            Debug.LogError("Inspectorの設定を確認してください");
-            return;
-        }
+            Debug.Log("① Eキーが押されました");
 
-        // プレイヤーが範囲内にいるか確認
-        if (IsPlayerInside())
-        {
-            Debug.Log("② 範囲内！ルートを表示します");
+            if (player == null ||
+                minimapRoute == null ||
+                boxCollider == null)
+            {
+                Debug.LogError("Inspectorの設定を確認してください");
+                return;
+            }
 
-            minimapRoute.ShowRoute();
-        }
-        else
-        {
-            Debug.Log("範囲外です");
+            // プレイヤーが範囲内にいるか確認
+            if (IsPlayerInside())
+            {
+                Debug.Log("② 範囲内！ルートを表示します");
+
+                minimapRoute.ShowRoute();
+            }
+            else
+            {
+                Debug.Log("範囲外です");
+            }
         }
     }
 

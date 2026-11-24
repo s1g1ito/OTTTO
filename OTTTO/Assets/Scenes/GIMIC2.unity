@@ -15485,7 +15485,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 764.99, y: -343.18}
+  m_AnchoredPosition: {x: 712, y: -239}
   m_SizeDelta: {x: 390.0272, y: 393.6464}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &530633708
@@ -40384,9 +40384,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef354e79184c5b2468898c2dd116a7d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemManager
-  itemCount: 0
-  itemText: {fileID: 0}
-  puzzle: {fileID: 0}
 --- !u!4 &1409869820
 Transform:
   m_ObjectHideFlags: 0
@@ -63019,7 +63016,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -10.319824, y: 0}
+  m_AnchoredPosition: {x: -10.319824, y: -14}
   m_SizeDelta: {x: 306.6396, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2126866289
