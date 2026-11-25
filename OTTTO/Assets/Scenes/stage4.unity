@@ -3126,6 +3126,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 6
   holdingMoveSpeed: 3
+  isMoveReversed: 0
 --- !u!114 &105530210
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5059,6 +5060,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   sensitivity: 60
+  isLookReversed: 0
   playerBody: {fileID: 105530215}
 --- !u!114 &160523274
 MonoBehaviour:
@@ -26048,7 +26050,7 @@ GameObject:
   - component: {fileID: 930997060}
   - component: {fileID: 930997061}
   m_Layer: 0
-  m_Name: MazeManager
+  m_Name: RuatManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26063,11 +26065,11 @@ Transform:
   m_GameObject: {fileID: 930997057}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.9, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 12.560163, y: 0.57810533, z: 0.45}
+  m_LocalScale: {x: 6.408246, y: 2.408772, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1584858064}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &930997060
 MonoBehaviour:
@@ -26121,7 +26123,7 @@ MonoBehaviour:
   lineWidth: 0.025
   wallLayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
   rayDistance: 6
   wallCheckHeight: 0.5
   pointsPerSegment: 10
@@ -26264,11 +26266,11 @@ Transform:
   m_GameObject: {fileID: 940388898}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.35, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 12.560163, y: -0.7467192, z: 0.45}
+  m_LocalScale: {x: 6.408246, y: 2.408772, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1584858064}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!120 &940388900
 LineRenderer:
@@ -42546,7 +42548,9 @@ Transform:
   m_LocalScale: {x: 0.15604894, y: 0.4151493, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 930997058}
   - {fileID: 833813137}
+  - {fileID: 940388899}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1589797485
@@ -43471,6 +43475,25 @@ MonoBehaviour:
   height: 10
   mazeCellPrefab: {fileID: 5640764479148408230, guid: 1914a734b0395ed4983338cb1e930279, type: 3}
   root: {fileID: 174639398}
+  cellScale: 5
+  player: {fileID: 0}
+  startPoint: {fileID: 0}
+  playerHeight: 1
+  goal: {fileID: 0}
+  goalHeight: 0
+  goalWallSide: 0
+  removeGoalWall: 1
+  goalInset: 0
+  rotateGoalTowardMaze: 1
+  pressurePlate: {fileID: 0}
+  keyBox: {fileID: 0}
+  keyBoxStartPoint: {fileID: 0}
+  randomizePuzzlePieces: 0
+  puzzlePieceSourceRoot: {fileID: 0}
+  puzzlePiecesSpawnRoot: {fileID: 0}
+  puzzlePieceHeight: 1
+  excludeStartCell: 1
+  excludeGoalCell: 1
 --- !u!4 &1628492696
 Transform:
   m_ObjectHideFlags: 0
@@ -56660,7 +56683,5 @@ SceneRoots:
   - {fileID: 1590968303}
   - {fileID: 1516024534}
   - {fileID: 1584858064}
-  - {fileID: 930997058}
-  - {fileID: 940388899}
   - {fileID: 105530215}
   - {fileID: 1725393412}
