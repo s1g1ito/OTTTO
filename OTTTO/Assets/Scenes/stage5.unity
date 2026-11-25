@@ -1385,6 +1385,19 @@ MonoBehaviour:
   height: 10
   mazeCellPrefab: {fileID: 5640764479148408230, guid: 1914a734b0395ed4983338cb1e930279, type: 3}
   root: {fileID: 1814478465}
+  cellScale: 5
+  player: {fileID: 0}
+  startPoint: {fileID: 0}
+  playerHeight: 1
+  goal: {fileID: 0}
+  goalHeight: 0
+  goalWallSide: 0
+  removeGoalWall: 1
+  goalInset: 0
+  rotateGoalTowardMaze: 1
+  pressurePlate: {fileID: 0}
+  keyBox: {fileID: 0}
+  keyBoxStartPoint: {fileID: 0}
 --- !u!4 &46114595
 Transform:
   m_ObjectHideFlags: 0
@@ -1420,7 +1433,7 @@ MonoBehaviour:
   lineWidth: 0.04
   wallLayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
   rayDistance: 5
   wallCheckHeight: 0.5
   pointsPerSegment: 10
@@ -48367,10 +48380,14 @@ MonoBehaviour:
   - {fileID: 1081288780}
   - {fileID: 1602161417}
   arriveDistance: 0.5
+  moveSpeed: 3
   viewDistance: 10
   viewAngle: 90
   rayHeight: 1
   loseDistance: 75
+  visionObstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!195 &1950379801
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -54266,6 +54283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   sensitivity: 60
+  isLookReversed: 0
   playerBody: {fileID: 2591962440507306950}
 --- !u!224 &734533438888124660
 RectTransform:
@@ -57916,6 +57934,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 6
   holdingMoveSpeed: 3
+  isMoveReversed: 0
 --- !u!224 &5744808434840486124
 RectTransform:
   m_ObjectHideFlags: 0

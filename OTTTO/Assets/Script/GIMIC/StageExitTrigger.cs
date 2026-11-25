@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class StageExitTrigger : MonoBehaviour
 {
     [Header("次のステージ")]
-    [SerializeField] private string nextSceneName = "Stage";
+    [SerializeField] private string nextSceneName = "Stage2";
 
     [Header("ゴールの扉")]
     [SerializeField] private DoorMove door;
