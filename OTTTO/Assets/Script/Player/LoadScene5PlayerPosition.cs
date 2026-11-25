@@ -7,9 +7,9 @@ public class LoadScene5PlayerPosition : MonoBehaviour
         // パズルから戻ってきた場合だけ位置を変更する
         if (PlayerPrefs.GetInt("ReturnFromPuzzle", 0) == 1)
         {
-            float x = PlayerPrefs.GetFloat("Scene5_PlayerPosX");
-            float y = PlayerPrefs.GetFloat("Scene5_PlayerPosY");
-            float z = PlayerPrefs.GetFloat("Scene5_PlayerPosZ");
+            float x = PlayerPrefs.GetFloat("Player_PlayerPosX");
+            float y = PlayerPrefs.GetFloat("Player_PlayerPosY");
+            float z = PlayerPrefs.GetFloat("Player_PlayerPosZ");
 
             float rotY = PlayerPrefs.GetFloat("Scene5_PlayerRotY");
 

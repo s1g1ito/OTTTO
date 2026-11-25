@@ -1501,7 +1501,6 @@ GameObject:
   - component: {fileID: 128349075}
   - component: {fileID: 128349079}
   - component: {fileID: 128349078}
-  - component: {fileID: 128349077}
   - component: {fileID: 128349076}
   m_Layer: 0
   m_Name: gameobject (5)
@@ -1519,7 +1518,7 @@ Transform:
   m_GameObject: {fileID: 128349074}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 44.687042, y: 1.4729658, z: 43.84646}
+  m_LocalPosition: {x: 44.391224, y: 1, z: 43.84646}
   m_LocalScale: {x: 0.29289, y: 0.29289, z: 0.29289}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1538,20 +1537,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemManager
   itemCount: 0
-  itemText: {fileID: 0}
-  puzzle: {fileID: 0}
---- !u!114 &128349077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 128349074}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6fbe42584dc34f418191fa89819ee6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Itemtag
+  itemText: {fileID: 973642809}
+  puzzle: {fileID: 679446669}
 --- !u!65 &128349078
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2417,6 +2404,8 @@ Transform:
   m_Children:
   - {fileID: 679446670}
   - {fileID: 122892636}
+  - {fileID: 2001572630}
+  - {fileID: 2042946417}
   m_Father: {fileID: 1346209058}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &189419508
@@ -2826,8 +2815,6 @@ GameObject:
   - component: {fileID: 225564546}
   - component: {fileID: 225564545}
   - component: {fileID: 225564544}
-  - component: {fileID: 225564543}
-  - component: {fileID: 225564542}
   - component: {fileID: 225564541}
   m_Layer: 0
   m_Name: gameobject
@@ -2845,7 +2832,7 @@ Transform:
   m_GameObject: {fileID: 225564539}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 44.40382, y: 1.4709659, z: 47.80279}
+  m_LocalPosition: {x: 44.108, y: 1, z: 47.80279}
   m_LocalScale: {x: 0.29288998, y: 0.29288998, z: 0.29288998}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2864,32 +2851,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemManager
   itemCount: 0
-  itemText: {fileID: 0}
-  puzzle: {fileID: 0}
---- !u!114 &225564542
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 225564539}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6fbe42584dc34f418191fa89819ee6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Itemtag
---- !u!114 &225564543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 225564539}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d59bd8d52c055164ba55fca788e40a6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemLogger
+  itemText: {fileID: 973642809}
+  puzzle: {fileID: 679446669}
 --- !u!65 &225564544
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5793,7 +5756,6 @@ GameObject:
   - component: {fileID: 487445506}
   - component: {fileID: 487445510}
   - component: {fileID: 487445509}
-  - component: {fileID: 487445508}
   - component: {fileID: 487445507}
   m_Layer: 0
   m_Name: gameobject (7)
@@ -5811,7 +5773,7 @@ Transform:
   m_GameObject: {fileID: 487445505}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 44.61882, y: 1.4964451, z: 42.361507}
+  m_LocalPosition: {x: 44.323, y: 1, z: 42.361507}
   m_LocalScale: {x: 0.29289, y: 0.29289, z: 0.29289}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5830,20 +5792,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemManager
   itemCount: 0
-  itemText: {fileID: 0}
-  puzzle: {fileID: 0}
---- !u!114 &487445508
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 487445505}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6fbe42584dc34f418191fa89819ee6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Itemtag
+  itemText: {fileID: 973642809}
+  puzzle: {fileID: 679446669}
 --- !u!65 &487445509
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6829,7 +6779,6 @@ MonoBehaviour:
   worldMax: {x: 100, y: 100}
   stageId: Stage2
   autoSaveInterval: 3
-  loadSavedOnStart: 0
 --- !u!1 &633233921
 GameObject:
   m_ObjectHideFlags: 0
@@ -7294,7 +7243,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &679446670
 Transform:
   m_ObjectHideFlags: 0
@@ -7304,7 +7253,7 @@ Transform:
   m_GameObject: {fileID: 679446669}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 43.16982, y: 1.35, z: 49.35279}
+  m_LocalPosition: {x: -0.372, y: 1.35, z: 0.031}
   m_LocalScale: {x: 0.29289, y: 0.29289, z: 0.29289}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8615,8 +8564,7 @@ GameObject:
   - component: {fileID: 872553094}
   - component: {fileID: 872553093}
   - component: {fileID: 872553092}
-  - component: {fileID: 872553091}
-  - component: {fileID: 872553090}
+  - component: {fileID: 872553095}
   m_Layer: 0
   m_Name: gameobject (1)
   m_TagString: Item
@@ -8633,39 +8581,12 @@ Transform:
   m_GameObject: {fileID: 872553088}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 44.447166, y: 1.4569658, z: 46.71678}
+  m_LocalPosition: {x: 44.15135, y: 1, z: 46.71678}
   m_LocalScale: {x: 0.29289, y: 0.29289, z: 0.29289}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 122892636}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &872553090
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 872553088}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1881b151632bb4740a107ed5e3917d60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemManager
-  itemCount: 0
-  itemText: {fileID: 0}
-  puzzle: {fileID: 0}
---- !u!114 &872553091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 872553088}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6fbe42584dc34f418191fa89819ee6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Itemtag
 --- !u!114 &872553092
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8760,6 +8681,21 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &872553095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872553088}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1881b151632bb4740a107ed5e3917d60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemManager
+  itemCount: 0
+  itemText: {fileID: 973642809}
+  puzzle: {fileID: 679446669}
 --- !u!1 &879973781
 GameObject:
   m_ObjectHideFlags: 0
@@ -9388,7 +9324,6 @@ GameObject:
   - component: {fileID: 973016997}
   - component: {fileID: 973017001}
   - component: {fileID: 973017000}
-  - component: {fileID: 973016999}
   - component: {fileID: 973016998}
   m_Layer: 0
   m_Name: gameobject (4)
@@ -9406,7 +9341,7 @@ Transform:
   m_GameObject: {fileID: 973016996}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 44.5406, y: 1.4629658, z: 44.733917}
+  m_LocalPosition: {x: 44.24478, y: 1, z: 44.733917}
   m_LocalScale: {x: 0.29289, y: 0.29289, z: 0.29289}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9425,20 +9360,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemManager
   itemCount: 0
-  itemText: {fileID: 0}
-  puzzle: {fileID: 0}
---- !u!114 &973016999
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 973016996}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6fbe42584dc34f418191fa89819ee6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Itemtag
+  itemText: {fileID: 973642809}
+  puzzle: {fileID: 679446669}
 --- !u!65 &973017000
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9874,7 +9797,7 @@ Transform:
   m_GameObject: {fileID: 994875349}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.57, z: -0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1000, y: 1, z: 1000}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10018,8 +9941,7 @@ GameObject:
   - component: {fileID: 1016907095}
   - component: {fileID: 1016907099}
   - component: {fileID: 1016907098}
-  - component: {fileID: 1016907097}
-  - component: {fileID: 1016907096}
+  - component: {fileID: 1016907100}
   m_Layer: 0
   m_Name: gameobject (2)
   m_TagString: Item
@@ -10036,39 +9958,12 @@ Transform:
   m_GameObject: {fileID: 1016907094}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 44.51424, y: 1.4279658, z: 45.990414}
+  m_LocalPosition: {x: 44.218422, y: 1, z: 45.990414}
   m_LocalScale: {x: 0.29289, y: 0.29289, z: 0.29289}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 122892636}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1016907096
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1016907094}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1881b151632bb4740a107ed5e3917d60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ItemManager
-  itemCount: 0
-  itemText: {fileID: 0}
-  puzzle: {fileID: 0}
---- !u!114 &1016907097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1016907094}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6fbe42584dc34f418191fa89819ee6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Itemtag
 --- !u!65 &1016907098
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10149,6 +10044,21 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1016907100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1016907094}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1881b151632bb4740a107ed5e3917d60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemManager
+  itemCount: 0
+  itemText: {fileID: 973642809}
+  puzzle: {fileID: 679446669}
 --- !u!1 &1029075829
 GameObject:
   m_ObjectHideFlags: 0
@@ -10936,7 +10846,6 @@ GameObject:
   - component: {fileID: 1070925785}
   - component: {fileID: 1070925789}
   - component: {fileID: 1070925788}
-  - component: {fileID: 1070925787}
   - component: {fileID: 1070925786}
   m_Layer: 0
   m_Name: gameobject (6)
@@ -10954,7 +10863,7 @@ Transform:
   m_GameObject: {fileID: 1070925784}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 44.61968, y: 1.4989659, z: 43.143524}
+  m_LocalPosition: {x: 44.32386, y: 1, z: 43.143524}
   m_LocalScale: {x: 0.29289, y: 0.29289, z: 0.29289}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -10973,20 +10882,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemManager
   itemCount: 0
-  itemText: {fileID: 0}
-  puzzle: {fileID: 0}
---- !u!114 &1070925787
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1070925784}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6fbe42584dc34f418191fa89819ee6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Itemtag
+  itemText: {fileID: 973642809}
+  puzzle: {fileID: 679446669}
 --- !u!65 &1070925788
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12639,7 +12536,6 @@ GameObject:
   - component: {fileID: 1194109635}
   - component: {fileID: 1194109639}
   - component: {fileID: 1194109638}
-  - component: {fileID: 1194109637}
   - component: {fileID: 1194109636}
   m_Layer: 0
   m_Name: gameobject (3)
@@ -12657,7 +12553,7 @@ Transform:
   m_GameObject: {fileID: 1194109634}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 44.53064, y: 1.4769658, z: 45.21601}
+  m_LocalPosition: {x: 44.23482, y: 1, z: 45.21601}
   m_LocalScale: {x: 0.29289, y: 0.29289, z: 0.29289}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12676,20 +12572,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemManager
   itemCount: 0
-  itemText: {fileID: 0}
-  puzzle: {fileID: 0}
---- !u!114 &1194109637
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1194109634}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6fbe42584dc34f418191fa89819ee6c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Itemtag
+  itemText: {fileID: 973642809}
+  puzzle: {fileID: 679446669}
 --- !u!65 &1194109638
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13722,17 +13606,18 @@ MonoBehaviour:
   root: {fileID: 512821323}
   cellScale: 5
   player: {fileID: 1642832583}
-  startPoint: {fileID: 0}
   playerHeight: 1
-  goal: {fileID: 750159254}
+  goal: {fileID: 186415795}
   goalHeight: 0.5
-  goalWallSide: 0
-  removeGoalWall: 1
+  removeGoalWall: 0
   goalInset: 0.5
   rotateGoalTowardMaze: 1
   pressurePlate: {fileID: 1134905413}
   keyBox: {fileID: 1600726833}
   keyBoxStartPoint: {fileID: 667549119}
+  randomizePuzzlePieces: 0
+  puzzlePieceSourceRoot: {fileID: 122892636}
+  puzzlePiecesSpawnRoot: {fileID: 2001572630}
 --- !u!4 &1292715687
 Transform:
   m_ObjectHideFlags: 0
@@ -14959,7 +14844,6 @@ Transform:
   - {fileID: 750159254}
   - {fileID: 1828202250}
   - {fileID: 186415795}
-  - {fileID: 2042946417}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1365537659
@@ -18067,6 +17951,8 @@ GameObject:
   - component: {fileID: 1642832578}
   - component: {fileID: 1642832577}
   - component: {fileID: 1642832576}
+  - component: {fileID: 1642832584}
+  - component: {fileID: 1642832585}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -18253,6 +18139,33 @@ Transform:
   - {fileID: 591286744}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1642832584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642832575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1881b151632bb4740a107ed5e3917d60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemManager
+  itemCount: 0
+  itemText: {fileID: 973642809}
+  puzzle: {fileID: 679446669}
+--- !u!114 &1642832585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1642832575}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4294e0993b791f24cb40e8279c948116, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &1648998733
 GameObject:
   m_ObjectHideFlags: 0
@@ -20932,6 +20845,37 @@ MonoBehaviour:
   maxViewTime: 99
   usesText: {fileID: 0}
   timerText: {fileID: 0}
+--- !u!1 &2001572629
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2001572630}
+  m_Layer: 0
+  m_Name: PuzzlePiecesSpawnRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2001572630
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2001572629}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 186415795}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2010594976
 GameObject:
   m_ObjectHideFlags: 0
@@ -21334,7 +21278,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1555933810}
-  m_Father: {fileID: 1346209058}
+  m_Father: {fileID: 186415795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -22062,7 +22006,7 @@ Transform:
   m_GameObject: {fileID: 2103410510}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.0200007, y: -0.85000014, z: -1.4499991}
+  m_LocalPosition: {x: 0.83, y: -0.85000014, z: 0.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -22080,8 +22024,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f58b1700abff64d4ea8e659e7753f75a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  targetScene: {fileID: 102900000, guid: ac62c2a54a01b504c820a53b5b1552f2, type: 3}
-  player: {fileID: 0}
+  targetSceneName: puzzle
+  player: {fileID: 1642832583}
 --- !u!65 &2103410513
 BoxCollider:
   m_ObjectHideFlags: 0

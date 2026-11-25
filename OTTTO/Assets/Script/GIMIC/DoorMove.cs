@@ -7,21 +7,27 @@ public class DoorMove : MonoBehaviour
     public float moveDistance = 5f;
     public float moveTime = 2f;
 
+    // 扉の閉じた位置
     private Vector3 closedPosition;
+
+    // 扉の開いた位置
     private Vector3 openedPosition;
 
-    // 扉の元々のローカル座標
+    // 初期ローカル座標
     private Vector3 initialLocalPosition;
 
+    // 現在動作中のコルーチン
     private Coroutine moveCoroutine;
+
     private bool initialized = false;
     private bool isOpen = false;
+    private bool hasInitialLocalPosition = false;
 
     public bool IsOpen => isOpen;
 
     private void Awake()
     {
-        initialLocalPosition = transform.localPosition;
+        SaveInitialLocalPosition();
     }
 
     private void Start()
@@ -32,28 +38,36 @@ public class DoorMove : MonoBehaviour
         }
     }
 
-    // 扉の初期位置を設定する
+    // 初期ローカル座標を保存
+    private void SaveInitialLocalPosition()
+    {
+        if (hasInitialLocalPosition)
+        {
+            return;
+        }
+
+        initialLocalPosition = transform.localPosition;
+        hasInitialLocalPosition = true;
+    }
+
+    // 扉の初期位置を設定
     public void InitializeDoor(
         bool restoreLocalPosition = false)
     {
-        // 移動中なら停止
-        if (moveCoroutine != null)
-        {
-            StopCoroutine(moveCoroutine);
-            moveCoroutine = null;
-        }
+        SaveInitialLocalPosition();
 
-        // 親オブジェクトの子になっている場合、
-        // 生成前のローカル位置に戻す
+        StopDoorMovement();
+
+        // 子オブジェクトの場合、初期位置に戻す
         if (restoreLocalPosition)
         {
             transform.localPosition = initialLocalPosition;
         }
 
-        // 今の配置場所を閉じた位置として記憶
+        // 現在位置を閉じた位置として保存
         closedPosition = transform.position;
 
-        // 扉自身の右方向に移動する
+        // 扉自身の右方向を開く方向にする
         openedPosition =
             closedPosition + transform.right * moveDistance;
 
@@ -61,7 +75,7 @@ public class DoorMove : MonoBehaviour
         isOpen = false;
     }
 
-    // 扉を右にスライド
+    // 扉を開く
     public void MoveRight()
     {
         if (!initialized)
@@ -69,18 +83,27 @@ public class DoorMove : MonoBehaviour
             InitializeDoor();
         }
 
-        if (moveCoroutine != null)
+        StopDoorMovement();
+
+        // Doorが無効な場合は移動させない
+        if (!isActiveAndEnabled)
         {
-            StopCoroutine(moveCoroutine);
+            Debug.LogWarning(
+                "Doorが非アクティブなので開けません",
+                this
+            );
+
+            return;
         }
 
         isOpen = false;
 
         moveCoroutine = StartCoroutine(
-            MoveDoor(openedPosition, true));
+            MoveDoor(openedPosition, true)
+        );
     }
 
-    // 扉を元の位置に戻す
+    // 扉を閉じる
     public void MoveBack()
     {
         if (!initialized)
@@ -88,23 +111,42 @@ public class DoorMove : MonoBehaviour
             InitializeDoor();
         }
 
-        if (moveCoroutine != null)
+        StopDoorMovement();
+
+        // Doorが無効ならコルーチンを使わず戻す
+        if (!isActiveAndEnabled)
         {
-            StopCoroutine(moveCoroutine);
+            transform.position = closedPosition;
+            isOpen = false;
+
+            return;
         }
 
         isOpen = false;
 
         moveCoroutine = StartCoroutine(
-            MoveDoor(closedPosition, false));
+            MoveDoor(closedPosition, false)
+        );
+    }
+
+    // 扉の移動を停止する
+    private void StopDoorMovement()
+    {
+        if (moveCoroutine != null)
+        {
+            StopCoroutine(moveCoroutine);
+            moveCoroutine = null;
+        }
     }
 
     // 扉を滑らかに移動させる
     private IEnumerator MoveDoor(
-        Vector3 target, bool willOpen)
+        Vector3 target,
+        bool willOpen)
     {
         Vector3 start = transform.position;
 
+        // 移動時間が0以下の場合は即座に移動
         if (moveTime <= 0f)
         {
             transform.position = target;
@@ -117,10 +159,15 @@ public class DoorMove : MonoBehaviour
             {
                 time += Time.deltaTime;
 
-                float t = Mathf.Clamp01(time / moveTime);
+                float t = Mathf.Clamp01(
+                    time / moveTime
+                );
 
-                transform.position =
-                    Vector3.Lerp(start, target, t);
+                transform.position = Vector3.Lerp(
+                    start,
+                    target,
+                    t
+                );
 
                 yield return null;
             }

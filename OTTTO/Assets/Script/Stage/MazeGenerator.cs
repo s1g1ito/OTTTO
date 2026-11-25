@@ -17,7 +17,7 @@ public class MazeGenerator : MonoBehaviour
 
     [Header("スタート設定")]
     [SerializeField] private Transform player;
-    [SerializeField] private Transform startPoint;
+     private Transform startPoint;
     [SerializeField] private float playerHeight = 1f;
 
     [Header("ゴール設定")]
@@ -25,7 +25,6 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] private float goalHeight = 0f;
 
     [Header("ゴールの壁設定")]
-    [SerializeField]
     private GoalWallSide goalWallSide =
         GoalWallSide.Top;
 
@@ -49,10 +48,10 @@ public class MazeGenerator : MonoBehaviour
     [SerializeField] private Transform puzzlePieceSourceRoot;
     [SerializeField] private Transform puzzlePiecesSpawnRoot;
 
-    [SerializeField] private float puzzlePieceHeight = 1f;
+     private float puzzlePieceHeight = 1f;
 
-    [SerializeField] private bool excludeStartCell = true;
-    [SerializeField] private bool excludeGoalCell = true;
+     private bool excludeStartCell = true;
+     private bool excludeGoalCell = true;
 
     // 元の8個のパズルピースを保存
     private List<GameObject> puzzlePieceTemplates =

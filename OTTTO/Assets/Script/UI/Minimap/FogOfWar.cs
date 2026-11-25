@@ -31,9 +31,6 @@ public class FogOfWar : MonoBehaviour
     [SerializeField] private string stageId = "Stage2";
     [SerializeField] private float autoSaveInterval = 3f;
 
-    [Header("開始時のロード設定")]
-    [SerializeField] private bool loadSavedOnStart = false;
-
     private Texture2D fogTexture;
     private Color32[] fogPixels;
     private Vector3 lastPosition;
