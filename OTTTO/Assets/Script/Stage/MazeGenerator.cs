@@ -22,18 +22,45 @@ public class MazeGenerator : MonoBehaviour
 
     [Header("ゴール設定")]
     [SerializeField] private Transform goal;
-    [SerializeField] private float goalHeight = 1.5f;
+    [SerializeField] private float goalHeight = 0f;
 
     [Header("ゴールの壁設定")]
     [SerializeField]
     private GoalWallSide goalWallSide =
         GoalWallSide.Top;
 
-    [SerializeField] private bool removeGoalWall = false;
+    [SerializeField] private bool removeGoalWall = true;
 
     [Header("ゴールの位置調整")]
-    [SerializeField] private float goalInset = 0.5f;
+    [SerializeField] private float goalInset = 0f;
     [SerializeField] private bool rotateGoalTowardMaze = true;
+
+    [Header("感圧板ギミック設定")]
+    [SerializeField] private PlateCheak pressurePlate;
+    [SerializeField] private Rigidbody keyBox;
+    [SerializeField] private Transform keyBoxStartPoint;
+
+    private Vector3 initialKeyBoxPosition;
+    private Quaternion initialKeyBoxRotation;
+
+    [Header("パズルピースのランダム配置")]
+    [SerializeField] private bool randomizePuzzlePieces = false;
+
+    [SerializeField] private Transform puzzlePieceSourceRoot;
+    [SerializeField] private Transform puzzlePiecesSpawnRoot;
+
+    [SerializeField] private float puzzlePieceHeight = 1f;
+
+    [SerializeField] private bool excludeStartCell = true;
+    [SerializeField] private bool excludeGoalCell = true;
+
+    // 元の8個のパズルピースを保存
+    private List<GameObject> puzzlePieceTemplates =
+        new List<GameObject>();
+
+    // ランダム配置したパズルピース
+    private List<GameObject> spawnedPuzzlePieces =
+        new List<GameObject>();
 
     private enum GoalWallSide
     {
@@ -41,10 +68,53 @@ public class MazeGenerator : MonoBehaviour
         Right
     }
 
+    private void Awake()
+    {
+        // 箱の初期位置を保存
+        if (keyBox != null)
+        {
+            initialKeyBoxPosition = keyBox.position;
+            initialKeyBoxRotation = keyBox.rotation;
+        }
+
+        // パズルピースの生成元を登録
+        InitializePuzzlePieces();
+    }
+
     private void Start()
     {
-        // ステージ開始時に迷路生成
         GenerateMaze();
+    }
+
+    // パズルピースの生成元を登録
+    private void InitializePuzzlePieces()
+    {
+        if (!randomizePuzzlePieces)
+        {
+            return;
+        }
+
+        if (puzzlePieceSourceRoot == null)
+        {
+            Debug.LogWarning(
+                "Puzzle Piece Source Rootが未設定です");
+            return;
+        }
+
+        puzzlePieceTemplates.Clear();
+
+        foreach (Transform child in puzzlePieceSourceRoot)
+        {
+            puzzlePieceTemplates.Add(child.gameObject);
+
+            // 元のピースは生成元として保存するため非表示
+            child.gameObject.SetActive(false);
+        }
+
+        Debug.Log(
+            "パズルピースの生成元を" +
+            puzzlePieceTemplates.Count +
+            "個登録しました");
     }
 
     // 既存の迷路を削除
@@ -55,7 +125,8 @@ public class MazeGenerator : MonoBehaviour
             return;
         }
 
-        List<GameObject> tempList = new List<GameObject>();
+        List<GameObject> tempList =
+            new List<GameObject>();
 
         foreach (Transform child in root)
         {
@@ -76,11 +147,12 @@ public class MazeGenerator : MonoBehaviour
         }
     }
 
-    // 迷路生成
+    // 迷路をランダム生成
     public void GenerateMaze()
     {
         if (width <= 0 || height <= 0 ||
-            root == null || mazeCellPrefab == null ||
+            root == null ||
+            mazeCellPrefab == null ||
             cellScale <= 0f)
         {
             Debug.LogError(
@@ -88,21 +160,31 @@ public class MazeGenerator : MonoBehaviour
             return;
         }
 
-        // プレイヤーやゴールが削除対象に
-        // 入っていないか確認する
-        if ((player != null &&
-             (player == root || player.IsChildOf(root))) ||
-            (goal != null &&
-             (goal == root || goal.IsChildOf(root))))
+        // 大切なオブジェクトが削除されないよう確認
+        if (IsInsideMazeRoot(player) ||
+            IsInsideMazeRoot(startPoint) ||
+            IsInsideMazeRoot(goal) ||
+            IsInsideMazeRoot(keyBoxStartPoint) ||
+            (pressurePlate != null &&
+             IsInsideMazeRoot(pressurePlate.transform)) ||
+            (keyBox != null &&
+             IsInsideMazeRoot(keyBox.transform)) ||
+            IsInsideMazeRoot(puzzlePieceSourceRoot) ||
+            IsInsideMazeRoot(puzzlePiecesSpawnRoot))
         {
             Debug.LogError(
-                "PlayerとGoalはMazeRootの子にしないでください");
+                "Player、Goal、ギミック類を" +
+                "MazeRootの子にしないでください");
             return;
         }
 
+        // 以前の迷路を削除
         ClearMaze();
 
-        // 迷路データを作成
+        // 以前生成したパズルピースを削除
+        ClearSpawnedPuzzlePieces();
+
+        // 迷路データ作成
         maze = new MazeCellModel[width, height];
 
         for (int x = 0; x < width; x++)
@@ -113,36 +195,40 @@ public class MazeGenerator : MonoBehaviour
             }
         }
 
-        // ランダムな迷路を生成
+        // 深さ優先探索で迷路生成
         GenerateMazePath(0, 0);
 
-        // 必要な場合だけゴールの外壁を削除
+        // ゴールの外壁を削除
         if (removeGoalWall)
         {
             RemoveGoalWall();
         }
 
-        // 迷路のPrefabを配置
+        // 迷路のPrefabを生成
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                float posX = x * cellScale;
-                float posZ = y * cellScale;
+                Vector3 position = new Vector3(
+                    x * cellScale,
+                    0f,
+                    y * cellScale
+                );
 
                 GameObject obj = Instantiate(
                     mazeCellPrefab,
-                    new Vector3(posX, 0f, posZ),
+                    position,
                     Quaternion.identity,
                     root
                 );
 
-                MazeCell cell = obj.GetComponent<MazeCell>();
+                MazeCell cell =
+                    obj.GetComponent<MazeCell>();
 
                 if (cell == null)
                 {
                     Debug.LogError(
-                        "MazeCellコンポーネントがありません");
+                        "MazeCellが設定されていません");
                     continue;
                 }
 
@@ -153,20 +239,40 @@ public class MazeGenerator : MonoBehaviour
             }
         }
 
-        // スタートとゴールの位置を自動設定
+        // スタートとゴールを自動配置
         SetStartAndGoal();
 
-        Debug.Log("迷路を生成しました");
+        // 箱と感圧板を初期化
+        ResetGimmick();
+
+        // パズルピースをランダム配置
+        if (randomizePuzzlePieces)
+        {
+            RandomizePuzzlePieces();
+        }
+
+        Physics.SyncTransforms();
+
+        Debug.Log("迷路とギミックを生成しました");
     }
 
-    // 死亡時に呼び出す
+    // 死亡時に迷路を再生成
     public void RestartMaze()
     {
-        Debug.Log("死亡したため迷路を再生成します");
+        Debug.Log("迷路を再生成します");
 
-        // 新しい迷路を生成
-        // プレイヤーもスタート位置に戻る
         GenerateMaze();
+    }
+
+    // MazeRootの子かどうかを確認
+    private bool IsInsideMazeRoot(Transform target)
+    {
+        if (target == null || root == null)
+        {
+            return false;
+        }
+
+        return target == root || target.IsChildOf(root);
     }
 
     // 深さ優先探索
@@ -183,7 +289,8 @@ public class MazeGenerator : MonoBehaviour
             if (newX >= 0 && newY >= 0 &&
                 newX < width && newY < height)
             {
-                MazeCellModel neighbourCell = maze[newX, newY];
+                MazeCellModel neighbourCell =
+                    maze[newX, newY];
 
                 if (!neighbourCell.visited)
                 {
@@ -198,7 +305,7 @@ public class MazeGenerator : MonoBehaviour
         }
     }
 
-    // 探索方向をランダムに並べ替える
+    // 探索方向をランダム化
     private List<(int, int, MazeCellModel.Wall, MazeCellModel.Wall)>
         ShuffleDirections()
     {
@@ -227,8 +334,8 @@ public class MazeGenerator : MonoBehaviour
         {
             var temp = directions[i];
 
-            int randomIndex = random.Next(
-                i, directions.Count);
+            int randomIndex =
+                random.Next(i, directions.Count);
 
             directions[i] = directions[randomIndex];
             directions[randomIndex] = temp;
@@ -237,7 +344,7 @@ public class MazeGenerator : MonoBehaviour
         return directions;
     }
 
-    // ゴール部分の外壁を削除
+    // ゴールの外壁を削除
     private void RemoveGoalWall()
     {
         MazeCellModel goalCell =
@@ -258,27 +365,23 @@ public class MazeGenerator : MonoBehaviour
     // スタートとゴールを自動配置
     private void SetStartAndGoal()
     {
-        // スタートの中心座標
         Vector3 startPosition = new Vector3(
             0f,
             playerHeight,
             0f
         );
 
-        // StartPointも自動配置する
         if (startPoint != null)
         {
             startPoint.position = startPosition;
         }
 
-        // プレイヤーをスタートに移動
         SetPlayerPosition(startPosition);
 
-        // ゴールを右上の壁に配置
         SetGoalPosition();
     }
 
-    // プレイヤーの位置を設定
+    // プレイヤー配置
     private void SetPlayerPosition(Vector3 position)
     {
         if (player == null)
@@ -299,7 +402,8 @@ public class MazeGenerator : MonoBehaviour
             return;
         }
 
-        Rigidbody rb = player.GetComponent<Rigidbody>();
+        Rigidbody rb =
+            player.GetComponent<Rigidbody>();
 
         if (rb != null)
         {
@@ -311,11 +415,9 @@ public class MazeGenerator : MonoBehaviour
         {
             player.position = position;
         }
-
-        Physics.SyncTransforms();
     }
 
-    // ゴールを右上の外壁に配置
+    // 右上の外壁にゴールを配置
     private void SetGoalPosition()
     {
         if (goal == null)
@@ -325,39 +427,26 @@ public class MazeGenerator : MonoBehaviour
             return;
         }
 
-        // 右上のマスの中心
         Vector3 goalCellCenter = new Vector3(
             (width - 1) * cellScale,
             0f,
             (height - 1) * cellScale
         );
 
-        // 外壁の方向
-        Vector3 wallDirection;
+        Vector3 wallDirection =
+            goalWallSide == GoalWallSide.Top
+            ? Vector3.forward
+            : Vector3.right;
 
-        if (goalWallSide == GoalWallSide.Top)
-        {
-            wallDirection = Vector3.forward;
-        }
-        else
-        {
-            wallDirection = Vector3.right;
-        }
-
-        // 外壁の中心座標
         Vector3 wallPosition =
             goalCellCenter +
             wallDirection * (cellScale / 2f);
 
-        // 壁の内側に少し移動
         wallPosition -= wallDirection * goalInset;
-
-        // 高さを設定
         wallPosition.y = goalHeight;
 
         goal.position = wallPosition;
 
-        // ギミックを迷路の内側に向ける
         if (rotateGoalTowardMaze)
         {
             goal.rotation = Quaternion.LookRotation(
@@ -366,7 +455,191 @@ public class MazeGenerator : MonoBehaviour
             );
         }
 
+        // DoorMoveの初期位置を再設定
+        DoorMove[] doors =
+            goal.GetComponentsInChildren<DoorMove>(true);
+
+        foreach (DoorMove door in doors)
+        {
+            bool isChild = door.transform != goal;
+            door.InitializeDoor(isChild);
+        }
+
         Debug.Log(
             "ゴールを配置しました：" + wallPosition);
+    }
+
+    // 箱と感圧板の初期化
+    private void ResetGimmick()
+    {
+        if (keyBox != null)
+        {
+            Vector3 boxPosition =
+                keyBoxStartPoint != null
+                ? keyBoxStartPoint.position
+                : initialKeyBoxPosition;
+
+            Quaternion boxRotation =
+                keyBoxStartPoint != null
+                ? keyBoxStartPoint.rotation
+                : initialKeyBoxRotation;
+
+            keyBox.linearVelocity = Vector3.zero;
+            keyBox.angularVelocity = Vector3.zero;
+
+            keyBox.position = boxPosition;
+            keyBox.rotation = boxRotation;
+        }
+
+        if (pressurePlate != null)
+        {
+            pressurePlate.ResetPlate();
+        }
+    }
+
+    // ===================================
+    // パズルピースのランダム配置
+    // ===================================
+
+    private void RandomizePuzzlePieces()
+    {
+        if (puzzlePieceTemplates.Count == 0)
+        {
+            Debug.LogWarning(
+                "パズルピースが登録されていません");
+            return;
+        }
+
+        Transform spawnParent =
+            puzzlePiecesSpawnRoot != null
+            ? puzzlePiecesSpawnRoot
+            : transform;
+
+        // 元のピースが入った親は生成先にしない
+        if (puzzlePieceSourceRoot != null &&
+            (spawnParent == puzzlePieceSourceRoot ||
+             spawnParent.IsChildOf(puzzlePieceSourceRoot)))
+        {
+            Debug.LogError(
+                "生成先はPuzzPieceとは別のオブジェクトにしてください");
+            return;
+        }
+
+        if (!spawnParent.gameObject.activeInHierarchy)
+        {
+            Debug.LogError(
+                "パズルピースの生成先が非アクティブです");
+            return;
+        }
+
+        // 配置可能なマス一覧
+        List<Vector2Int> availableCells =
+            new List<Vector2Int>();
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                // スタートマスを除外
+                if (excludeStartCell &&
+                    x == 0 && y == 0)
+                {
+                    continue;
+                }
+
+                // ゴールマスを除外
+                if (excludeGoalCell &&
+                    x == width - 1 &&
+                    y == height - 1)
+                {
+                    continue;
+                }
+
+                availableCells.Add(
+                    new Vector2Int(x, y));
+            }
+        }
+
+        // ピースの数だけマスが必要
+        if (availableCells.Count <
+            puzzlePieceTemplates.Count)
+        {
+            Debug.LogError(
+                "パズルピースを配置するマスが不足しています");
+            return;
+        }
+
+        // マスの順番をシャッフル
+        for (int i = 0; i < availableCells.Count; i++)
+        {
+            int randomIndex =
+                random.Next(i, availableCells.Count);
+
+            Vector2Int temp = availableCells[i];
+
+            availableCells[i] =
+                availableCells[randomIndex];
+
+            availableCells[randomIndex] = temp;
+        }
+
+        // 8個のピースを別々のマスに配置
+        for (int i = 0; i < puzzlePieceTemplates.Count; i++)
+        {
+            Vector2Int cell = availableCells[i];
+
+            Vector3 spawnPosition = new Vector3(
+                cell.x * cellScale,
+                puzzlePieceHeight,
+                cell.y * cellScale
+            );
+
+            GameObject original = puzzlePieceTemplates[i];
+
+            // 元のピースを複製
+            GameObject piece = Instantiate(
+                original,
+                spawnPosition,
+                original.transform.rotation,
+                spawnParent
+            );
+
+            piece.name = "PuzzlePiece_" + (i + 1);
+
+            // 元のピースは非表示なので
+            // 複製したピースを有効化
+            piece.SetActive(true);
+
+            spawnedPuzzlePieces.Add(piece);
+        }
+
+        Debug.Log(
+            "パズルピースを" +
+            spawnedPuzzlePieces.Count +
+            "個ランダム配置しました");
+    }
+
+    // 以前生成したパズルピースを削除
+    private void ClearSpawnedPuzzlePieces()
+    {
+        foreach (GameObject piece in spawnedPuzzlePieces)
+        {
+            if (piece == null)
+            {
+                continue;
+            }
+
+            if (Application.isPlaying)
+            {
+                piece.SetActive(false);
+                Destroy(piece);
+            }
+            else
+            {
+                DestroyImmediate(piece);
+            }
+        }
+
+        spawnedPuzzlePieces.Clear();
     }
 }

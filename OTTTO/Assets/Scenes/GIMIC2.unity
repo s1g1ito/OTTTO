@@ -39880,6 +39880,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
   moveSpeed: 5
   holdingMoveSpeed: 3
+  isMoveReversed: 0
 --- !u!114 &1371706151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39894,6 +39895,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRespawn
   startPoint: {fileID: 376518500}
   fallHeight: -5
+  fogOfWar: {fileID: 0}
 --- !u!54 &1371706152
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -42349,6 +42351,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   sensitivity: 60
+  isLookReversed: 0
   playerBody: {fileID: 1371706156}
 --- !u!114 &1450350913
 MonoBehaviour:
@@ -45510,7 +45513,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1530204710
 Transform:
   m_ObjectHideFlags: 0
