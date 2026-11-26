@@ -91131,7 +91131,7 @@ Transform:
   m_GameObject: {fileID: 482260752}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.71111983, z: -0, w: 0.7030709}
-  m_LocalPosition: {x: 79.3, y: 1, z: 17.9}
+  m_LocalPosition: {x: 68.4, y: 1, z: 40.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -197585,6 +197585,73 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1644376395}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1045334910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1045334913}
+  - component: {fileID: 1045334912}
+  - component: {fileID: 1045334911}
+  m_Layer: 0
+  m_Name: CodeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1045334911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045334910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efa5b3276f51d0a48b38602efdab0082, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeWatchTrigger
+  player: {fileID: 482260760}
+  playerCamera: {fileID: 1525515675}
+  watchDistance: 2
+  requiredWatchTime: 1.5
+  hunter: {fileID: 1199447203}
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  codeCollider: {fileID: 896817899}
+--- !u!114 &1045334912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045334910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b942fdec98937a40aa6f109b1133814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CodeHint
+  hintText: {fileID: 1425228780}
+--- !u!4 &1045334913
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1045334910}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 86.67, y: 0.5, z: 20.08}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1047682210
 GameObject:
   m_ObjectHideFlags: 0
@@ -225745,7 +225812,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 781ac8c5fb1bf8641b83a53be779c740, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 40.7
+      value: 60.1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 781ac8c5fb1bf8641b83a53be779c740, type: 3}
       propertyPath: m_LocalPosition.y
@@ -225753,7 +225820,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 781ac8c5fb1bf8641b83a53be779c740, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 89.4
+      value: 39.3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 781ac8c5fb1bf8641b83a53be779c740, type: 3}
       propertyPath: m_LocalRotation.w
@@ -225928,10 +225995,8 @@ MonoBehaviour:
   - {fileID: 929262075}
   arriveDistance: 0.5
   moveSpeed: 3
-  viewDistance: 10
-  viewAngle: 90
+  viewDistance: 50
   rayHeight: 1
-  loseDistance: 75
   visionObstacleMask:
     serializedVersion: 2
     m_Bits: 0
@@ -309026,6 +309091,15 @@ MonoBehaviour:
   removeGoalWall: 1
   goalInset: 0.5
   rotateGoalTowardMaze: 1
+  pressurePlate: {fileID: 0}
+  keyBox: {fileID: 0}
+  keyBoxStartPoint: {fileID: 0}
+  randomizePuzzlePieces: 0
+  puzzlePieceSourceRoot: {fileID: 0}
+  puzzlePiecesSpawnRoot: {fileID: 0}
+  puzzlePieceHeight: 1
+  excludeStartCell: 1
+  excludeGoalCell: 1
 --- !u!4 &1644750582
 Transform:
   m_ObjectHideFlags: 0
@@ -318061,8 +318135,6 @@ GameObject:
   - component: {fileID: 1697161782}
   - component: {fileID: 1697161781}
   - component: {fileID: 1697161783}
-  - component: {fileID: 1697161784}
-  - component: {fileID: 1697161785}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -318091,7 +318163,7 @@ Transform:
   m_GameObject: {fileID: 1697161780}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 75.25231, y: 6.74926, z: 66.1}
+  m_LocalPosition: {x: 86.12, y: 22.5, z: 62.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -318110,39 +318182,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReturnPosition
   returnPoint: {fileID: 486999723}
---- !u!114 &1697161784
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1697161780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b942fdec98937a40aa6f109b1133814, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CodeHint
-  hintText: {fileID: 1425228780}
---- !u!114 &1697161785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1697161780}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: efa5b3276f51d0a48b38602efdab0082, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CodeWatchTrigger
-  player: {fileID: 482260760}
-  watchDistance: 5
-  watchAngle: 30
-  requiredWatchTime: 3
-  hunter: {fileID: 1199447203}
-  wallMask:
-    serializedVersion: 2
-    m_Bits: 1
 --- !u!1 &1697245953
 GameObject:
   m_ObjectHideFlags: 0
@@ -399049,3 +399088,4 @@ SceneRoots:
   - {fileID: 2656632}
   - {fileID: 666049733}
   - {fileID: 1425228782}
+  - {fileID: 1045334913}

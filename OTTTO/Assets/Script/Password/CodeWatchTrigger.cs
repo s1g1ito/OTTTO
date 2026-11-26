@@ -5,11 +5,11 @@ public class CodeWatchTrigger : MonoBehaviour
     [Header("Player")]
     public Transform player;
 
+    [Header("Playerのカメラ")]
+    public Camera playerCamera;
+
     [Header("Codeを見る距離")]
     public float watchDistance = 5f;
-
-    [Header("Codeを見る角度")]
-    public float watchAngle = 30f;
 
     [Header("必要な視認時間")]
     public float requiredWatchTime = 3f;
@@ -20,12 +20,20 @@ public class CodeWatchTrigger : MonoBehaviour
     [Header("視界を遮るWall")]
     public LayerMask wallMask;
 
+    [Header("Code判定")]
+    public Collider codeCollider;
+
     private float watchTimer = 0f;
     private bool triggered = false;
+    private bool wasWatching = false;
+
 
     void Start()
     {
-        // Playerを自動取得
+        // ==========================================
+        // Player取得
+        // ==========================================
+
         if (player == null)
         {
             GameObject obj =
@@ -36,36 +44,67 @@ public class CodeWatchTrigger : MonoBehaviour
                 player = obj.transform;
 
                 Debug.Log(
-                    "CodeWatchTrigger：Playerを取得しました"
+                    "【CodeWatch】Playerを取得しました"
                 );
             }
             else
             {
                 Debug.LogError(
-                    "CodeWatchTrigger：Playerタグのオブジェクトが見つかりません！"
+                    "【CodeWatch】Playerタグのオブジェクトが見つかりません！"
                 );
             }
         }
 
-        // EnemyHunterを自動取得
-        if (hunter == null)
+
+        // ==========================================
+        // Camera取得
+        // ==========================================
+
+        if (playerCamera == null)
         {
-            hunter = Object.FindAnyObjectByType<EnemyHunter>();
+            playerCamera = Camera.main;
         }
 
-        if (hunter != null)
+        if (playerCamera != null)
         {
             Debug.Log(
-                "CodeWatchTrigger：EnemyHunterを取得しました"
+                "【CodeWatch】Playerカメラを取得しました：" +
+                playerCamera.name
             );
         }
         else
         {
             Debug.LogError(
-                "CodeWatchTrigger：EnemyHunterが見つかりません！"
+                "【CodeWatch】Main Cameraが見つかりません！"
+            );
+        }
+
+
+        // ==========================================
+        // EnemyHunter取得
+        // ==========================================
+
+        if (hunter == null)
+        {
+            hunter =
+                Object.FindAnyObjectByType<EnemyHunter>();
+        }
+
+        if (hunter != null)
+        {
+            Debug.Log(
+                "【CodeWatch】EnemyHunterを取得しました：" +
+                hunter.name
+            );
+        }
+        else
+        {
+            Debug.LogError(
+                "【CodeWatch】EnemyHunterが見つかりません！"
             );
         }
     }
+
 
     void Update()
     {
@@ -75,141 +114,241 @@ public class CodeWatchTrigger : MonoBehaviour
         if (player == null)
             return;
 
-        bool isWatching = IsPlayerWatchingCode();
+        if (playerCamera == null)
+            return;
+
+
+        bool isWatching =
+            IsPlayerWatchingCode();
+
+
+        // ==========================================
+        // Codeを見ている
+        // ==========================================
 
         if (isWatching)
         {
             watchTimer += Time.deltaTime;
 
-            Debug.Log(
-                "Code：Playerが暗証番号を見ています " +
-                watchTimer.ToString("F1") +
-                " / " +
-                requiredWatchTime.ToString("F1") +
-                "秒"
-            );
+
+            if (!wasWatching)
+            {
+                Debug.Log(
+                    "【CodeWatch】PlayerがCodeを見始めました"
+                );
+
+                Debug.Log(
+                    "【CodeWatch】暗証番号：" +
+                    CodeGenerator.GeneratedCode
+                );
+            }
+
+            wasWatching = true;
+
+
+            // 0.5秒ごとに表示
+            if (
+                Mathf.FloorToInt(watchTimer * 2f) !=
+                Mathf.FloorToInt(
+                    (watchTimer - Time.deltaTime) * 2f
+                )
+            )
+            {
+                Debug.Log(
+                    "【CodeWatch】視認時間 " +
+                    watchTimer.ToString("F1") +
+                    " / " +
+                    requiredWatchTime.ToString("F1") +
+                    "秒"
+                );
+            }
+
+
+            // ======================================
+            // 3秒達成
+            // ======================================
 
             if (watchTimer >= requiredWatchTime)
             {
                 ForceHunterChase();
             }
         }
+
+
+        // ==========================================
+        // Codeを見ていない
+        // ==========================================
+
         else
         {
-            if (watchTimer > 0f)
+            if (wasWatching)
             {
                 Debug.Log(
-                    "Code：Playerが暗証番号から視線を外しました"
+                    "【CodeWatch】PlayerがCodeから視線を外しました"
+                );
+
+                Debug.Log(
+                    "【CodeWatch】視認タイマーをリセットします"
                 );
             }
 
-            // 3秒経過する前ならリセット
             watchTimer = 0f;
+            wasWatching = false;
         }
     }
+
+
+    // ==================================================
+    // PlayerがCodeを見ているか
+    // ==================================================
 
     bool IsPlayerWatchingCode()
     {
-        // ----------------------------------------
-        // Player → Code
-        // ----------------------------------------
-
-        Vector3 direction =
-            transform.position - player.position;
-
-        float distance = direction.magnitude;
-
-        // 距離
-        if (distance > watchDistance)
-            return false;
-
-        // ----------------------------------------
-        // 水平方向だけで角度を判定
-        // ----------------------------------------
-
-        Vector3 flatDirection =
-            new Vector3(
-                direction.x,
-                0f,
-                direction.z
+        Ray ray =
+            playerCamera.ViewportPointToRay(
+                new Vector3(0.5f, 0.5f, 0f)
             );
 
-        if (flatDirection.sqrMagnitude < 0.001f)
-            return true;
+        Debug.DrawRay(
+            ray.origin,
+            ray.direction * watchDistance,
+            Color.cyan
+        );
 
-        flatDirection.Normalize();
-
-        Vector3 playerForward =
-            player.forward;
-
-        playerForward.y = 0f;
-
-        if (playerForward.sqrMagnitude < 0.001f)
-            return false;
-
-        playerForward.Normalize();
-
-        float angle =
-            Vector3.Angle(
-                playerForward,
-                flatDirection
+        RaycastHit[] hits =
+            Physics.RaycastAll(
+                ray,
+                watchDistance
             );
 
-        if (angle > watchAngle)
-            return false;
+        System.Array.Sort(
+            hits,
+            (a, b) =>
+                a.distance.CompareTo(b.distance)
+        );
 
-        // ----------------------------------------
-        // Wallチェック
-        // ----------------------------------------
+        Debug.Log(
+            "【CodeWatch】Raycastヒット数：" +
+            hits.Length
+        );
 
-        Vector3 origin =
-            player.position + Vector3.up * 1f;
-
-        Vector3 target =
-            transform.position + Vector3.up * 1f;
-
-        Vector3 ray =
-            target - origin;
-
-        float rayDistance =
-            ray.magnitude;
-
-        if (Physics.Raycast(
-            origin,
-            ray.normalized,
-            rayDistance,
-            wallMask))
+        foreach (RaycastHit hit in hits)
         {
+            GameObject hitObject =
+                hit.collider.gameObject;
+
+            Debug.Log(
+                "【CodeWatch】Raycast → " +
+                hitObject.name +
+                " / Layer = " +
+                LayerMask.LayerToName(hitObject.layer)
+            );
+
+            // =====================================
+            // 指定したCode Colliderに当たった
+            // =====================================
+            if (codeCollider != null &&
+                hit.collider == codeCollider)
+            {
+                Debug.Log(
+                    "【CodeWatch】★ Codeに当たりました！"
+                );
+
+                return true;
+            }
+
+            string layerName =
+                LayerMask.LayerToName(hitObject.layer);
+
+            // Groundは無視
+            if (layerName == "Ground")
+            {
+                continue;
+            }
+
+            // Wallは視界を遮る
+            if (layerName == "Wall")
+            {
+                Debug.Log(
+                    "【CodeWatch】Wallに視界を遮られました"
+                );
+
+                return false;
+            }
+
+            // Codeより手前にある別Collider
+            Debug.Log(
+                "【CodeWatch】Codeより先に別のColliderに当たりました：" +
+                hitObject.name
+            );
+
             return false;
         }
 
-        return true;
+        Debug.Log(
+            "【CodeWatch】何にも当たりませんでした"
+        );
+
+        return false;
     }
+
+
+    // ==================================================
+    // 3秒見た
+    // ==================================================
 
     void ForceHunterChase()
     {
         triggered = true;
 
-        Debug.Log("================================");
-        Debug.Log("Code：暗証番号を3秒以上見ました！");
+
         Debug.Log(
-            "Code：EnemyHunterへ強制追跡を通知します！"
+            "================================"
         );
+
         Debug.Log(
-            "暗証番号 = " +
+            "【CodeWatch】★ 3秒達成 ★"
+        );
+
+        Debug.Log(
+            "【CodeWatch】暗証番号：" +
             CodeGenerator.GeneratedCode
         );
-        Debug.Log("================================");
 
-        if (hunter != null)
-        {
-            hunter.StartChase();
-        }
-        else
+        Debug.Log(
+            "【CodeWatch】EnemyHunterへ強制追跡通知！"
+        );
+
+
+        if (hunter == null)
         {
             Debug.LogError(
-                "CodeWatchTrigger：EnemyHunterが設定されていません！"
+                "【CodeWatch】EnemyHunterがNULLです！"
             );
+
+            return;
         }
+
+
+        Debug.Log(
+            "【CodeWatch】通知先：" +
+            hunter.name
+        );
+
+
+        // ==========================================
+        // EnemyHunterへ通知
+        // ==========================================
+
+        hunter.StartChase();
+
+
+        Debug.Log(
+            "【CodeWatch】StartChase()を呼び出しました！"
+        );
+
+        Debug.Log(
+            "================================"
+        );
     }
 }
