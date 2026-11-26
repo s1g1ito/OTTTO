@@ -1,17 +1,42 @@
 
+using System.Collections;
 using UnityEngine;
 
 public class PlayerRespawn : MonoBehaviour
 {
     [Header("リスポーン設定")]
-    public Transform startPoint;
-    public float fallHeight = -5f;
+    [SerializeField] private MazeGenerator mazeGenerator;
+
+    [SerializeField] private float fallHeight = -5f;
 
     [Header("ミニマップ")]
     [SerializeField] private FogOfWar fogOfWar;
 
+    [Header("連続リスポーン防止")]
+    [SerializeField] private float respawnCooldown = 0.5f;
+
+    private Rigidbody rb;
+
+    // リスポーン処理中かどうか
+    private bool isRespawning = false;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+    private void Start()
+    {
+        FindMazeGenerator();
+    }
+
     private void Update()
     {
+        if (isRespawning)
+        {
+            return;
+        }
+
         // プレイヤーが落下した場合
         if (transform.position.y < fallHeight)
         {
@@ -19,9 +44,14 @@ public class PlayerRespawn : MonoBehaviour
         }
     }
 
-    // 通常のColliderに接触した場合
+    // 通常のColliderに接触
     private void OnCollisionEnter(Collision collision)
     {
+        if (isRespawning)
+        {
+            return;
+        }
+
         if (collision.gameObject.CompareTag("Gimick") ||
             collision.gameObject.CompareTag("Enemy"))
         {
@@ -29,9 +59,14 @@ public class PlayerRespawn : MonoBehaviour
         }
     }
 
-    // TriggerのColliderに接触した場合
+    // TriggerのColliderに接触
     private void OnTriggerEnter(Collider other)
     {
+        if (isRespawning)
+        {
+            return;
+        }
+
         if (other.CompareTag("Gimick") ||
             other.CompareTag("Enemy"))
         {
@@ -39,42 +74,116 @@ public class PlayerRespawn : MonoBehaviour
         }
     }
 
-    // プレイヤーがやられたときの処理
+    // 現在のステージのMazeGeneratorを取得
+    private void FindMazeGenerator()
+    {
+        if (mazeGenerator == null)
+        {
+            mazeGenerator =
+                FindFirstObjectByType<MazeGenerator>();
+        }
+    }
+
+    // プレイヤー死亡時の処理
     public void Respawn()
     {
-        if (startPoint == null)
+        if (isRespawning)
         {
-            Debug.LogError("スタート地点が未設定です");
             return;
         }
 
-        // スタート地点に戻す
-        transform.position = startPoint.position;
+        // MazeGeneratorがあるか確認
+        FindMazeGenerator();
 
-        // Rigidbodyの速度を止める
-        Rigidbody rb = GetComponent<Rigidbody>();
-
-        if (rb != null)
+        if (mazeGenerator == null)
         {
-            rb.position = startPoint.position;
+            Debug.LogError(
+                "MazeGeneratorが見つからないため、" +
+                "リスポーンできません"
+            );
 
-            if (!rb.isKinematic)
-            {
-                rb.linearVelocity = Vector3.zero;
-                rb.angularVelocity = Vector3.zero;
-            }
+            return;
         }
 
-        // ミニマップの探索記録を初期化
+        isRespawning = true;
+
+        Debug.Log("プレイヤーが死亡しました");
+
+        // Rigidbodyの速度を止める
+        ResetRigidbodyVelocity();
+
+        // ==============================
+        // 迷路の再生成
+        // ==============================
+
+        // MazeGenerator側で
+        // ① 迷路再生成
+        // ② プレイヤーをスタート位置へ配置
+        // を実行する
+        mazeGenerator.RestartMaze();
+
+        // 移動後の速度を初期化
+        ResetRigidbodyVelocity();
+
+        // ==============================
+        // ミニマップのリセット
+        // ==============================
+
+        if (fogOfWar == null)
+        {
+            fogOfWar =
+                FindFirstObjectByType<FogOfWar>();
+        }
+
         if (fogOfWar != null)
         {
             fogOfWar.ResetExploration();
+
+            Debug.Log(
+                "ミニマップの探索履歴を初期化しました"
+            );
         }
         else
         {
-            Debug.LogWarning("FogOfWarが未設定です");
+            Debug.LogWarning(
+                "FogOfWarが設定されていません"
+            );
         }
 
-        Debug.Log("プレイヤーがリスポーンしました");
+        // Colliderの位置を同期
+        Physics.SyncTransforms();
+
+        Debug.Log(
+            "MazeGeneratorのスタート位置に" +
+            "リスポーンしました"
+        );
+
+        // 連続死亡を防止
+        StartCoroutine(RespawnCooldown());
+    }
+
+    // Rigidbodyの速度をリセット
+    private void ResetRigidbodyVelocity()
+    {
+        if (rb == null)
+        {
+            return;
+        }
+
+        if (!rb.isKinematic)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+    }
+
+    // リスポーン後のクールダウン
+    private IEnumerator RespawnCooldown()
+    {
+        yield return new WaitForSecondsRealtime(
+            Mathf.Max(0.1f, respawnCooldown)
+        );
+
+        isRespawning = false;
     }
 }
