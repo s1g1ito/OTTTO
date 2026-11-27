@@ -8394,9 +8394,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 781ac8c5fb1bf8641b83a53be779c740, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1755695228}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 781ac8c5fb1bf8641b83a53be779c740, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1755695229}
   m_SourcePrefab: {fileID: 100100000, guid: 781ac8c5fb1bf8641b83a53be779c740, type: 3}
 --- !u!1 &1488077420
 GameObject:
@@ -10010,24 +10007,10 @@ MonoBehaviour:
   arriveDistance: 0.5
   moveSpeed: 3
   viewDistance: 10
-  viewAngle: 90
   rayHeight: 1
-  loseDistance: 75
   visionObstacleMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1755695229
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1755695227}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 143182eb01ea95046bb38d847d22f933, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyHitPlayer
 --- !u!195 &1755695230
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -14124,6 +14107,12 @@ MonoBehaviour:
   moveSpeed: 6
   holdingMoveSpeed: 3
   isMoveReversed: 0
+  deathStateName: Base Layer.Dying
+  extraWaitAfterDeathAnimation: 0
+  maxDeathAnimationWait: 15
+  mainCamera: {fileID: 6454587439398767445}
+  deathZoomOutFOV: 85
+  deathZoomDuration: 2.5
 --- !u!4 &3614755350832816396
 Transform:
   m_ObjectHideFlags: 0

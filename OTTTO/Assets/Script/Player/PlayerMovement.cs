@@ -1,18 +1,15 @@
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
-using System.Collections;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // 箱を持っていない時の速度
+    [Header("移動設定")]
     public float moveSpeed = 7f;
-
-    // 箱を持っている時の速度
     public float holdingMoveSpeed = 3f;
 
-    // 操作反転フラグ
+    [Header("操作反転")]
     public bool isMoveReversed = false;
 
     private float reverseMoveUntil = 0f;
@@ -20,39 +17,48 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody rb;
     private InputAction moveAction;
     private Animator animator;
+    private PlayerRespawn playerRespawn;
 
-    // 死亡フラグ
+    // 死亡中かどうか
     private bool isDead = false;
 
-    // リスタートまでの待ち時間
-    public float deathRestartDelay = 5.8f;
+    public bool IsDead => isDead;
 
-    // =========================
-    // 死亡時カメラ設定
-    // =========================
+    [Header("死亡アニメーション")]
+    [SerializeField]
+    private string deathStateName = "Base Layer.Dying";
+
+    [Tooltip("死亡アニメーション終了後の追加待機時間")]
+    [Min(0f)]
+    public float extraWaitAfterDeathAnimation = 0f;
+
+    [Tooltip("アニメーションが終了しない場合の最大待機時間")]
+    [Min(1f)]
+    public float maxDeathAnimationWait = 15f;
 
     [Header("死亡時カメラズームアウト")]
-
     public Camera mainCamera;
 
-    // 死亡時の視野角
     public float deathZoomOutFOV = 85f;
-
-    // ズームアウトにかける時間
     public float deathZoomDuration = 2.5f;
 
-    // 通常時の視野角を保存
     private float originalFOV;
-
+    private Coroutine cameraZoomCoroutine;
 
     // =========================
     // 初期設定
     // =========================
 
-    void Awake()
+    private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
+
+        if (rb != null)
+        {
+            rb.freezeRotation = true;
+        }
+
+        playerRespawn = GetComponent<PlayerRespawn>();
 
         moveAction = new InputAction(
             type: InputActionType.Value
@@ -65,44 +71,50 @@ public class PlayerMovement : MonoBehaviour
             .With("Right", "<Keyboard>/d");
     }
 
-    void Start()
+    private void Start()
     {
-        animator = GetComponentInChildren<Animator>();
+        animator = GetComponentInChildren<Animator>(true);
 
-        // MainCameraを取得
         if (mainCamera == null)
         {
             mainCamera = Camera.main;
         }
 
-        // 通常時の視野角を保存
         if (mainCamera != null)
         {
             originalFOV = mainCamera.fieldOfView;
         }
 
+        ResetAnimation();
+
         isDead = false;
         isMoveReversed = false;
+    }
 
-        if (animator != null)
+    private void OnEnable()
+    {
+        if (moveAction != null)
         {
-            animator.Rebind();
-            animator.Update(0f);
-            animator.SetFloat("Speed", 0f);
-            animator.ResetTrigger("Death");
+            moveAction.Enable();
         }
     }
 
-    void OnEnable()
+    private void OnDisable()
     {
-        moveAction.Enable();
+        if (moveAction != null)
+        {
+            moveAction.Disable();
+        }
     }
 
-    void OnDisable()
+    private void OnDestroy()
     {
-        moveAction.Disable();
+        if (moveAction != null)
+        {
+            moveAction.Dispose();
+            moveAction = null;
+        }
     }
-
 
     // =========================
     // 操作反転
@@ -110,7 +122,10 @@ public class PlayerMovement : MonoBehaviour
 
     public void ReverseMove(float duration)
     {
-        if (isDead) return;
+        if (isDead)
+        {
+            return;
+        }
 
         isMoveReversed = true;
 
@@ -120,22 +135,25 @@ public class PlayerMovement : MonoBehaviour
         );
     }
 
-
     // =========================
-    // 入力・アニメーション
+    // 入力・通常アニメーション
     // =========================
 
-    void Update()
+    private void Update()
     {
-        if (isDead) return;
+        if (isDead)
+        {
+            return;
+        }
 
-        // 操作反転の終了判定
-        if (isMoveReversed && Time.time >= reverseMoveUntil)
+        if (isMoveReversed &&
+            Time.time >= reverseMoveUntil)
         {
             isMoveReversed = false;
         }
 
-        Vector2 input = moveAction.ReadValue<Vector2>();
+        Vector2 input =
+            moveAction.ReadValue<Vector2>();
 
         float speed = input.magnitude;
 
@@ -145,18 +163,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
     // =========================
     // プレイヤー移動
     // =========================
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        if (isDead) return;
+        if (isDead || rb == null)
+        {
+            return;
+        }
 
-        Vector2 input = moveAction.ReadValue<Vector2>();
+        Vector2 input =
+            moveAction.ReadValue<Vector2>();
 
-        // 操作反転
         if (isMoveReversed)
         {
             input = -input;
@@ -166,16 +186,12 @@ public class PlayerMovement : MonoBehaviour
             transform.forward * input.y +
             transform.right * input.x;
 
-        float currentSpeed;
+        float currentSpeed = moveSpeed;
 
-        // 箱を持っているか確認
-        if (animator != null && animator.GetBool("IsHolding"))
+        if (animator != null &&
+            animator.GetBool("IsHolding"))
         {
             currentSpeed = holdingMoveSpeed;
-        }
-        else
-        {
-            currentSpeed = moveSpeed;
         }
 
         rb.MovePosition(
@@ -184,9 +200,8 @@ public class PlayerMovement : MonoBehaviour
         );
     }
 
-
     // =========================
-    // Trigger接触判定
+    // Trigger接触
     // =========================
 
     private void OnTriggerEnter(Collider other)
@@ -194,9 +209,8 @@ public class PlayerMovement : MonoBehaviour
         CheckDeadlyObject(other.gameObject);
     }
 
-
     // =========================
-    // 通常の衝突判定
+    // 通常の衝突
     // =========================
 
     private void OnCollisionEnter(Collision collision)
@@ -204,14 +218,16 @@ public class PlayerMovement : MonoBehaviour
         CheckDeadlyObject(collision.gameObject);
     }
 
-
     // =========================
-    // 死亡対象の確認
+    // 死亡対象の判定
     // =========================
 
     private void CheckDeadlyObject(GameObject obj)
     {
-        if (isDead) return;
+        if (isDead)
+        {
+            return;
+        }
 
         if (obj.CompareTag("Deadly"))
         {
@@ -219,64 +235,263 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-
     // =========================
-    // 死亡処理
+    // 死亡開始
     // =========================
 
     public void Die()
     {
-        if (isDead) return;
+        if (isDead)
+        {
+            return;
+        }
+
+        // リスポーン直後の連続死亡を防ぐ
+        if (playerRespawn != null &&
+            !playerRespawn.CanStartDeath)
+        {
+            return;
+        }
 
         isDead = true;
-
-        // プレイヤーの動きを停止
-        rb.linearVelocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
         isMoveReversed = false;
+        reverseMoveUntil = 0f;
+
+        Debug.Log("プレイヤー死亡！");
+
+        // 移動速度をリセット
+        StopRigidbody();
+
+        bool animationStarted = false;
+
+        // =========================
+        // 死亡アニメーション再生
+        // =========================
 
         if (animator != null)
         {
-            // Animatorを初期化
             animator.enabled = true;
             animator.speed = 1f;
+
             animator.Rebind();
             animator.Update(0f);
 
-            // パラメータをリセット
             animator.SetFloat("Speed", 0f);
             animator.ResetTrigger("Death");
 
-            // 死亡アニメーションを最初から再生
-            animator.Play("Base Layer.Dying", 0, 0f);
-            animator.Update(0f);
+            int deathHash =
+                Animator.StringToHash(deathStateName);
 
-            Debug.Log("死亡アニメーション再生！");
+            if (animator.HasState(0, deathHash))
+            {
+                animator.Play(
+                    deathStateName,
+                    0,
+                    0f
+                );
+
+                animator.Update(0f);
+
+                animationStarted = true;
+
+                Debug.Log(
+                    "死亡アニメーション再生開始！"
+                );
+            }
+            else
+            {
+                Debug.LogError(
+                    "Animatorに死亡ステートがありません：" +
+                    deathStateName
+                );
+            }
         }
         else
         {
-            Debug.LogError("Animatorが見つかりません！");
+            Debug.LogError(
+                "Animatorが見つかりません！"
+            );
         }
 
-        // 死亡時カメラズームアウト開始
+        // =========================
+        // カメラズームアウト
+        // =========================
+
         if (mainCamera != null)
         {
-            StartCoroutine(DeathCameraZoomOut());
+            cameraZoomCoroutine =
+                StartCoroutine(DeathCameraZoomOut());
         }
 
-        // リスタート処理開始
-        StartCoroutine(RestartAfterDeath());
+        // =========================
+        // アニメーション終了後にリスポーン
+        // =========================
+
+        StartCoroutine(
+            WaitForDeathAndRespawn(animationStarted)
+        );
     }
 
+    // =========================
+    // Rigidbody停止
+    // =========================
+
+    private void StopRigidbody()
+    {
+        if (rb == null || rb.isKinematic)
+        {
+            return;
+        }
+
+        rb.linearVelocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
+
+    // =========================
+    // アニメーション終了待機
+    // =========================
+
+    private IEnumerator WaitForDeathAndRespawn(
+        bool animationStarted)
+    {
+        if (animationStarted)
+        {
+            int deathHash =
+                Animator.StringToHash(deathStateName);
+
+            float startTime = Time.unscaledTime;
+            float expectedDuration = 0f;
+
+            bool enteredDeathState = false;
+            bool finished = false;
+
+            while (Time.unscaledTime - startTime <
+                   maxDeathAnimationWait)
+            {
+                if (animator == null ||
+                    !animator.isActiveAndEnabled)
+                {
+                    break;
+                }
+
+                AnimatorStateInfo state =
+                    animator.GetCurrentAnimatorStateInfo(0);
+
+                if (state.fullPathHash == deathHash)
+                {
+                    enteredDeathState = true;
+
+                    // ステートの再生時間を記録
+                    expectedDuration = Mathf.Max(
+                        expectedDuration,
+                        state.length /
+                        Mathf.Max(0.01f, animator.speed)
+                    );
+
+                    // 1回分のアニメーションが終了
+                    if (state.normalizedTime >= 1f)
+                    {
+                        finished = true;
+                        break;
+                    }
+                }
+                else if (enteredDeathState)
+                {
+                    // 別ステートに遷移した場合も
+                    // 元の死亡アニメーションの長さまでは待つ
+                    float elapsed =
+                        Time.unscaledTime - startTime;
+
+                    float remaining =
+                        expectedDuration - elapsed;
+
+                    if (remaining > 0f)
+                    {
+                        yield return new WaitForSecondsRealtime(
+                            remaining
+                        );
+                    }
+
+                    finished = true;
+                    break;
+                }
+
+                yield return null;
+            }
+
+            if (!finished)
+            {
+                Debug.LogWarning(
+                    "死亡アニメーションの終了を確認できませんでした。" +
+                    "AnimatorのDyingステートを確認してください。"
+                );
+            }
+        }
+        else
+        {
+            // ステート未設定時の安全用待機
+            yield return new WaitForSecondsRealtime(1f);
+        }
+
+        // アニメーション終了後、必要なら追加待機
+        if (extraWaitAfterDeathAnimation > 0f)
+        {
+            yield return new WaitForSecondsRealtime(
+                extraWaitAfterDeathAnimation
+            );
+        }
+
+        // =========================
+        // リスポーン処理
+        // =========================
+
+        if (playerRespawn == null)
+        {
+            playerRespawn = GetComponent<PlayerRespawn>();
+        }
+
+        if (playerRespawn == null)
+        {
+            Debug.LogError(
+                "PlayerRespawnが付いていません！"
+            );
+
+            yield break;
+        }
+
+        // 迷路とプレイヤーの位置をリセット
+        playerRespawn.FinishRespawn();
+
+        // カメラを元に戻す
+        RestoreCamera();
+
+        // Animatorを通常状態へ戻す
+        ResetAnimation();
+
+        StopRigidbody();
+
+        // 再び操作を有効化
+        isDead = false;
+
+        Debug.Log(
+            "死亡アニメーション終了・リスポーン完了！"
+        );
+    }
 
     // =========================
     // 死亡時カメラズームアウト
     // =========================
 
-    IEnumerator DeathCameraZoomOut()
+    private IEnumerator DeathCameraZoomOut()
     {
         float startFOV = mainCamera.fieldOfView;
         float elapsed = 0f;
+
+        if (deathZoomDuration <= 0f)
+        {
+            mainCamera.fieldOfView = deathZoomOutFOV;
+            yield break;
+        }
 
         while (elapsed < deathZoomDuration)
         {
@@ -286,7 +501,6 @@ public class PlayerMovement : MonoBehaviour
                 elapsed / deathZoomDuration
             );
 
-            // 徐々に変化するように補間
             t = Mathf.SmoothStep(0f, 1f, t);
 
             mainCamera.fieldOfView = Mathf.Lerp(
@@ -298,24 +512,46 @@ public class PlayerMovement : MonoBehaviour
             yield return null;
         }
 
-        // 最終値に設定
         mainCamera.fieldOfView = deathZoomOutFOV;
+        cameraZoomCoroutine = null;
     }
 
-
     // =========================
-    // 自動リスタート
+    // カメラを元に戻す
     // =========================
 
-    IEnumerator RestartAfterDeath()
+    private void RestoreCamera()
     {
-        yield return new WaitForSecondsRealtime(
-            deathRestartDelay
-        );
+        if (cameraZoomCoroutine != null)
+        {
+            StopCoroutine(cameraZoomCoroutine);
+            cameraZoomCoroutine = null;
+        }
 
-        // 現在のシーンを再読み込み
-        SceneManager.LoadScene(
-            SceneManager.GetActiveScene().buildIndex
-        );
+        if (mainCamera != null)
+        {
+            mainCamera.fieldOfView = originalFOV;
+        }
+    }
+
+    // =========================
+    // Animatorリセット
+    // =========================
+
+    private void ResetAnimation()
+    {
+        if (animator == null)
+        {
+            return;
+        }
+
+        animator.enabled = true;
+        animator.speed = 1f;
+
+        animator.Rebind();
+        animator.Update(0f);
+
+        animator.SetFloat("Speed", 0f);
+        animator.ResetTrigger("Death");
     }
 }
