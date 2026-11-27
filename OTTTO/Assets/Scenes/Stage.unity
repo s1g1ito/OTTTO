@@ -91000,6 +91000,10 @@ MonoBehaviour:
   moveSpeed: 6
   holdingMoveSpeed: 3
   isMoveReversed: 0
+  deathRestartDelay: 5.8
+  mainCamera: {fileID: 0}
+  deathZoomOutFOV: 85
+  deathZoomDuration: 2.5
 --- !u!114 &482260755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -309083,11 +309087,9 @@ MonoBehaviour:
   root: {fileID: 1895448426}
   cellScale: 5
   player: {fileID: 0}
-  startPoint: {fileID: 0}
   playerHeight: 1
   goal: {fileID: 0}
   goalHeight: 0.5
-  goalWallSide: 0
   removeGoalWall: 1
   goalInset: 0.5
   rotateGoalTowardMaze: 1
@@ -309097,9 +309099,6 @@ MonoBehaviour:
   randomizePuzzlePieces: 0
   puzzlePieceSourceRoot: {fileID: 0}
   puzzlePiecesSpawnRoot: {fileID: 0}
-  puzzlePieceHeight: 1
-  excludeStartCell: 1
-  excludeGoalCell: 1
 --- !u!4 &1644750582
 Transform:
   m_ObjectHideFlags: 0
