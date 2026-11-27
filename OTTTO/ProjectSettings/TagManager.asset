@@ -4,13 +4,18 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Item
+  - Ground
+  - Ball
+  - ENEMY
+  - Deadly
   - KeyBox
+  - Button
+  - Box
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Wall
+  - 
   - Water
   - UI
   - 
