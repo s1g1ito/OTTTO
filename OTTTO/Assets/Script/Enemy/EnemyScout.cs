@@ -166,6 +166,8 @@ public class EnemyScout : MonoBehaviour
                 detectedViewColor
             );
 
+            Debug.Log("EnemyScout：canSeePlayer = TRUE / foundPlayer = " + foundPlayer);
+
             // 初めて発見した瞬間
             if (!foundPlayer)
             {
@@ -334,10 +336,7 @@ public class EnemyScout : MonoBehaviour
             Color.yellow
         );
 
-        // --------------------------------------------------
-        // まず「何に当たったか」を確認する
-        // --------------------------------------------------
-
+        // Rayが何に当たったか全部取得
         RaycastHit[] hits =
             Physics.RaycastAll(
                 origin,
@@ -345,7 +344,7 @@ public class EnemyScout : MonoBehaviour
                 rayDistance
             );
 
-        // RaycastAllは距離順とは限らないので並べ替える
+        // 距離順に並べる
         System.Array.Sort(
             hits,
             (a, b) =>
@@ -369,23 +368,33 @@ public class EnemyScout : MonoBehaviour
                 layerName
             );
 
-            // Playerに当たったら「見えている」
+            // ========================================
+            // Playerに当たった
+            // ========================================
+
             if (hitObject.CompareTag("Player"))
             {
                 Debug.Log(
                     "EnemyScout：Playerを視認しました！"
                 );
 
+                // ★ここが重要
                 return true;
             }
 
-            // Groundは完全に無視
+            // ========================================
+            // Groundは無視
+            // ========================================
+
             if (layerName == "Ground")
             {
                 continue;
             }
 
-            // Wallだけ視界を遮る
+            // ========================================
+            // Wallなら視界を遮る
+            // ========================================
+
             if (layerName == "Wall")
             {
                 Debug.Log(
@@ -398,14 +407,8 @@ public class EnemyScout : MonoBehaviour
             // その他のオブジェクトは無視
         }
 
-        // 何にも遮られずPlayerにも当たらなかった場合
-        // PlayerがColliderを持っていないケースなどを考慮して、
-        // 最後にPlayerが範囲内なら見えている扱いにする
-        Debug.Log(
-            "EnemyScout：Playerを視認しました！"
-        );
-
-        return true;
+        // Playerに当たらなかった
+        return false;
     }
 
     // ========================================
